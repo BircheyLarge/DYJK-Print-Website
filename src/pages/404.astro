@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { QUOTE_PATH } from '../consts';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="mx-auto max-w-2xl px-4 py-24 text-center">
+    <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
+      404
+    </p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight text-brand-ink">
+      We couldn't find that page
+    </h1>
+    <p class="mt-4 text-brand-muted">
+      The page may have moved. Head back home or request a quote and we'll point
+      you in the right direction.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a
+        href="/"
+        class="rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white hover:bg-brand-blue-dark"
+      >
+        Back home
+      </a>
+      <a
+        href={QUOTE_PATH}
+        class="rounded-md border border-slate-300 px-6 py-3 text-base font-semibold text-brand-slate hover:border-brand-blue hover:text-brand-blue"
+      >
+        Request a Quote
+      </a>
+    </div>
+  </section>
+</BaseLayout>
