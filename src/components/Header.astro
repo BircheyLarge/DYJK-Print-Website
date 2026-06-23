@@ -1,0 +1,112 @@
+---
+import { NAV, QUOTE_PATH, SITE } from '../consts';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur"
+>
+  <nav
+    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3"
+    aria-label="Primary"
+  >
+    <a href="/" class="flex items-center" aria-label={`${SITE.name} home`}>
+      <img
+        src="/brand/logo.png"
+        width="299"
+        height="78"
+        alt={`${SITE.name} — ${SITE.tagline}`}
+        class="h-9 w-auto"
+      />
+    </a>
+
+    <ul class="hidden items-center gap-6 md:flex">
+      {
+        NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'text-sm font-medium transition-colors hover:text-brand-blue',
+                isActive(item.href) ? 'text-brand-blue' : 'text-brand-slate',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={QUOTE_PATH}
+        class="hidden rounded-md bg-brand-blue px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-dark sm:inline-block"
+      >
+        Request a Quote
+      </a>
+      <button
+        type="button"
+        id="nav-toggle"
+        class="inline-flex items-center justify-center rounded-md p-2 text-brand-slate md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Toggle navigation menu"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-nav" class="hidden border-t border-slate-200 md:hidden">
+    <ul class="space-y-1 px-4 py-3">
+      {
+        NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class="block rounded-md px-2 py-2 text-base font-medium text-brand-slate hover:bg-brand-surface"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a
+          href={QUOTE_PATH}
+          class="mt-2 block rounded-md bg-brand-blue px-4 py-2 text-center text-base font-semibold text-white"
+        >
+          Request a Quote
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-nav');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    menu?.classList.toggle('hidden', open);
+  });
+</script>

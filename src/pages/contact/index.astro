@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { QUOTE_PATH, SITE } from '../../consts';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const schema = breadcrumbSchema([
+  { name: 'Home', path: '/' },
+  { name: 'Contact', path: '/contact/' },
+]);
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with DYJK Print by phone or email, or request a quote for your nationwide print project."
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Let's talk about your print project"
+    subtitle="We work with clients across the country — reach us by phone or email, or send your project details for a quote."
+  />
+
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <dl class="grid gap-8 sm:grid-cols-2">
+      <div>
+        <dt class="text-sm font-semibold text-brand-ink">Phone</dt>
+        <dd class="mt-1">
+          <a
+            href={`tel:${SITE.phone}`}
+            class="text-lg text-brand-blue hover:text-brand-blue-dark"
+          >
+            {SITE.phoneDisplay}
+          </a>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-sm font-semibold text-brand-ink">Email</dt>
+        <dd class="mt-1">
+          <a
+            href={`mailto:${SITE.email}`}
+            class="text-lg text-brand-blue hover:text-brand-blue-dark"
+          >
+            {SITE.email}
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="mt-10">
+      <a
+        href={QUOTE_PATH}
+        class="inline-block rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-blue-dark"
+      >
+        Request a Quote
+      </a>
+    </div>
+  </section>
+</BaseLayout>

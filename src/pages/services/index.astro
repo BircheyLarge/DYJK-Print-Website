@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import { SERVICES } from '../../data/catalog';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const schema = breadcrumbSchema([
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services/' },
+]);
+---
+
+<BaseLayout
+  title="Printing Services"
+  description="Offset printing, digital printing, and graphic design & prepress — produced to spec and shipped nationwide by DYJK Print."
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Services"
+    title="Printing services built around your project"
+    subtitle="From high-volume offset runs to fast digital turnarounds and press-ready design, we cover the full production path — nationwide."
+  />
+
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <div class="grid gap-6 md:grid-cols-3">
+      {
+        SERVICES.map((service) => (
+          <a
+            href={service.href}
+            class="group rounded-xl border border-slate-200 p-6 transition-shadow hover:shadow-lg"
+          >
+            <h2 class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
+              {service.name}
+            </h2>
+            <p class="mt-2 text-sm text-brand-muted">{service.blurb}</p>
+            <span class="mt-4 inline-block text-sm font-semibold text-brand-blue">
+              Learn more →
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <QuoteCta />
+</BaseLayout>

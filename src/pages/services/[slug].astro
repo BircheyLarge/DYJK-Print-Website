@@ -1,0 +1,52 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import { SERVICES } from '../../data/catalog';
+import { breadcrumbSchema, serviceSchema } from '../../lib/schema';
+
+export const getStaticPaths = (() => {
+  return SERVICES.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}) satisfies GetStaticPaths;
+
+const { service } = Astro.props;
+
+const schema = [
+  serviceSchema({
+    name: service.name,
+    description: service.blurb,
+    path: service.href,
+  }),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services/' },
+    { name: service.name, path: service.href },
+  ]),
+];
+---
+
+<BaseLayout title={service.name} description={service.blurb} schema={schema}>
+  <PageHeader
+    eyebrow="Services"
+    title={service.name}
+    subtitle={service.blurb}
+  />
+
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <p class="text-lg leading-relaxed text-brand-slate">{service.detail}</p>
+    <p class="mt-6">
+      <a
+        href="/services/"
+        class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+      >
+        ← All services
+      </a>
+    </p>
+  </section>
+
+  <QuoteCta heading={`Need ${service.name.toLowerCase()}?`} />
+</BaseLayout>
