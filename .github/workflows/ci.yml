@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -38,8 +38,10 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
 
+      # `npm run test:e2e` rebuilds; the Build step above already produced
+      # dist/, so invoke Playwright directly to avoid a redundant build.
       - name: End-to-end + a11y tests
-        run: npm run test:e2e
+        run: npx playwright test
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
