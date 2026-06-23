@@ -9,8 +9,15 @@
  * ──────────────────────────────────────────────────────────────────────────
  */
 @theme {
-  --color-brand-blue: #2880c0;
-  --color-brand-blue-dark: #1f6aa1;
+  /*
+   * brand-blue is the AA-adjusted UI blue: the logo's true #2880c0 only hits
+   * 4.25:1 on white (fails WCAG AA for normal text and for white button
+   * labels), so the interactive/text blue is darkened to #1d6fa8 (~5.4:1).
+   * The exact logo hue is preserved in the logo image itself.
+   * Contrast of text-bearing tokens is enforced by tests/unit/color.test.ts.
+   */
+  --color-brand-blue: #1d6fa8;
+  --color-brand-blue-dark: #14517d;
   --color-brand-slate: #506870;
   --color-brand-ink: #0b1a22;
   --color-brand-muted: #5b6b73;
