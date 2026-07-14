@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import Button from '../../components/Button.astro';
 import { SITE } from '../../consts';
 import { breadcrumbSchema } from '../../lib/schema';
 
@@ -43,18 +44,11 @@ const mailto = `mailto:${SITE.email}?subject=${mailtoSubject}&body=${mailtoBody}
     </p>
 
     <div class="mt-8 flex flex-wrap gap-4">
-      <a
-        href={mailto}
-        class="inline-block rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-blue-dark"
+      <Button href={mailto} variant="primary">Email your project details</Button
       >
-        Email your project details
-      </a>
-      <a
-        href={`tel:${SITE.phone}`}
-        class="inline-block rounded-md border border-slate-300 px-6 py-3 text-base font-semibold text-brand-slate transition-colors hover:border-brand-blue hover:text-brand-blue"
-      >
+      <Button href={`tel:${SITE.phone}`} variant="outline">
         Call {SITE.phoneDisplay}
-      </a>
+      </Button>
     </div>
 
     <p class="mt-6 text-sm text-brand-muted">

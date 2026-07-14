@@ -10,7 +10,7 @@
  * There should be one primary per screen.
  */
 interface Props {
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'outline-accent';
   size?: 'default' | 'sm';
   href?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -46,6 +46,10 @@ const variantClass = {
   outline: onInk
     ? 'border border-slate-600 text-white hover:border-white'
     : 'border border-slate-300 bg-white text-brand-slate hover:border-brand-blue hover:text-brand-blue',
+  // Quiet form of the reserved quote action — used where the quote CTA is
+  // secondary (persistent nav, 404 escape hatch). text-accent is 6.07:1 on
+  // white; not for the ink band (accent as text fails there).
+  'outline-accent': 'border border-accent text-accent hover:bg-accent-tint',
 }[variant];
 
 const cls = [base, sizeClass, variantClass, className];
