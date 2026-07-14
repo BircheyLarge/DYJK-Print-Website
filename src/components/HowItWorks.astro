@@ -1,0 +1,60 @@
+---
+/*
+ * HowItWorks — the remote-buyer trust module. A nationwide print buyer never
+ * visits the shop, so the leap of faith is "can I order this from anywhere and
+ * trust the result?" These four steps answer it (files → proof → print → ship)
+ * and lean on the arch doc's core trust factors: proofing, file prep, timeline.
+ * Numbered badges in Fraunces; no imagery required.
+ */
+import Section from './Section.astro';
+
+const STEPS = [
+  {
+    n: 1,
+    title: 'Send your files',
+    body: 'Upload artwork and specs — or just your quantity, deadline, and where it ships. We take it from there.',
+  },
+  {
+    n: 2,
+    title: 'Approve a proof',
+    body: 'We check bleeds, color, and resolution, then send a proof to sign off before anything runs.',
+  },
+  {
+    n: 3,
+    title: 'We print to spec',
+    body: 'Offset for high-volume consistency or digital for fast short-runs — on the right stock, checked on-press.',
+  },
+  {
+    n: 4,
+    title: 'Shipped to your door',
+    body: 'Delivered anywhere in the US on a timeline you can plan around. No need to be local.',
+  },
+];
+---
+
+<Section
+  tone="surface"
+  align="center"
+  eyebrow="How it works"
+  title="Printing you can run from anywhere"
+  lead="A remote-friendly process built for buyers who never set foot in the shop."
+>
+  <ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      STEPS.map((step) => (
+        <li class="flex flex-col">
+          <span
+            class="font-display flex h-11 w-11 items-center justify-center rounded-full bg-accent-tint text-lg font-semibold text-accent-hover"
+            aria-hidden="true"
+          >
+            {step.n}
+          </span>
+          <h3 class="mt-4 text-lg font-semibold text-brand-ink">
+            {step.title}
+          </h3>
+          <p class="mt-2 text-sm text-brand-muted">{step.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+</Section>

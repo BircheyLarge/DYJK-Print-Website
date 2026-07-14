@@ -1,4 +1,12 @@
 ---
+/*
+ * CatalogGrid — product / industry hub grid, built on the Card primitive.
+ * These items have no detail page yet (see data/catalog.ts), so they render as
+ * static (non-link) Cards — intentional panels, not dead links. When a detail
+ * route lands, add `href` to the item and pass it through here to light the
+ * whole card up as a link (plus a MediaFrame in the media slot).
+ */
+import Card from './Card.astro';
 import type { CatalogItem } from '../data/catalog';
 
 interface Props {
@@ -10,10 +18,9 @@ const { items } = Astro.props;
 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
   {
     items.map((item) => (
-      <div class="rounded-xl border border-slate-200 p-6">
-        <h2 class="text-lg font-semibold text-brand-ink">{item.name}</h2>
-        <p class="mt-2 text-sm text-brand-muted">{item.blurb}</p>
-      </div>
+      <Card title={item.name} headingLevel={2}>
+        {item.blurb}
+      </Card>
     ))
   }
 </div>

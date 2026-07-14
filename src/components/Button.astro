@@ -1,0 +1,70 @@
+---
+/*
+ * Button — the action primitive. Renders an <a> when given href, else a
+ * <button>. Three variants enforce the hierarchy:
+ *   primary   = accent fill. RESERVED for the single "Request a Quote" action
+ *               so it owns the eye against the all-blue field. On the ink band
+ *               this filled+white-label form is the ONLY allowed accent usage.
+ *   secondary = brand-blue fill for supporting actions.
+ *   outline   = quiet tertiary; pass onInk for dark bands.
+ * There should be one primary per screen.
+ */
+interface Props {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'default' | 'sm';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  onInk?: boolean;
+  disabled?: boolean;
+  id?: string;
+  'aria-label'?: string;
+  class?: string;
+}
+const {
+  variant = 'primary',
+  size = 'default',
+  href,
+  type = 'button',
+  onInk = false,
+  disabled = false,
+  id,
+  'aria-label': ariaLabel,
+  class: className = '',
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50';
+
+const sizeClass = {
+  default: 'px-6 py-3 text-base',
+  sm: 'px-5 py-2.5 text-sm',
+}[size];
+
+const variantClass = {
+  primary: 'bg-accent text-white shadow-rest hover:bg-accent-hover',
+  secondary: 'bg-brand-blue text-white shadow-rest hover:bg-brand-blue-dark',
+  outline: onInk
+    ? 'border border-slate-600 text-white hover:border-white'
+    : 'border border-slate-300 bg-white text-brand-slate hover:border-brand-blue hover:text-brand-blue',
+}[variant];
+
+const cls = [base, sizeClass, variantClass, className];
+---
+
+{
+  href ? (
+    <a href={href} id={id} aria-label={ariaLabel} class:list={cls}>
+      <slot />
+    </a>
+  ) : (
+    <button
+      type={type}
+      id={id}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      class:list={cls}
+    >
+      <slot />
+    </button>
+  )
+}

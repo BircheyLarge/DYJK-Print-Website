@@ -1,0 +1,76 @@
+---
+/*
+ * Card — the content primitive. Elevated white surface at rest (shadow-rest).
+ * With href it becomes a whole-card link that lifts on hover (shadow-raised);
+ * without one it is a static panel — so product/industry cards read as
+ * intentional (not dead links) until their detail pages exist and a href is
+ * passed. The `media` named slot is the seam for MediaFrame (aspect ratio +
+ * duotone + registration): Card owns the slot and its states, MediaFrame fills
+ * it. Body copy goes in the default slot.
+ */
+interface Props {
+  href?: string;
+  eyebrow?: string;
+  title: string;
+  /** Link affordance text, e.g. "Learn more". Only shown when interactive. */
+  cta?: string;
+  headingLevel?: 2 | 3 | 4;
+  class?: string;
+}
+const {
+  href,
+  eyebrow,
+  title,
+  cta,
+  headingLevel = 3,
+  class: className = '',
+} = Astro.props;
+
+const interactive = Boolean(href);
+const hasMedia = Astro.slots.has('media');
+const Root = interactive ? 'a' : 'div';
+const HeadingTag = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
+
+const rootClass = [
+  'group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-rest',
+  interactive &&
+    'transition duration-200 hover:-translate-y-0.5 hover:shadow-raised motion-reduce:transform-none motion-reduce:transition-none',
+  className,
+];
+---
+
+<Root href={href} class:list={rootClass}>
+  {hasMedia && <slot name="media" />}
+  <div class="flex flex-1 flex-col p-6">
+    {
+      eyebrow && (
+        <p class="text-xs font-semibold uppercase tracking-wider text-brand-blue">
+          {eyebrow}
+        </p>
+      )
+    }
+    <HeadingTag
+      class:list={[
+        'text-lg font-semibold text-brand-ink',
+        interactive && 'group-hover:text-brand-blue',
+        eyebrow && 'mt-2',
+      ]}
+    >
+      {title}
+    </HeadingTag>
+    <div class="mt-2 text-sm text-brand-muted"><slot /></div>
+    {
+      cta && interactive && (
+        <span class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-blue">
+          {cta}
+          <span
+            class="transition-transform group-hover:translate-x-0.5 motion-reduce:transform-none"
+            aria-hidden="true"
+          >
+            →
+          </span>
+        </span>
+      )
+    }
+  </div>
+</Root>

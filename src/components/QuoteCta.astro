@@ -1,4 +1,11 @@
 ---
+/*
+ * QuoteCta — the closing conversion band (ink tone). "Request a Quote" is the
+ * one reserved-accent action; on the ink band the accent's only valid form is
+ * this filled+white-label button, which is exactly what primary renders.
+ */
+import Section from './Section.astro';
+import Button from './Button.astro';
 import { QUOTE_PATH, SITE } from '../consts';
 
 interface Props {
@@ -11,23 +18,11 @@ const {
 } = Astro.props;
 ---
 
-<section class="bg-brand-ink">
-  <div class="mx-auto max-w-6xl px-4 py-16 text-center">
-    <h2 class="text-3xl font-bold tracking-tight text-white">{heading}</h2>
-    <p class="mx-auto mt-4 max-w-xl text-slate-300">{text}</p>
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-      <a
-        href={QUOTE_PATH}
-        class="inline-block rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-blue-dark"
-      >
-        Request a Quote
-      </a>
-      <a
-        href={`tel:${SITE.phone}`}
-        class="inline-block rounded-md border border-slate-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:border-white"
-      >
-        Call {SITE.phoneDisplay}
-      </a>
-    </div>
+<Section tone="ink" align="center" title={heading} lead={text}>
+  <div class="flex flex-wrap items-center justify-center gap-4">
+    <Button href={QUOTE_PATH} variant="primary">Request a Quote</Button>
+    <Button href={`tel:${SITE.phone}`} variant="outline" onInk>
+      Call {SITE.phoneDisplay}
+    </Button>
   </div>
-</section>
+</Section>
