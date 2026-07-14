@@ -1,0 +1,365 @@
+---
+/*
+ * INTERNAL DESIGN PREVIEW — not linked in nav, noindex.
+ * This is the swatch board for the token decisions that need a human eyeball
+ * (accent loudness, surface tone, display face), plus a live demo of the
+ * elevation scale and the duotone / registration image-slot system. It is NOT
+ * the redesign — it exists so @you can pick the finalists before we compose.
+ * Delete once the tokens are locked.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+// Space Grotesk is loaded here only, to compare against the default Fraunces.
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/700.css';
+
+const ALT_MAGENTA = '#d6006e'; // "turn it up" accent option (not a token yet)
+const PAPER = '#f4efe6'; // warm-paper surface option (not a token yet)
+---
+
+<BaseLayout
+  title="Design Preview"
+  description="Internal token swatch board."
+  noindex
+>
+  <div class="mx-auto max-w-6xl px-4 py-10">
+    <p class="text-sm font-semibold uppercase tracking-wider text-accent">
+      Internal · not the redesign
+    </p>
+    <h1 class="mt-2 font-display text-4xl font-semibold text-brand-ink">
+      Design token preview
+    </h1>
+    <p class="mt-3 max-w-2xl text-brand-muted">
+      A swatch board for the three calls that need your eye. Committed defaults
+      are marked ✓; the alternatives are shown side-by-side. Everything below is
+      driven by real tokens, so what you pick is what ships.
+    </p>
+  </div>
+
+  <!-- ── 1. The bold first-scroll moment (Fraunces + accent color-block) ── -->
+  <section class="bg-brand-surface">
+    <div class="mx-auto max-w-6xl px-4 py-20">
+      <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
+        Nationwide commercial printing
+      </p>
+      <h2
+        class="font-display mt-4 max-w-4xl text-5xl font-semibold leading-[1.05] tracking-tight text-brand-ink sm:text-7xl"
+      >
+        Your Vision,<br />
+        <span class="text-accent">Our Precision.</span>
+      </h2>
+      <p class="mt-6 max-w-xl text-lg text-brand-slate">
+        This is the "pop" — an oversized editorial headline with the magenta
+        doing one confident thing, on a surface that finally separates from the
+        page. No stock-photo hero required to feel intentional.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="#"
+          class="rounded-md bg-accent px-6 py-3 font-semibold text-white shadow-rest transition-colors hover:bg-accent-hover"
+        >
+          Request a Quote
+        </a>
+        <a
+          href="#"
+          class="rounded-md border border-slate-300 bg-white px-6 py-3 font-semibold text-brand-slate transition-colors hover:border-brand-blue hover:text-brand-blue"
+        >
+          Explore Services
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2. Accent finalists ─────────────────────────────────────────────── -->
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="font-display text-3xl font-semibold text-brand-ink">
+      1 · Accent finalist
+    </h2>
+    <p class="mt-2 max-w-2xl text-brand-muted">
+      Both clear WCAG AA as a white-label button (every warm coral/amber option
+      failed). Raspberry has more trust headroom; magenta-600 is louder pop.
+    </p>
+    <div class="mt-8 grid gap-8 md:grid-cols-2">
+      <!-- Raspberry (default) -->
+      <div class="rounded-xl border border-slate-200 p-6 shadow-rest">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-brand-ink">Raspberry #b4237a</h3>
+          <span
+            class="rounded-full bg-accent-tint px-3 py-1 text-xs font-semibold text-accent-hover"
+          >
+            default ✓ · 6.07:1
+          </span>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button
+            class="rounded-md bg-accent px-5 py-2.5 font-semibold text-white shadow-rest hover:bg-accent-hover"
+          >
+            Request a Quote
+          </button>
+          <button
+            class="rounded-md border border-accent px-5 py-2.5 font-semibold text-accent hover:bg-accent-tint"
+          >
+            Secondary
+          </button>
+        </div>
+        <div class="mt-4 rounded-md bg-brand-ink p-4">
+          <button
+            class="rounded-md bg-accent px-5 py-2.5 font-semibold text-white hover:bg-accent-hover"
+          >
+            On ink (filled only)
+          </button>
+          <p class="mt-2 text-xs text-slate-400">
+            ✓ filled button reads. Accent <span class="text-accent"
+              >as text on ink</span
+            >
+            is too weak (~3:1) — the primitive forbids it.
+          </p>
+        </div>
+      </div>
+      <!-- Magenta-600 (louder) -->
+      <div class="rounded-xl border border-slate-200 p-6 shadow-rest">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-brand-ink">Magenta-600 #d6006e</h3>
+          <span
+            class="rounded-full px-3 py-1 text-xs font-semibold text-white"
+            style={`background:${ALT_MAGENTA}`}
+          >
+            louder · 5.14:1
+          </span>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button
+            class="rounded-md px-5 py-2.5 font-semibold text-white shadow-rest"
+            style={`background:${ALT_MAGENTA}`}
+          >
+            Request a Quote
+          </button>
+          <button
+            class="rounded-md border px-5 py-2.5 font-semibold"
+            style={`border-color:${ALT_MAGENTA};color:${ALT_MAGENTA}`}
+          >
+            Secondary
+          </button>
+        </div>
+        <div class="mt-4 rounded-md bg-brand-ink p-4">
+          <button
+            class="rounded-md px-5 py-2.5 font-semibold text-white"
+            style={`background:${ALT_MAGENTA}`}
+          >
+            On ink (filled only)
+          </button>
+          <p class="mt-2 text-xs text-slate-400">
+            More heat on the hero; less contrast headroom for small UI.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3. Surface tone ─────────────────────────────────────────────────── -->
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="font-display text-3xl font-semibold text-brand-ink">
+      2 · Surface tone
+    </h2>
+    <p class="mt-2 max-w-2xl text-brand-muted">
+      The old #f5f8fa was ~3% off white, so sections never separated. Cool-gray
+      is the safe fix; warm-paper quietly evokes paper stock (a functional print
+      nod) but adds a third temperature next to the blue + magenta.
+    </p>
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      <div class="rounded-xl bg-brand-surface p-8">
+        <p
+          class="text-xs font-semibold uppercase tracking-wider text-brand-blue"
+        >
+          Cool-gray #e7edf1 · default ✓
+        </p>
+        <div class="mt-4 rounded-lg bg-white p-6 shadow-rest">
+          <p class="text-brand-ink">A white card sits cleanly on this plane.</p>
+        </div>
+      </div>
+      <div class="rounded-xl p-8" style={`background:${PAPER}`}>
+        <p
+          class="text-xs font-semibold uppercase tracking-wider text-brand-blue"
+        >
+          Warm-paper #f4efe6 · alternative
+        </p>
+        <div class="mt-4 rounded-lg bg-white p-6 shadow-rest">
+          <p class="text-brand-ink">
+            Warmer, more tactile — but three temperatures.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. Display face ─────────────────────────────────────────────────── -->
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="font-display text-3xl font-semibold text-brand-ink">
+      3 · Display face (headings only — Inter stays for body)
+    </h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      <div class="rounded-xl border border-slate-200 p-8 shadow-rest">
+        <p class="text-xs font-semibold uppercase tracking-wider text-accent">
+          Fraunces · craft · default ✓
+        </p>
+        <p class="font-display mt-3 text-4xl font-semibold text-brand-ink">
+          Catalogs &amp; Booklets
+        </p>
+        <p class="mt-2 text-sm text-brand-muted">
+          Editorial serif — reads "a print shop that understands type."
+        </p>
+      </div>
+      <div class="rounded-xl border border-slate-200 p-8 shadow-rest">
+        <p class="text-xs font-semibold uppercase tracking-wider text-accent">
+          Space Grotesk · modern press · alt
+        </p>
+        <p
+          class="mt-3 text-4xl font-bold text-brand-ink"
+          style="font-family:'Space Grotesk',sans-serif"
+        >
+          Catalogs &amp; Booklets
+        </p>
+        <p class="mt-2 text-sm text-brand-muted">
+          Precision grotesque — cleaner, more technical.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 5. Elevation scale ──────────────────────────────────────────────── -->
+  <section class="bg-brand-surface">
+    <div class="mx-auto max-w-6xl px-4 py-16">
+      <h2 class="font-display text-3xl font-semibold text-brand-ink">
+        Elevation scale
+      </h2>
+      <p class="mt-2 max-w-2xl text-brand-muted">
+        The depth the flat template never had. One scale, tokenized — no more
+        ad-hoc shadow-lg.
+      </p>
+      <div class="mt-8 grid gap-6 sm:grid-cols-3">
+        <div class="rounded-xl bg-white p-6 shadow-rest">
+          <p class="font-semibold text-brand-ink">shadow-rest</p>
+          <p class="mt-1 text-sm text-brand-muted">Cards at rest.</p>
+        </div>
+        <div class="rounded-xl bg-white p-6 shadow-raised">
+          <p class="font-semibold text-brand-ink">shadow-raised</p>
+          <p class="mt-1 text-sm text-brand-muted">Hover / active lift.</p>
+        </div>
+        <div class="rounded-xl bg-white p-6 shadow-overlay">
+          <p class="font-semibold text-brand-ink">shadow-overlay</p>
+          <p class="mt-1 text-sm text-brand-muted">Menus / dialogs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 6. Image-slot / duotone system (the seam) ───────────────────────── -->
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="font-display text-3xl font-semibold text-brand-ink">
+      Image-slot system — the with/without-image contract
+    </h2>
+    <p class="mt-2 max-w-2xl text-brand-muted">
+      Fixed aspect ratios + object-fit cover, a duotone treatment that unifies
+      mixed photos (and makes placeholders look intentional), and opt-in
+      registration crop marks. This is where art-direction meets the card
+      primitive — so it lives in the shared contract.
+    </p>
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- With-image state: duotone-treated placeholder -->
+      <figure
+        class="overflow-hidden rounded-xl border border-slate-200 shadow-rest"
+      >
+        <div class="reg-frame relative aspect-[3/2]">
+          <div class="duotone h-full w-full"></div>
+        </div>
+        <figcaption class="p-4">
+          <p class="font-semibold text-brand-ink">With image · 3:2</p>
+          <p class="text-sm text-brand-muted">
+            Duotone (ink → blue) + registration corners. A real photo drops in
+            here; the treatment keeps mismatched sources on-brand.
+          </p>
+        </figcaption>
+      </figure>
+      <!-- Empty state -->
+      <figure
+        class="overflow-hidden rounded-xl border border-slate-200 shadow-rest"
+      >
+        <div
+          class="flex aspect-[3/2] items-center justify-center bg-brand-surface"
+        >
+          <div class="text-center">
+            <p class="font-display text-2xl font-semibold text-brand-slate">
+              DYJK
+            </p>
+            <p class="text-xs uppercase tracking-wider text-brand-muted">
+              artwork coming
+            </p>
+          </div>
+        </div>
+        <figcaption class="p-4">
+          <p class="font-semibold text-brand-ink">Empty state</p>
+          <p class="text-sm text-brand-muted">
+            No dead gray box — an intentional monogram placeholder until owner
+            photos land.
+          </p>
+        </figcaption>
+      </figure>
+      <!-- Accent-tint block (portfolio 4:3) -->
+      <figure
+        class="overflow-hidden rounded-xl border border-slate-200 shadow-rest"
+      >
+        <div
+          class="flex aspect-[4/3] items-center justify-center bg-accent-tint"
+        >
+          <p class="font-display text-2xl font-semibold text-accent-hover">
+            4:3 slot
+          </p>
+        </div>
+        <figcaption class="p-4">
+          <p class="font-semibold text-brand-ink">Portfolio · 4:3</p>
+          <p class="text-sm text-brand-muted">
+            Accent-tint plane for highlight cards.
+          </p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Duotone placeholder: an ink→blue wash with a print halftone dot overlay.
+     A real <img> would sit under the same gradient via mix-blend-mode. */
+  .duotone {
+    background-image:
+      radial-gradient(
+        circle at 1px 1px,
+        rgb(255 255 255 / 0.16) 1.2px,
+        transparent 1.3px
+      ),
+      linear-gradient(135deg, var(--color-brand-ink), var(--color-brand-blue));
+    background-size:
+      8px 8px,
+      cover;
+  }
+  /* Registration crop marks at the four corners — a functional print detail. */
+  .reg-frame::before,
+  .reg-frame::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .reg-frame::before {
+    top: 8px;
+    left: 8px;
+    border-top: 2px solid rgb(255 255 255 / 0.7);
+    border-left: 2px solid rgb(255 255 255 / 0.7);
+  }
+  .reg-frame::after {
+    bottom: 8px;
+    right: 8px;
+    border-bottom: 2px solid rgb(255 255 255 / 0.7);
+    border-right: 2px solid rgb(255 255 255 / 0.7);
+  }
+</style>

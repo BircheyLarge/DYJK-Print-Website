@@ -63,3 +63,23 @@ describe('brand tokens meet WCAG AA (4.5:1) for normal text', () => {
     ).toBeGreaterThanOrEqual(AA_NORMAL);
   });
 });
+
+describe('accent (single-action spot color) contract', () => {
+  it('white button label on the accent fill passes AA', () => {
+    expect(contrastRatio(WHITE, token('accent'))).toBeGreaterThanOrEqual(
+      AA_NORMAL,
+    );
+  });
+
+  it('white button label on the accent hover state passes AA', () => {
+    expect(contrastRatio(WHITE, token('accent-hover'))).toBeGreaterThanOrEqual(
+      AA_NORMAL,
+    );
+  });
+
+  it('ink body text on the accent tint passes AA', () => {
+    expect(
+      contrastRatio(token('brand-ink'), token('accent-tint')),
+    ).toBeGreaterThanOrEqual(AA_NORMAL);
+  });
+});

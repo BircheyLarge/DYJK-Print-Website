@@ -1,31 +1,72 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/fraunces/opsz.css';
 
 /*
  * ──────────────────────────────────────────────────────────────────────────
  * BRAND TOKENS — single swap point.
  * Values sampled from the logo (references/dyjk-logo-from-invoice.png).
  * Replace with exact brand values once the high-res logo lands; nothing else
- * in the codebase hard-codes brand colors.
+ * in the codebase hard-codes brand colors. Contrast of text-bearing tokens is
+ * enforced by tests/unit/color.test.ts.
  * ──────────────────────────────────────────────────────────────────────────
  */
 @theme {
-  /*
+  /* ── Brand blue ─────────────────────────────────────────────────────────
    * brand-blue is the AA-adjusted UI blue: the logo's true #2880c0 only hits
    * 4.25:1 on white (fails WCAG AA for normal text and for white button
    * labels), so the interactive/text blue is darkened to #1d6fa8 (~5.4:1).
-   * The exact logo hue is preserved in the logo image itself.
-   * Contrast of text-bearing tokens is enforced by tests/unit/color.test.ts.
-   */
+   * The exact logo hue is preserved in the logo image itself. */
   --color-brand-blue: #1d6fa8;
   --color-brand-blue-dark: #14517d;
   --color-brand-slate: #506870;
   --color-brand-ink: #0b1a22;
   --color-brand-muted: #5b6b73;
-  --color-brand-surface: #f5f8fa;
 
+  /* ── Section-tone set — the four background rhythms ──────────────────────
+   * white (base) · brand-surface (raised panels / heroes) · brand-ink (dark
+   * bands) · accent-tint (highlight blocks). brand-surface was #f5f8fa — only
+   * ~3% off white, so sections could not visually separate. Deepened to a tone
+   * that reads as a distinct plane while keeping muted text AA on it (4.69:1).
+   * A warm-paper alternative (#f4efe6) is staged on /preview for the owner
+   * eyeball — it evokes paper stock, a functional print nod, not decoration. */
+  --color-brand-surface: #e7edf1;
+
+  /* ── Accent — the SINGLE-ACTION spot color ──────────────────────────────
+   * A flat, measured magenta referencing CMYK's M — deliberately NOT an AI
+   * purple/pink gradient. Reserved for the primary action ("Request a Quote")
+   * so it owns the eye against the otherwise all-blue field. Contrast measured
+   * as a white label on the fill:
+   *   #b4237a  6.07:1 AA ✓  (default — trust headroom)
+   *   #d6006e  5.14:1 AA ✓  ("turn it up" option, shown on /preview)
+   * On the ink band the accent is a FILLED button (white label) ONLY — as
+   * text or a hairline on #0b1a22 it drops to ~2.5–3.4:1, so use white or the
+   * tint there instead. This rule is baked into the primitives. */
+  --color-accent: #b4237a;
+  --color-accent-hover: #8f1a60; /* one step darker — 8.45:1 white label */
+  --color-accent-tint: #fbeaf3; /* near-white magenta wash — ink body 15.3:1 */
+
+  /* ── Elevation scale — the depth the flat template never had ─────────────
+   * rest = cards at rest (the piece that was missing) · raised = hover lift ·
+   * overlay = menus / dialogs. Tinted with ink (not pure black) so shadows
+   * read as ink on paper rather than a gray haze. */
+  --shadow-rest: 0 1px 2px rgb(11 26 34 / 0.06), 0 1px 3px rgb(11 26 34 / 0.1);
+  --shadow-raised: 0 8px 24px rgb(11 26 34 / 0.12);
+  --shadow-overlay: 0 16px 48px rgb(11 26 34 / 0.2);
+
+  /* ── Type ────────────────────────────────────────────────────────────────
+   * Inter (variable) for body/UI — a fine workhorse. Fraunces (variable,
+   * optical-size axis) for display headings + the tagline: the editorial serif
+   * is what actually carries the "print shop that understands type" craft, and
+   * a large Fraunces headline is the bold first-scroll moment the owner asked
+   * for. Space Grotesk is staged on /preview as the "modern press" alternative.
+   * NOTE: Inter was previously declared here but never loaded — the site had
+   * been rendering in the OS system font. Both faces are now self-hosted
+   * (fontsource) for Core Web Vitals + privacy, no third-party request. */
   --font-sans:
-    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
+    'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 }
 
 /* Base element defaults. */
@@ -40,6 +81,11 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Display headings use Fraunces' optical-size axis for crisp large type. */
+.font-display {
+  font-optical-sizing: auto;
 }
 
 /* Visible keyboard focus for accessibility (WCAG 2.2). */

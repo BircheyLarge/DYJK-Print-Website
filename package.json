@@ -20,6 +20,9 @@
     "test:e2e:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
+    "@fontsource-variable/fraunces": "^5.2.9",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource/space-grotesk": "^5.2.10",
     "astro": "7.0.2",
     "zod": "^4.3.6"
   },
