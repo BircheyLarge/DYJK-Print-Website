@@ -189,6 +189,15 @@ const inputClass =
     const honeypot = form.querySelector('#company_website');
 
     const errorNode = (el) => document.getElementById(el.id + '-error');
+    const hintId = (el) =>
+      document.getElementById(el.id + '-hint') ? el.id + '-hint' : null;
+    // aria-describedby always carries the hint (if any); the error id is added
+    // while the field is invalid and dropped when it clears.
+    function setDescribedBy(el, errorId) {
+      const ids = [hintId(el), errorId].filter(Boolean);
+      if (ids.length) el.setAttribute('aria-describedby', ids.join(' '));
+      else el.removeAttribute('aria-describedby');
+    }
 
     function setError(el, message) {
       const node = errorNode(el);
@@ -197,14 +206,14 @@ const inputClass =
         node.textContent = message;
         node.classList.remove('hidden');
         el.setAttribute('aria-invalid', 'true');
-        el.setAttribute('aria-describedby', node.id);
+        setDescribedBy(el, node.id);
         el.classList.remove('border-slate-300');
         el.classList.add('border-red-500');
       } else {
         node.textContent = '';
         node.classList.add('hidden');
         el.removeAttribute('aria-invalid');
-        el.removeAttribute('aria-describedby');
+        setDescribedBy(el, null);
         el.classList.remove('border-red-500');
         el.classList.add('border-slate-300');
       }
@@ -226,6 +235,7 @@ const inputClass =
 
     // Validate on blur (not per keystroke) so errors appear once a field is done.
     form.querySelectorAll('input, select, textarea').forEach((el) => {
+      setDescribedBy(el, null); // associate the hint up front
       el.addEventListener('blur', () => validate(el));
     });
 
