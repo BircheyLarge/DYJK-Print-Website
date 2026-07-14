@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import Card from '../components/Card.astro';
 import Button from '../components/Button.astro';
+import MediaFrame from '../components/MediaFrame.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import QuoteCta from '../components/QuoteCta.astro';
 import { QUOTE_PATH, SITE } from '../consts';
@@ -13,23 +14,39 @@ const schema = [organizationSchema(), websiteSchema()];
 ---
 
 <BaseLayout description={SITE.description} schema={schema}>
-  <!-- Hero — art-direction owned by @diogoiore (ported from /preview). -->
+  <!-- Hero — art-direction: headline left, duotone media panel right. -->
   <Section tone="surface" size="hero">
-    <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
-      Nationwide commercial printing
-    </p>
-    <h1
-      class="font-display mt-4 max-w-4xl text-5xl font-semibold leading-[1.05] tracking-tight text-brand-ink sm:text-7xl"
-    >
-      Your Vision,<br /><span class="text-accent">Our Precision.</span>
-    </h1>
-    <p class="mt-6 max-w-xl text-lg text-brand-slate">
-      Offset and digital printing, graphic design and prepress — produced to
-      spec and shipped to your door anywhere in the United States.
-    </p>
-    <div class="mt-8 flex flex-wrap gap-4">
-      <Button href={QUOTE_PATH} variant="primary">Request a Quote</Button>
-      <Button href="/services/" variant="outline">Explore Services</Button>
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+      <div>
+        <p
+          class="text-sm font-semibold uppercase tracking-wider text-brand-blue"
+        >
+          Nationwide commercial printing
+        </p>
+        <h1
+          class="font-display mt-4 text-5xl font-semibold leading-[1.05] tracking-tight text-brand-ink sm:text-7xl"
+        >
+          Your Vision,<br /><span class="text-accent">Our Precision.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-brand-slate">
+          Offset and digital printing, graphic design and prepress — produced to
+          spec and shipped to your door anywhere in the United States.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <Button href={QUOTE_PATH} variant="primary">Request a Quote</Button>
+          <Button href="/services/" variant="outline">Explore Services</Button>
+        </div>
+      </div>
+      <!-- Hidden on mobile: the headline carries small screens; the panel is a
+           placeholder until real press/product photography lands. -->
+      <div class="hidden lg:block">
+        <MediaFrame
+          ratio="hero"
+          registration
+          placeholder="showcase"
+          class="shadow-raised"
+        />
+      </div>
     </div>
   </Section>
 
