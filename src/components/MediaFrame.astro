@@ -2,23 +2,28 @@
 /*
  * MediaFrame — the imagery art-direction primitive (owns the visual treatment;
  * Card owns the slot it drops into). Fixed aspect ratio + object-cover so images
- * never cause layout shift, an optional ink→blue duotone that unifies mixed
- * source photos into one brand look, and opt-in registration crop marks (a
- * functional print detail, not decoration).
+ * never cause layout shift; opt-in ink→blue duotone that unifies mixed source
+ * photos into one brand look; opt-in registration crop marks (a functional
+ * print detail, not decoration).
  *
  * States:
- *   - with `src`      → the real photo, duotone-treated by default.
- *   - no `src`        → an INTENTIONAL placeholder (never a dead gray box):
+ *   - with `src` → the real photo (TRUE COLOR; pass `duotone` to brand it).
+ *   - no `src`   → an INTENTIONAL placeholder (never a dead gray box):
  *       placeholder="showcase" (default) = branded duotone + halftone panel,
  *       placeholder="monogram"           = DYJK monogram + "artwork coming".
- * This is why the "zero photos" gap doesn't block layout — placeholders read as
- * designed, and a real <img src> slots in with no structural change.
+ * The "zero photos" gap doesn't block layout — placeholders read as designed,
+ * and a real <img src> slots in with no structural change.
+ *
+ * Notes: `duotone` is OFF by default so product/portfolio shots keep true color
+ * (turn it on for atmosphere/press-floor photos). Registration marks are white
+ * (`--reg-color`) so they only read on a DARK frame; override the var otherwise.
  */
 interface Props {
   src?: string;
-  /** Required + meaningful when `src` is set. */
+  /** Required + meaningful when `src` is set (pass alt="" only if decorative). */
   alt?: string;
   ratio?: 'hero' | '3/2' | '4/3' | 'square';
+  /** Brand a real photo with the ink→blue duotone wash. Off by default. */
   duotone?: boolean;
   registration?: boolean;
   placeholder?: 'showcase' | 'monogram';
@@ -29,15 +34,23 @@ interface Props {
 }
 const {
   src,
-  alt = '',
+  alt,
   ratio = '3/2',
-  duotone = true,
+  duotone = false,
   registration = false,
   placeholder = 'showcase',
   width,
   height,
   class: className = '',
 } = Astro.props;
+
+// Dev guard: a real image with no alt ships as decorative and is silently
+// skipped by screen readers. Pass alt="" explicitly only when truly decorative.
+if (src && alt === undefined && import.meta.env.DEV) {
+  console.warn(
+    `MediaFrame: <img src="${src}"> has no alt — pass alt="" only if decorative.`,
+  );
+}
 
 const ratioClass = {
   hero: 'aspect-[4/5]',
@@ -49,7 +62,7 @@ const ratioClass = {
 
 <div
   class:list={[
-    'relative overflow-hidden rounded-xl',
+    'relative isolate overflow-hidden rounded-xl',
     ratioClass,
     registration && 'reg-frame',
     className,
@@ -57,15 +70,20 @@ const ratioClass = {
 >
   {
     src ? (
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading="lazy"
-        decoding="async"
-        class:list={['h-full w-full object-cover', duotone && 'is-duotone']}
-      />
+      <Fragment>
+        <img
+          src={src}
+          alt={alt ?? ''}
+          width={width}
+          height={height}
+          loading="lazy"
+          decoding="async"
+          class:list={['h-full w-full object-cover', duotone && 'is-duotone']}
+        />
+        {duotone && (
+          <div class="duotone-wash absolute inset-0" aria-hidden="true" />
+        )}
+      </Fragment>
     ) : placeholder === 'monogram' ? (
       <div class="flex h-full w-full items-center justify-center bg-brand-surface">
         <div class="text-center">
@@ -84,15 +102,24 @@ const ratioClass = {
 </div>
 
 <style>
-  /* Duotone for a real photo: desaturate, then wash toward the brand blue so a
-     grab-bag of client photos reads as one cohesive set. Refine per-photo when
-     real artwork lands. */
+  /* Duotone (opt-in): desaturate the photo, then the .duotone-wash sibling
+     re-colors it toward the brand via mix-blend, so a grab-bag of client photos
+     reads as one set. Product/portfolio shots omit this to keep true color. */
   .is-duotone {
-    filter: grayscale(1) contrast(1.05) brightness(0.98);
+    filter: grayscale(1) contrast(1.05);
+  }
+  .duotone-wash {
+    background: linear-gradient(
+      135deg,
+      var(--color-brand-ink),
+      var(--color-brand-blue)
+    );
+    mix-blend-mode: color;
+    pointer-events: none;
   }
 
-  /* Branded showcase placeholder: ink→blue duotone field + a print halftone
-     dot grid. Reads as an intentional treated image, not an empty slot. */
+  /* Branded showcase placeholder: ink→blue field + a print halftone dot grid.
+     Reads as an intentional treated image, not an empty slot. */
   .showcase {
     background-image:
       radial-gradient(
@@ -106,7 +133,12 @@ const ratioClass = {
       cover;
   }
 
-  /* Opt-in registration crop marks at two corners — a functional print cue. */
+  /* Opt-in registration crop marks. White by default (--reg-color) so they read
+     on a DARK frame (showcase/hero); on a light-backed frame, override the var
+     (e.g. style="--reg-color: var(--color-brand-slate)"). */
+  .reg-frame {
+    --reg-color: rgb(255 255 255 / 0.75);
+  }
   .reg-frame::before,
   .reg-frame::after {
     content: '';
@@ -119,13 +151,13 @@ const ratioClass = {
   .reg-frame::before {
     top: 10px;
     left: 10px;
-    border-top: 2px solid rgb(255 255 255 / 0.75);
-    border-left: 2px solid rgb(255 255 255 / 0.75);
+    border-top: 2px solid var(--reg-color);
+    border-left: 2px solid var(--reg-color);
   }
   .reg-frame::after {
     bottom: 10px;
     right: 10px;
-    border-bottom: 2px solid rgb(255 255 255 / 0.75);
-    border-right: 2px solid rgb(255 255 255 / 0.75);
+    border-bottom: 2px solid var(--reg-color);
+    border-right: 2px solid var(--reg-color);
   }
 </style>
