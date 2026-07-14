@@ -1,0 +1,51 @@
+---
+/*
+ * Field — a labeled form-control wrapper. Renders the label (+ a decorative
+ * required mark; the control's own `required` attr is what a screen reader
+ * announces), an optional hint, a slot for the control, and an always-present
+ * error node the quote-form script targets by id (`<for>-error`). Centralizes
+ * label / hint / error styling so the form never hand-rolls it per field.
+ */
+interface Props {
+  label: string;
+  /** id of the control this labels; also derives the error node id. */
+  for: string;
+  required?: boolean;
+  hint?: string;
+  class?: string;
+}
+const {
+  label,
+  for: htmlFor,
+  required = false,
+  hint,
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['flex flex-col', className]}>
+  <label for={htmlFor} class="text-sm font-semibold text-brand-ink">
+    {label}
+    {
+      required && (
+        <span class="ml-0.5 text-red-600" aria-hidden="true">
+          *
+        </span>
+      )
+    }
+  </label>
+  {
+    hint && (
+      <p id={`${htmlFor}-hint`} class="mt-1 text-xs text-brand-muted">
+        {hint}
+      </p>
+    )
+  }
+  <slot />
+  <p
+    id={`${htmlFor}-error`}
+    class="mt-1 hidden text-xs font-medium text-red-600"
+    role="alert"
+  >
+  </p>
+</div>
