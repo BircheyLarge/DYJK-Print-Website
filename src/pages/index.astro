@@ -5,6 +5,7 @@ import Card from '../components/Card.astro';
 import Button from '../components/Button.astro';
 import MediaFrame from '../components/MediaFrame.astro';
 import HowItWorks from '../components/HowItWorks.astro';
+import TrustBar from '../components/TrustBar.astro';
 import QuoteCta from '../components/QuoteCta.astro';
 import { QUOTE_PATH, SITE } from '../consts';
 import { organizationSchema, websiteSchema } from '../lib/schema';
@@ -25,6 +26,7 @@ const schema = [organizationSchema(), websiteSchema()];
         </p>
         <h1
           class="font-display mt-4 text-5xl font-semibold leading-[1.05] tracking-tight text-brand-ink sm:text-7xl"
+          aria-label="Your Vision, Our Precision."
         >
           Your Vision,<br /><span class="text-accent">Our Precision.</span>
         </h1>
@@ -49,6 +51,9 @@ const schema = [organizationSchema(), websiteSchema()];
       </div>
     </div>
   </Section>
+
+  <!-- Trust bar -->
+  <TrustBar />
 
   <!-- Services -->
   <Section
