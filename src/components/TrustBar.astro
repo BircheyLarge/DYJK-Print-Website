@@ -1,0 +1,41 @@
+---
+/*
+ * TrustBar — a quiet credibility strip under the hero. Honest capability facts
+ * only (nationwide reach, the two print methods, in-house design, proofing) —
+ * deliberately NOT invented metrics or ratings. Numeric stats and testimonials
+ * wait on real owner data (arch doc §5: first-party proof only). Blue checks
+ * (the trust anchor); accent stays reserved for the quote action.
+ */
+const ITEMS = [
+  'Ships to all 50 states',
+  'Offset & digital printing',
+  'In-house design & prepress',
+  'Proof before every run',
+];
+---
+
+<div class="border-y border-slate-200 bg-white">
+  <ul
+    class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-4 py-5"
+  >
+    {
+      ITEMS.map((item) => (
+        <li class="flex items-center gap-2 text-sm font-medium text-brand-slate">
+          <svg
+            class="h-4 w-4 shrink-0 text-brand-blue"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4.5 10.5l3.5 3.5 7.5-8" />
+          </svg>
+          {item}
+        </li>
+      ))
+    }
+  </ul>
+</div>

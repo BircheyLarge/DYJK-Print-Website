@@ -1,7 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import Field from '../../components/Field.astro';
+import Button from '../../components/Button.astro';
 import { SITE } from '../../consts';
+import { PRODUCTS, SERVICES } from '../../data/catalog';
 import { breadcrumbSchema } from '../../lib/schema';
 
 const schema = breadcrumbSchema([
@@ -9,20 +12,12 @@ const schema = breadcrumbSchema([
   { name: 'Request a Quote', path: '/request-a-quote/' },
 ]);
 
-// P0 ships an email-based path so the conversion flow works today. The full
-// quote form (Cloudflare Function + Turnstile + R2 artwork upload) lands in P1.
-const mailtoSubject = encodeURIComponent('Quote request');
-const mailtoBody = encodeURIComponent(
-  [
-    'Project / product:',
-    'Quantity:',
-    'Size / specs:',
-    'Deadline:',
-    'Ship-to (state / ZIP):',
-    'Notes:',
-  ].join('\n'),
-);
-const mailto = `mailto:${SITE.email}?subject=${mailtoSubject}&body=${mailtoBody}`;
+// P0: the form has no backend yet. On submit the client builds a prefilled
+// email (mailto) from the field values so the conversion path works TODAY,
+// honestly — no fake success screen. The full form (Cloudflare Function +
+// Turnstile + R2 artwork upload) lands in P1, changing only the submit handler.
+const inputClass =
+  'mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-base text-brand-ink placeholder:text-brand-muted transition-colors focus-visible:border-brand-blue';
 ---
 
 <BaseLayout
@@ -36,29 +31,257 @@ const mailto = `mailto:${SITE.email}?subject=${mailtoSubject}&body=${mailtoBody}
     subtitle="Share your project details and we'll come back with pricing and a production timeline. We print and ship nationwide."
   />
 
-  <section class="mx-auto max-w-3xl px-4 py-16">
+  <section class="mx-auto max-w-3xl px-4 py-16 sm:py-20">
     <p class="text-lg leading-relaxed text-brand-slate">
-      To quote your job quickly, include the product, quantity, size/specs,
-      deadline, and where it ships. Send it over and we'll take it from there.
+      The more you can tell us up front — product, quantity, size, deadline, and
+      where it ships — the faster we can quote it.
     </p>
 
-    <div class="mt-8 flex flex-wrap gap-4">
-      <a
-        href={mailto}
-        class="inline-block rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-blue-dark"
-      >
-        Email your project details
-      </a>
-      <a
-        href={`tel:${SITE.phone}`}
-        class="inline-block rounded-md border border-slate-300 px-6 py-3 text-base font-semibold text-brand-slate transition-colors hover:border-brand-blue hover:text-brand-blue"
-      >
-        Call {SITE.phoneDisplay}
-      </a>
-    </div>
+    <form id="quote-form" class="mt-8" novalidate>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <Field label="Name" for="name" required>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            autocomplete="name"
+            class={inputClass}
+          />
+        </Field>
+        <Field label="Company" for="company">
+          <input
+            id="company"
+            name="company"
+            type="text"
+            autocomplete="organization"
+            class={inputClass}
+          />
+        </Field>
+        <Field label="Email" for="email" required>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            class={inputClass}
+          />
+        </Field>
+        <Field label="Phone" for="phone">
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            class={inputClass}
+          />
+        </Field>
+        <Field label="Product or service" for="product" required>
+          <select id="product" name="product" required class={inputClass}>
+            <option value="">Select a product or service…</option>
+            <optgroup label="Products">
+              {PRODUCTS.map((p) => <option value={p.name}>{p.name}</option>)}
+            </optgroup>
+            <optgroup label="Services">
+              {SERVICES.map((s) => <option value={s.name}>{s.name}</option>)}
+            </optgroup>
+            <option value="Not sure yet">Not sure yet</option>
+          </select>
+        </Field>
+        <Field label="Quantity" for="quantity" hint="An estimate is fine">
+          <input
+            id="quantity"
+            name="quantity"
+            type="text"
+            inputmode="numeric"
+            class={inputClass}
+          />
+        </Field>
+        <Field label="Ship to" for="shipto" required hint="State or ZIP">
+          <input
+            id="shipto"
+            name="shipto"
+            type="text"
+            required
+            autocomplete="postal-code"
+            class={inputClass}
+          />
+        </Field>
+        <Field label="Deadline" for="deadline" hint="Leave blank if flexible">
+          <input id="deadline" name="deadline" type="date" class={inputClass} />
+        </Field>
+      </div>
 
-    <p class="mt-6 text-sm text-brand-muted">
-      An online quote form with secure artwork upload is on the way.
-    </p>
+      <div class="mt-5">
+        <p class="text-sm font-semibold text-brand-ink">Artwork</p>
+        <div
+          class="mt-1 rounded-md border border-dashed border-slate-300 bg-brand-surface px-4 py-5 text-sm text-brand-muted"
+        >
+          Secure file upload is on the way. Send your request now and we'll
+          reply with an upload link — or just attach your files to the email.
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <Field
+          label="Project details"
+          for="message"
+          hint="Sizes, finishes, stock, or anything else we should know"
+        >
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            class={`${inputClass} min-h-28`}></textarea>
+        </Field>
+      </div>
+
+      {/* Honeypot — hidden from people, tempting to bots. */}
+      <div class="sr-only" aria-hidden="true">
+        <label for="company_website">Leave this field empty</label>
+        <input
+          id="company_website"
+          name="company_website"
+          type="text"
+          tabindex="-1"
+          autocomplete="off"
+        />
+      </div>
+
+      <p class="mt-6 text-xs text-brand-muted">
+        By sending this you agree DYJK Print may contact you about your request.
+      </p>
+
+      <div class="mt-4 flex flex-wrap items-center gap-4">
+        <Button type="submit" variant="primary">Send request</Button>
+        <span class="text-sm text-brand-muted">
+          or call
+          <a
+            href={`tel:${SITE.phone}`}
+            class="font-medium text-brand-blue hover:text-brand-blue-dark"
+          >
+            {SITE.phoneDisplay}
+          </a>
+        </span>
+      </div>
+
+      <p id="form-status" role="status" aria-live="polite" class="mt-3 text-sm">
+      </p>
+
+      <noscript>
+        <p class="mt-3 text-sm text-brand-muted">
+          This form needs JavaScript to send. You can email
+          <a href={`mailto:${SITE.email}`} class="text-brand-blue">
+            {SITE.email}
+          </a>
+          or call {SITE.phoneDisplay}.
+        </p>
+      </noscript>
+    </form>
   </section>
 </BaseLayout>
+
+<script define:vars={{ email: SITE.email }}>
+  const form = document.getElementById('quote-form');
+  if (form) {
+    const status = document.getElementById('form-status');
+    const honeypot = form.querySelector('#company_website');
+
+    const errorNode = (el) => document.getElementById(el.id + '-error');
+    const hintId = (el) =>
+      document.getElementById(el.id + '-hint') ? el.id + '-hint' : null;
+    // aria-describedby always carries the hint (if any); the error id is added
+    // while the field is invalid and dropped when it clears.
+    function setDescribedBy(el, errorId) {
+      const ids = [hintId(el), errorId].filter(Boolean);
+      if (ids.length) el.setAttribute('aria-describedby', ids.join(' '));
+      else el.removeAttribute('aria-describedby');
+    }
+
+    function setError(el, message) {
+      const node = errorNode(el);
+      if (!node) return;
+      if (message) {
+        node.textContent = message;
+        node.classList.remove('hidden');
+        el.setAttribute('aria-invalid', 'true');
+        setDescribedBy(el, node.id);
+        el.classList.remove('border-slate-300');
+        el.classList.add('border-red-500');
+      } else {
+        node.textContent = '';
+        node.classList.add('hidden');
+        el.removeAttribute('aria-invalid');
+        setDescribedBy(el, null);
+        el.classList.remove('border-red-500');
+        el.classList.add('border-slate-300');
+      }
+    }
+
+    function validate(el) {
+      const value = (el.value || '').trim();
+      if (el.hasAttribute('required') && !value) {
+        setError(el, 'This field is required.');
+        return false;
+      }
+      if (el.type === 'email' && value && !el.checkValidity()) {
+        setError(el, 'Enter a valid email address.');
+        return false;
+      }
+      setError(el, '');
+      return true;
+    }
+
+    // Validate on blur (not per keystroke) so errors appear once a field is done.
+    form.querySelectorAll('input, select, textarea').forEach((el) => {
+      setDescribedBy(el, null); // associate the hint up front
+      el.addEventListener('blur', () => validate(el));
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (honeypot && honeypot.value) return; // bot — drop silently
+
+      let firstInvalid = null;
+      form.querySelectorAll('[required]').forEach((el) => {
+        if (!validate(el) && !firstInvalid) firstInvalid = el;
+      });
+      const emailEl = document.getElementById('email');
+      if (emailEl && emailEl.value && !validate(emailEl) && !firstInvalid) {
+        firstInvalid = emailEl;
+      }
+      if (firstInvalid) {
+        status.textContent = 'Please fix the highlighted fields and try again.';
+        status.className = 'mt-3 text-sm font-medium text-red-600';
+        firstInvalid.focus();
+        return;
+      }
+
+      const value = (id) => (document.getElementById(id)?.value || '').trim();
+      const body = [
+        `Name: ${value('name')}`,
+        `Company: ${value('company')}`,
+        `Email: ${value('email')}`,
+        `Phone: ${value('phone')}`,
+        `Product / service: ${value('product')}`,
+        `Quantity: ${value('quantity')}`,
+        `Ship to (state / ZIP): ${value('shipto')}`,
+        `Deadline: ${value('deadline')}`,
+        '',
+        'Project details:',
+        value('message'),
+      ].join('\n');
+      const product = value('product');
+      const subject = product ? `Quote request — ${product}` : 'Quote request';
+      const href =
+        `mailto:${email}?subject=${encodeURIComponent(subject)}` +
+        `&body=${encodeURIComponent(body)}`;
+
+      status.textContent =
+        'Opening your email app to send your request. Prefer not to? Call us instead.';
+      status.className = 'mt-3 text-sm text-brand-muted';
+      window.location.href = href;
+    });
+  }
+</script>

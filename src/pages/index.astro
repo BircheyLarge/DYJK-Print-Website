@@ -1,72 +1,81 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import MediaFrame from '../components/MediaFrame.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import TrustBar from '../components/TrustBar.astro';
 import QuoteCta from '../components/QuoteCta.astro';
 import { QUOTE_PATH, SITE } from '../consts';
 import { organizationSchema, websiteSchema } from '../lib/schema';
 import { SERVICES } from '../data/catalog';
 
-const services = SERVICES;
-
 const schema = [organizationSchema(), websiteSchema()];
 ---
 
 <BaseLayout description={SITE.description} schema={schema}>
-  <!-- Hero -->
-  <section class="bg-brand-surface">
-    <div class="mx-auto max-w-6xl px-4 py-20 text-center sm:py-28">
-      <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
-        Nationwide commercial printing
-      </p>
-      <h1
-        class="mx-auto mt-4 max-w-3xl text-4xl font-bold tracking-tight text-brand-ink sm:text-5xl"
-      >
-        Your Vision, Our Precision
-      </h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg text-brand-muted">
-        Offset and digital printing, graphic design and prepress — produced to
-        spec and shipped to your door anywhere in the United States.
-      </p>
-      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <a
-          href={QUOTE_PATH}
-          class="rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-blue-dark"
+  <!-- Hero — art-direction: headline left, duotone media panel right. -->
+  <Section tone="surface" size="hero">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+      <div>
+        <p
+          class="text-sm font-semibold uppercase tracking-wider text-brand-blue"
         >
-          Request a Quote
-        </a>
-        <a
-          href="/services/"
-          class="rounded-md border border-slate-300 px-6 py-3 text-base font-semibold text-brand-slate transition-colors hover:border-brand-blue hover:text-brand-blue"
+          Nationwide commercial printing
+        </p>
+        <h1
+          class="font-display mt-4 text-5xl font-semibold leading-[1.05] tracking-tight text-brand-ink sm:text-7xl"
+          aria-label="Your Vision, Our Precision."
         >
-          Explore Services
-        </a>
+          Your Vision,<br /><span class="text-accent">Our Precision.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-brand-slate">
+          Offset and digital printing, graphic design and prepress — produced to
+          spec and shipped to your door anywhere in the United States.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <Button href={QUOTE_PATH} variant="primary">Request a Quote</Button>
+          <Button href="/services/" variant="outline">Explore Services</Button>
+        </div>
+      </div>
+      <!-- Hidden on mobile: the headline carries small screens; the panel is a
+           placeholder until real press/product photography lands. -->
+      <div class="hidden lg:block">
+        <MediaFrame
+          ratio="hero"
+          registration
+          placeholder="showcase"
+          class="shadow-raised"
+        />
       </div>
     </div>
-  </section>
+  </Section>
 
-  <!-- Services overview -->
-  <section class="mx-auto max-w-6xl px-4 py-16">
-    <h2 class="text-center text-3xl font-bold tracking-tight text-brand-ink">
-      What we print
-    </h2>
-    <div class="mt-10 grid gap-6 md:grid-cols-3">
+  <!-- Trust bar -->
+  <TrustBar />
+
+  <!-- Services -->
+  <Section
+    tone="white"
+    align="center"
+    eyebrow="Services"
+    title="What we print"
+    lead="Offset and digital printing plus in-house design and prepress — one partner, from press-ready files to your doorstep."
+  >
+    <div class="grid gap-6 md:grid-cols-3">
       {
-        services.map((service) => (
-          <a
-            href={service.href}
-            class="group rounded-xl border border-slate-200 p-6 transition-shadow hover:shadow-lg"
-          >
-            <h3 class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
-              {service.name}
-            </h3>
-            <p class="mt-2 text-sm text-brand-muted">{service.blurb}</p>
-            <span class="mt-4 inline-block text-sm font-semibold text-brand-blue">
-              Learn more →
-            </span>
-          </a>
+        SERVICES.map((service) => (
+          <Card href={service.href} title={service.name} cta="Learn more">
+            {service.blurb}
+          </Card>
         ))
       }
     </div>
-  </section>
+  </Section>
+
+  <!-- How it works -->
+  <HowItWorks />
 
   <!-- CTA band -->
   <QuoteCta />

@@ -1,0 +1,91 @@
+---
+/*
+ * Section — the section-rhythm primitive.
+ * A full-bleed band with a centered max-w container and one of the four
+ * committed section tones. Owns vertical rhythm and (optionally) a standard
+ * section header, so composition never re-invents band + heading spacing.
+ * On the ink tone, text inverts and the eyebrow uses accent-tint (a magenta
+ * wash that reads as the brand highlight at 15:1 on ink — the accent itself
+ * fails as small text on dark, per the token contract).
+ */
+interface Props {
+  tone?: 'white' | 'surface' | 'ink' | 'accent-tint';
+  /** hero = taller padding for the first-scroll band. */
+  size?: 'default' | 'hero';
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+  align?: 'left' | 'center';
+  id?: string;
+  class?: string;
+}
+const {
+  tone = 'white',
+  size = 'default',
+  eyebrow,
+  title,
+  lead,
+  align = 'left',
+  id,
+  class: className = '',
+} = Astro.props;
+
+const toneClass = {
+  white: 'bg-white',
+  surface: 'bg-brand-surface',
+  ink: 'bg-brand-ink',
+  'accent-tint': 'bg-accent-tint',
+}[tone];
+
+const padClass = size === 'hero' ? 'py-20 sm:py-28' : 'py-16 sm:py-20';
+
+const onInk = tone === 'ink';
+const eyebrowColor = onInk ? 'text-accent-tint' : 'text-brand-blue';
+const titleColor = onInk ? 'text-white' : 'text-brand-ink';
+const leadColor = onInk ? 'text-slate-300' : 'text-brand-muted';
+
+const centered = align === 'center';
+const hasHeader = Boolean(eyebrow || title || lead);
+---
+
+<section id={id} class:list={[toneClass, className]}>
+  <div class:list={['mx-auto max-w-6xl px-4', padClass]}>
+    {
+      hasHeader && (
+        <header
+          class:list={['mb-10 max-w-2xl', centered && 'mx-auto text-center']}
+        >
+          {eyebrow && (
+            <p
+              class:list={[
+                'text-sm font-semibold uppercase tracking-wider',
+                eyebrowColor,
+              ]}
+            >
+              {eyebrow}
+            </p>
+          )}
+          {title && (
+            <h2
+              class:list={[
+                'font-display text-3xl font-semibold tracking-tight sm:text-4xl',
+                titleColor,
+                eyebrow && 'mt-2',
+              ]}
+            >
+              {title}
+            </h2>
+          )}
+          {lead && (
+            <p
+              class:list={['text-lg', leadColor, (eyebrow || title) && 'mt-3']}
+            >
+              {lead}
+            </p>
+          )}
+        </header>
+      )
+    }
+    <slot />
+  </div>
+</section>

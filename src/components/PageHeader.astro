@@ -1,4 +1,11 @@
 ---
+/*
+ * PageHeader — the page-level h1 band. Built on Section (surface tone) so the
+ * band + rhythm stay in one place; the display token carries the h1 in Fraunces
+ * so hub headlines match the homepage hero instead of falling back to Inter.
+ */
+import Section from './Section.astro';
+
 interface Props {
   title: string;
   subtitle?: string;
@@ -7,24 +14,25 @@ interface Props {
 const { title, subtitle, eyebrow } = Astro.props;
 ---
 
-<section class="bg-brand-surface">
-  <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
-    {
-      eyebrow && (
-        <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
-          {eyebrow}
-        </p>
-      )
-    }
-    <h1
-      class="mt-3 max-w-3xl text-4xl font-bold tracking-tight text-brand-ink sm:text-5xl"
-    >
-      {title}
-    </h1>
-    {
-      subtitle && (
-        <p class="mt-4 max-w-2xl text-lg text-brand-muted">{subtitle}</p>
-      )
-    }
-  </div>
-</section>
+<Section tone="surface">
+  {
+    eyebrow && (
+      <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
+        {eyebrow}
+      </p>
+    )
+  }
+  <h1
+    class:list={[
+      'font-display max-w-3xl text-4xl font-semibold tracking-tight text-brand-ink sm:text-5xl',
+      eyebrow && 'mt-3',
+    ]}
+  >
+    {title}
+  </h1>
+  {
+    subtitle && (
+      <p class="mt-4 max-w-2xl text-lg text-brand-muted">{subtitle}</p>
+    )
+  }
+</Section>
