@@ -1,0 +1,55 @@
+---
+/**
+ * Confirmation page for visitors without JavaScript — /api/quote redirects
+ * here after a successful native form POST. Scripted submissions never leave
+ * the quote page; they get the inline success panel instead.
+ *
+ * noindex: it's a dead end for crawlers and would only dilute the quote page.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import { SITE } from '../../consts';
+---
+
+<BaseLayout
+  title="Quote request received"
+  description="Thanks — your quote request reached DYJK Print. We'll come back with pricing and a production timeline."
+  noindex
+>
+  <section class="mx-auto max-w-2xl px-4 py-24 text-center">
+    <svg
+      class="mx-auto h-14 w-14 text-green-700"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="m9 12 2 2 4-4"></path>
+    </svg>
+
+    <h1 class="mt-6 text-4xl font-bold tracking-tight text-brand-ink">
+      Thanks — your request is in.
+    </h1>
+    <p class="mx-auto mt-4 max-w-xl text-lg text-brand-slate">
+      A real person reviews every request. We'll come back with pricing and a
+      production timeline, usually within one business day.
+    </p>
+    <p class="mt-6 text-brand-muted">
+      Need it sooner? Call{' '}
+      <a
+        href={`tel:${SITE.phone}`}
+        class="font-semibold text-brand-blue hover:text-brand-blue-dark"
+        >{SITE.phoneDisplay}</a
+      >.
+    </p>
+
+    <div class="mt-10 flex flex-wrap justify-center gap-4">
+      <Button href="/" variant="secondary">Back to home</Button>
+      <Button href="/products/" variant="secondary">Browse products</Button>
+    </div>
+  </section>
+</BaseLayout>

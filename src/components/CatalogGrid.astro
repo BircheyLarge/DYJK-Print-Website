@@ -1,0 +1,61 @@
+---
+/**
+ * Card grid for the section hubs.
+ *
+ * Items with an `href` render as links; items without one render as plain
+ * cards. That distinction is deliberate — some sections still have entries
+ * whose detail pages aren't built yet, and a card that looks clickable but
+ * isn't is worse than a card that never invited the click.
+ */
+import type { CatalogItem } from '../data/catalog';
+
+interface Props {
+  items: ReadonlyArray<CatalogItem>;
+  /**
+   * Heading level for the card titles. Hubs put these directly under the page
+   * <h1> (2, the default); a page that introduces the grid with its own <h2>
+   * passes 3 so the outline doesn't skip. Purely semantic — the visual size is
+   * the same either way, which is the point of having the knob.
+   */
+  headingLevel?: 2 | 3;
+}
+const { items, headingLevel = 2 }: Props = Astro.props;
+
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+
+/*
+ * Hover is a border-color change, not a drop shadow. The site has no shadows
+ * anywhere else — every other surface is defined by a hairline — and a card
+ * that lifts off the page on hover was the one exception. Matches the hover
+ * language already used by the outlined button and the home product list.
+ */
+const card = 'rounded-xl border border-brand-line p-6 transition-colors';
+---
+
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    items.map((item) =>
+      item.href ? (
+        <a
+          href={item.href}
+          class:list={[card, 'group block hover:border-brand-blue']}
+        >
+          <Heading class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
+            {item.name}
+          </Heading>
+          <p class="mt-2 text-sm text-brand-muted">{item.blurb}</p>
+          <span class="mt-4 inline-block text-sm font-semibold text-brand-blue">
+            Learn more <span aria-hidden="true">→</span>
+          </span>
+        </a>
+      ) : (
+        <div class={card}>
+          <Heading class="text-lg font-semibold text-brand-ink">
+            {item.name}
+          </Heading>
+          <p class="mt-2 text-sm text-brand-muted">{item.blurb}</p>
+        </div>
+      ),
+    )
+  }
+</div>

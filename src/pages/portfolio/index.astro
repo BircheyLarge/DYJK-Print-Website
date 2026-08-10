@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const schema = breadcrumbSchema([
+  { name: 'Home', path: '/' },
+  { name: 'Portfolio', path: '/portfolio/' },
+]);
+---
+
+<BaseLayout
+  title="Portfolio"
+  description="A look at recent print work from DYJK Print — case studies and samples coming soon."
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Portfolio"
+    title="Our work"
+    subtitle="We're curating recent projects and case studies to share here. In the meantime, ask us for samples relevant to your project."
+  />
+
+  <section class="mx-auto max-w-3xl px-4 py-16 sm:py-20">
+    <p class="text-lg leading-relaxed text-brand-slate">
+      Want to see examples like yours? Tell us what you're printing and we'll
+      send relevant samples and specs.
+    </p>
+  </section>
+
+  <QuoteCta heading="Tell us about your project" />
+</BaseLayout>

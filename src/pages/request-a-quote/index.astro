@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import { SITE } from '../../consts';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+const faqs = [
+  {
+    question: 'How fast will I get my quote?',
+    answer:
+      'Most quotes go out within one business day. If your deadline is tight, call (801) 960-3396 and we will price it while you are on the phone.',
+  },
+  {
+    question: 'Do I need print-ready artwork to get a quote?',
+    answer:
+      'No. Tell us what you are printing and roughly how many, and we can price it. Our prepress team can prepare or fix your files later, and we always send a proof before anything goes on press.',
+  },
+  {
+    question: 'Do you print for customers outside your area?',
+    answer:
+      'Yes — DYJK Print produces and ships nationwide, to all 50 states. Everything is handled remotely: quoting, proofing, approval and delivery to your door.',
+  },
+  {
+    question: 'How do I send you my files?',
+    answer:
+      'Paste a link to Google Drive, Dropbox or WeTransfer in the quote form, or wait until we reply and send them to us directly. We accept print-ready PDF, and native InDesign, Illustrator and Photoshop files.',
+  },
+  {
+    question: 'What does it cost?',
+    answer:
+      'Print pricing depends on quantity, size, stock, colors and finishing, so there is no flat price list. Send us the details and you will get a real, itemized number rather than a placeholder estimate.',
+  },
+];
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Request a Quote', path: '/request-a-quote/' },
+  ]),
+  faqSchema(faqs),
+];
+
+const steps = [
+  {
+    title: 'You send the details',
+    body: 'Product, quantity, deadline and where it ships. Two minutes, and no account to create.',
+  },
+  {
+    title: 'We price it',
+    body: 'A real estimator reviews it — usually inside one business day — and comes back with an itemized quote and a production timeline.',
+  },
+  {
+    title: 'You approve a proof',
+    body: 'Nothing goes on press until you sign off. Then we produce it and ship it to your door.',
+  },
+];
+---
+
+<BaseLayout
+  title="Request a Quote"
+  description="Tell DYJK Print about your project for a fast quote and a clear production timeline — commercial printing produced to spec and shipped nationwide."
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Request a Quote"
+    title="Get a fast quote"
+    subtitle="Tell us what you're printing and we'll come back with pricing and a production timeline — usually within one business day."
+  />
+
+  <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
+      <div class="min-w-0">
+        <QuoteForm />
+      </div>
+
+      <aside class="lg:pt-2">
+        <div class="rounded-xl border border-brand-line bg-brand-surface p-6">
+          <h2 class="text-base font-bold text-brand-ink">What happens next</h2>
+          <ol class="mt-4 space-y-5">
+            {
+              steps.map((step, i) => (
+                <li class="flex gap-3">
+                  <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-blue text-sm font-bold text-white"
+                    aria-hidden="true"
+                  >
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p class="text-sm font-semibold text-brand-ink">
+                      {step.title}
+                    </p>
+                    <p class="mt-1 text-sm text-brand-muted">{step.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="mt-6 rounded-xl border border-brand-line p-6">
+          <h2 class="text-base font-bold text-brand-ink">
+            Rather talk it through?
+          </h2>
+          <p class="mt-2 text-sm text-brand-muted">
+            Complicated job, or a deadline that won't wait? Call us and we'll
+            work it out together.
+          </p>
+          <p class="mt-4">
+            <a
+              href={`tel:${SITE.phone}`}
+              class="text-lg font-bold text-brand-blue hover:text-brand-blue-dark"
+              >{SITE.phoneDisplay}</a
+            >
+          </p>
+          <p class="mt-1 text-sm">
+            <a
+              href={`mailto:${SITE.email}`}
+              class="text-brand-blue hover:text-brand-blue-dark">{SITE.email}</a
+            >
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <section class="border-t border-brand-line bg-brand-surface">
+    {
+      /* max-w-6xl so the heading lines up with the form's left edge above it;
+        the list itself stays measure-width for readability. */
+    }
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+      <h2 class="text-3xl font-bold tracking-tight text-brand-ink">
+        Common questions
+      </h2>
+      <dl class="mt-8 max-w-3xl space-y-8">
+        {
+          faqs.map((faq) => (
+            <div>
+              <dt class="text-lg font-semibold text-brand-ink">
+                {faq.question}
+              </dt>
+              <dd class="mt-2 leading-relaxed text-brand-slate">
+                {faq.answer}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+</BaseLayout>

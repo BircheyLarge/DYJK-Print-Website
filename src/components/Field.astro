@@ -1,0 +1,163 @@
+---
+/**
+ * One labelled form control, wired for assistive tech.
+ *
+ * Every field gets: a real <label for>, a stable id, an always-present error
+ * node referenced by aria-describedby (hidden until it has text), and the hint
+ * text in the same description. Enhancement JS only has to fill the error node
+ * and flip aria-invalid — it never has to invent markup or rewire ARIA, which
+ * is where hand-rolled forms usually break.
+ */
+/** [value, visible label] — the shape both selects on this site use. */
+type FieldOption = readonly [value: string, label: string];
+
+interface Props {
+  name: string;
+  label: string;
+  as?: 'input' | 'textarea' | 'select';
+  /** Narrowed to the input types this site actually uses. */
+  type?: 'text' | 'email' | 'tel' | 'url' | 'date' | 'number';
+  required?: boolean;
+  hint?: string;
+  placeholder?: string;
+  autocomplete?: string;
+  inputmode?: 'text' | 'email' | 'tel' | 'url' | 'numeric' | 'decimal';
+  rows?: number;
+  min?: string;
+  maxlength?: number;
+  /** Options for as="select". */
+  options?: ReadonlyArray<FieldOption>;
+  /** Leading blank option label for a select. */
+  optionsPlaceholder?: string;
+  /** Span both columns in the form grid. */
+  wide?: boolean;
+}
+
+const {
+  name,
+  label,
+  as = 'input',
+  type = 'text',
+  required = false,
+  hint,
+  placeholder,
+  autocomplete,
+  inputmode,
+  rows = 5,
+  min,
+  maxlength,
+  options = [] as ReadonlyArray<FieldOption>,
+  optionsPlaceholder,
+  wide = false,
+}: Props = Astro.props;
+
+const id = `qf-${name}`;
+const hintId = hint ? `${id}-hint` : undefined;
+const errorId = `${id}-error`;
+// The error node is always in the DOM (empty), so it can be announced the
+// moment it gains text without a describedby swap.
+const describedBy = [hintId, errorId].filter(Boolean).join(' ');
+
+/*
+ * No focus styling here on purpose. global.css gives every focusable thing on
+ * the site the same 3px brand-blue :focus-visible outline; the previous
+ * `focus:outline-none` + `ring-brand-blue/30` traded that for a ~1.9:1 wash on
+ * exactly the controls where focus matters most. The border still turns blue,
+ * but the outline is what you see.
+ *
+ * The resting border is brand-line-strong (3:1, SC 1.4.11) — an input with no
+ * fill is identified by its edge alone, and slate-300 was 1.48:1.
+ */
+const controlClass =
+  'mt-1.5 block w-full rounded-md border border-brand-line-strong bg-white ' +
+  'px-3 py-2.5 text-base text-brand-ink transition-colors ' +
+  'placeholder:text-brand-muted hover:border-brand-slate ' +
+  'focus-visible:border-brand-blue aria-[invalid=true]:border-red-600';
+---
+
+<div class:list={['min-w-0', wide && 'sm:col-span-2']}>
+  <label for={id} class="block text-sm font-semibold text-brand-ink">
+    {label}
+    {
+      required ? (
+        <span class="text-red-700" aria-hidden="true">
+          {' '}
+          *
+        </span>
+      ) : (
+        <span class="ml-1 font-normal text-brand-muted">(optional)</span>
+      )
+    }
+  </label>
+
+  {
+    as === 'textarea' && (
+      <textarea
+        id={id}
+        name={name}
+        rows={rows}
+        required={required}
+        placeholder={placeholder}
+        maxlength={maxlength}
+        aria-describedby={describedBy}
+        class={controlClass}
+      />
+    )
+  }
+
+  {
+    as === 'select' && (
+      <select
+        id={id}
+        name={name}
+        required={required}
+        aria-describedby={describedBy}
+        class={controlClass}
+      >
+        <option value="">{optionsPlaceholder ?? 'Choose one…'}</option>
+        {options.map(([value, text]) => (
+          <option value={value}>{text}</option>
+        ))}
+      </select>
+    )
+  }
+
+  {
+    as === 'input' && (
+      <input
+        id={id}
+        name={name}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        autocomplete={autocomplete}
+        inputmode={inputmode}
+        min={min}
+        maxlength={maxlength}
+        aria-describedby={describedBy}
+        class={controlClass}
+      />
+    )
+  }
+
+  {
+    hint && (
+      <p id={hintId} class="mt-1.5 text-sm text-brand-muted">
+        {hint}
+      </p>
+    )
+  }
+
+  {
+    /* Toggled via the `hidden` ATTRIBUTE, never a `hidden` class — a utility
+      class would keep display:none after the attribute is removed and the
+      message would silently never appear. */
+  }
+  <p
+    id={errorId}
+    data-error-for={name}
+    hidden
+    class="mt-1.5 text-sm font-medium text-red-700"
+  >
+  </p>
+</div>

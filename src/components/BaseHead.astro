@@ -1,0 +1,45 @@
+---
+import { SITE } from '../consts';
+import { buildPageMeta, type PageMetaInput } from '../lib/seo';
+
+type Props = PageMetaInput;
+
+const { title, description, image, noindex } = Astro.props;
+const meta = buildPageMeta({
+  title,
+  description,
+  image,
+  noindex,
+  path: Astro.url.pathname,
+});
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{meta.title}</title>
+<meta name="description" content={meta.description} />
+<link rel="canonical" href={meta.canonical} />
+{meta.noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={meta.title} />
+<meta property="og:description" content={meta.description} />
+<meta property="og:url" content={meta.canonical} />
+<meta property="og:locale" content={SITE.locale} />
+{meta.image && <meta property="og:image" content={meta.image} />}
+
+<!-- Twitter -->
+<meta
+  name="twitter:card"
+  content={meta.image ? 'summary_large_image' : 'summary'}
+/>
+<meta name="twitter:title" content={meta.title} />
+<meta name="twitter:description" content={meta.description} />
+{meta.image && <meta name="twitter:image" content={meta.image} />}
+
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
