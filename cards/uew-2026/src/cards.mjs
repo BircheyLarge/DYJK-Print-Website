@@ -28,6 +28,7 @@ const CORAL_LIGHT = '#f8a484';
 const GOLD = '#cba55f';
 const GOLD_LIGHT = '#e2c68d';
 const CREAM = '#faf5ec';
+const NAVY_NIGHT = '#0a2340'; // must match --navy-night; the halo blends against it
 
 /** A single wheat stalk, used quietly on the inside-left write-in panel. */
 function wheatSprig({ ink = NAVY, accent = CORAL } = {}) {
@@ -285,7 +286,7 @@ export function buildCards(logos) {
       outsideBg: 'var(--navy-night)',
       insideBg: CREAM,
       front: `<div class="stack stack--center c2-front">
-        <div class="c2-star">${starBurst({ size: 340, ink: GOLD_LIGHT, accent: CORAL_LIGHT })}</div>
+        <div class="c2-star">${starBurst({ size: 340, ink: GOLD_LIGHT, accent: CORAL_LIGHT, glowOn: NAVY_NIGHT })}</div>
         <p class="caps c2-merry">Merry Christmas</p>
         <p class="c2-sub">peace, joy and light</p>
       </div>`,

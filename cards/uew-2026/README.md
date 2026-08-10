@@ -107,3 +107,11 @@ with Georgia, which the 2025 card used for body copy.
 - Text is live vector with embedded subset fonts rather than converted to
   outlines. GotPrint accepts this; if their preflight ever objects, the same
   build can emit a fully flattened version.
+- **The only raster content in these files is in the client's own logo.** Each
+  logo instance carries three inline bitmaps — the highlight dots on the three
+  electrons, baked into the supplied artwork — at 90 dpi in the Brightmore
+  lockup and 216 dpi in the master. Each is about 0.05 in across, so it is
+  invisible at print size, but a preflight report may list them. Everything
+  drawn for these cards is vector. (The star's halo is built from concentric
+  opaque rings for exactly this reason: an SVG radial gradient gets flattened
+  to a 72 dpi bitmap on the way into the PDF.)

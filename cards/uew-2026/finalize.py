@@ -165,7 +165,11 @@ def main() -> int:
     for card in index:
         src = raw / f"UEW-2026-{card['id']}.pdf"
         finalize(src, final / src.name)
-        render_png(OUT / "proof" / f"UEW-2026-{card['id']}-proof.pdf", proofs_png)
+        # proofs get the same exact-size treatment, so a reviewer measuring one
+        # is measuring the same artboard the print file uses
+        proof = OUT / "proof" / f"UEW-2026-{card['id']}-proof.pdf"
+        finalize(proof, proof)
+        render_png(proof, proofs_png)
         render_png(final / src.name, proofs_png)
 
     for holiday in ("Thanksgiving", "Christmas"):

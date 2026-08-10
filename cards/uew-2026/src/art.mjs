@@ -276,12 +276,40 @@ export function atomOrnament({
 </svg>`;
 }
 
+const hex2rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const rgb2hex = (c) => '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
+
+/**
+ * A soft halo built from concentric *opaque* rings.
+ *
+ * The obvious way to do this is a radial gradient with alpha, but Skia
+ * flattens that to a 72 dpi bitmap on the way into the PDF — a 2.5in raster
+ * in an otherwise all-vector print file. Interpolating the colour against a
+ * known background instead keeps every ring a flat fill, so the file stays
+ * vector and the vendor gets no low-resolution image to flag.
+ */
+function halo(radius, tint, background, { strength = 0.3, steps = 28, falloff = 2.2 } = {}) {
+  const t0 = hex2rgb(tint);
+  const bg = hex2rgb(background);
+  const out = [];
+  for (let i = steps; i >= 1; i--) {
+    const t = i / steps;
+    // sample the falloff at the ring's midpoint so the innermost disc, which
+    // covers the centre, still lands at near-full strength
+    const a = strength * Math.pow(1 - (i - 0.5) / steps, falloff);
+    const c = rgb2hex(t0.map((v, k) => a * v + (1 - a) * bg[k]));
+    out.push(`<circle cx="0" cy="0" r="${n(radius * t)}" fill="${c}"/>`);
+  }
+  return out.join('');
+}
+
 /** Eight-point star with two orbits — the luminous Christmas card. */
 export function starBurst({
   size = 340,
   ink = '#D9B368',
   accent = '#F8A484',
   glow = true,
+  glowOn = '#0a2340',
 } = {}) {
   const long = size * 0.46;
   const short = size * 0.2;
@@ -304,12 +332,7 @@ export function starBurst({
     return `<circle cx="${n(x * c - y * s)}" cy="${n(x * s + y * c)}" r="${rr}" fill="${accent}"/>`;
   };
   return `<svg viewBox="${-half} ${-half} ${size} ${size}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-  ${
-    glow
-      ? `<defs><radialGradient id="starGlow"><stop offset="0" stop-color="${ink}" stop-opacity="0.34"/><stop offset="0.55" stop-color="${ink}" stop-opacity="0.07"/><stop offset="1" stop-color="${ink}" stop-opacity="0"/></radialGradient></defs>
-  <circle cx="0" cy="0" r="${n(half)}" fill="url(#starGlow)"/>`
-      : ''
-  }
+  ${glow ? halo(half, ink, glowOn, { strength: 0.3, steps: 30 }) : ''}
   <g fill="none" stroke="${ink}" stroke-width="1" opacity="0.55">
     <ellipse rx="${n(rx)}" ry="${n(ry)}" transform="rotate(28)"/>
     <ellipse rx="${n(rx)}" ry="${n(ry)}" transform="rotate(-28)"/>
