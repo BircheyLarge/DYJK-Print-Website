@@ -150,7 +150,7 @@ T1_ART = (
     + art.maple_leaf(CX_R + 96, 176, angle=28, scale=1.14, fill=P["amber"])
     + art.oak_leaf(CX_R, 116, angle=0, scale=1.22, fill=P["moss"], vein=P["navy_deep"])
     + art.oak_leaf(CX_R - 60, 268, angle=-40, scale=0.88, fill=P["goldenrod"])
-    + art.oak_leaf(CX_R + 60, 268, angle=40, scale=0.88, fill=P["rust"])
+    + art.oak_leaf(CX_R + 60, 268, angle=40, scale=0.88, fill=P["pumpkin"])
     + art.berry_cluster(CX_R - 8, 262, scale=0.94, fill=P["pumpkin"])
 )
 
@@ -272,9 +272,9 @@ T2 = Concept(
     inside_l_body="",
     inside_r_bg=flood(P["harvest"],
                       art.maple_leaf(VB_W - 54, 62, angle=22, scale=0.52,
-                                     fill=P["pumpkin"], opacity=0.8)
+                                     fill=P["pumpkin"])
                       + art.oak_leaf(46, VB_H - 56, angle=-20, scale=0.50,
-                                     fill=P["moss"], opacity=0.8)),
+                                     fill=P["chestnut"])),
     inside_r_body=msg(
         "Gratitude looks a lot like you.",
         "Thank you for serving our country, and for welcoming our caregivers into your "

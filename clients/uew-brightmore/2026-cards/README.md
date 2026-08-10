@@ -142,6 +142,16 @@ effectively invisible. Two rules came out of it:
 Watermarks are exempt and listed in the script — they're drawn at 30–40% opacity
 on purpose.
 
+**Use `verify_artwork.py` as the real check.** The pairing list above only covers
+what someone remembered to write down, and it has now missed defects twice — the
+brand coral as body text, and every element drawn at partial opacity, where the
+*declared* colour clears the floor but the composited pixel doesn't. A stroke set
+in goldenrod at 75% over navy is not goldenrod on navy. The measured sweep renders
+each panel, finds the background, and reports every fill above 0.1% of the panel
+that lands under 3:1 — it can't know what we meant, but it can't miss an element
+either. It caught a rust oak leaf at 2.45:1 on navy and a moss leaf compositing to
+2.38:1 that both checks-by-list had passed.
+
 **One for the client, reported not fixed.** Inside the supplied logo, the light-coral
 orbit rings measure **1.71:1 on the harvest ground**, 1.82:1 on cream and 1.94:1 on
 ivory; the coral "UNITED / HEALTHCARE" line is 2.93:1 on harvest. On warm uncoated
@@ -181,6 +191,7 @@ python3 src/build_logo_assets.py   # logo variants from the client's vector sour
 python3 src/build_cards.py         # HTML -> Chromium -> press PDFs + proofs
 python3 src/verify_print.py        # pre-press checks (exit 1 on failure)
 python3 src/verify_contrast.py     # contrast audit    (exit 1 on failure)
+python3 src/verify_artwork.py      # measured sweep off the rendered pages
 ```
 
 | Path | What |
@@ -191,6 +202,7 @@ python3 src/verify_contrast.py     # contrast audit    (exit 1 on failure)
 | `src/build_cards.py` | render pipeline |
 | `src/verify_print.py` | pre-press assertions |
 | `src/verify_contrast.py` | WCAG contrast audit of every ink/ground pairing |
+| `src/verify_artwork.py` | measured sweep — reads ink off the rendered page |
 | `assets/logo/` | client logo, six variants (colour / knockout / mono, ±Brightmore) |
 | `assets/fonts/` | self-hosted woff2 (Cormorant Garamond, Playfair, Cinzel, Lora, Montserrat, Great Vibes) |
 | `out/print/` | **the files to upload** |
