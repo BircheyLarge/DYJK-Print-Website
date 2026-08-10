@@ -102,6 +102,28 @@ Illustrator PDF** — we never rasterise it.
 >    concentric flat fills (`art.radial_rings`). **If you build print PDFs out of
 >    Chromium anywhere else, check with `get_image_info()`.**
 
+### Contrast
+
+`python3 src/verify_contrast.py` — all 45 ink/ground pairings clear WCAG AA
+(4.5:1 text, 3:1 non-text). This matters more than usual here: the list skews
+older, and reduced contrast sensitivity comes with age. On paper a too-light fill
+doesn't just look weak, it can drop out of uncoated stock or print as a smudge
+that reads like a fault.
+
+The audit caught nine real problems, seven of them in the first cut of the autumn
+palette — a husk wheat sprig on harvest cream at **1.46:1** would have been
+effectively invisible. Two rules came out of it:
+
+- **Light tones (amber, goldenrod, husk) go on dark grounds; deep tones (rust,
+  pumpkin, chestnut, moss, cranberry) go on light grounds.** `wheat_ink` exists
+  because wheat needs a light-ground version.
+- **`coral_ink` for coral text on cream/ivory.** The brand coral as body or lead
+  text is only 3.1:1; `coral_ink` is the same hue walked dark enough to clear AA.
+  Bright coral still does all the illustration work and all text on navy.
+
+Watermarks are exempt and listed in the script — they're drawn at 30–40% opacity
+on purpose.
+
 ---
 
 ## Decisions worth your sign-off
@@ -131,6 +153,7 @@ Illustrator PDF** — we never rasterise it.
 python3 src/build_logo_assets.py   # logo variants from the client's vector source
 python3 src/build_cards.py         # HTML -> Chromium -> press PDFs + proofs
 python3 src/verify_print.py        # pre-press checks (exit 1 on failure)
+python3 src/verify_contrast.py     # contrast audit    (exit 1 on failure)
 ```
 
 | Path | What |
@@ -140,6 +163,7 @@ python3 src/verify_print.py        # pre-press checks (exit 1 on failure)
 | `src/layout.py` | sheet geometry + shared CSS; every measurement in one place |
 | `src/build_cards.py` | render pipeline |
 | `src/verify_print.py` | pre-press assertions |
+| `src/verify_contrast.py` | WCAG contrast audit of every ink/ground pairing |
 | `assets/logo/` | client logo, six variants (colour / knockout / mono, ±Brightmore) |
 | `assets/fonts/` | self-hosted woff2 (Cormorant Garamond, Playfair, Cinzel, Lora, Montserrat, Great Vibes) |
 | `out/print/` | **the files to upload** |

@@ -143,7 +143,7 @@ T1_ART = (
     + art.oak_leaf(CX_R, 116, angle=0, scale=1.22, fill=P["moss"], vein=P["navy_deep"])
     + art.oak_leaf(CX_R - 60, 268, angle=-40, scale=0.88, fill=P["goldenrod"])
     + art.oak_leaf(CX_R + 60, 268, angle=40, scale=0.88, fill=P["rust"])
-    + art.berry_cluster(CX_R - 8, 262, scale=0.94, fill=P["cranberry"])
+    + art.berry_cluster(CX_R - 8, 262, scale=0.94, fill=P["pumpkin"])
 )
 
 T1 = Concept(
@@ -163,7 +163,7 @@ T1 = Concept(
     .t1-in .lead   {{ color: {P['rust']}; }}
     .t1-in .copy   {{ color: {P['ink']}; }}
     .t1-in .sign   {{ color: {P['navy']}; }}
-    .t1-in .msg-rule {{ background: {P['goldenrod']}; }}
+    .t1-in .msg-rule {{ background: {P['chestnut']}; }}
     """,
     front_bg=glow(P["navy_deep"], P["navy"], CX_R, 200, 300, T1_ART),
     front_body=(
@@ -180,7 +180,7 @@ T1 = Concept(
     inside_l_body="",
     inside_r_bg=flood(P["harvest"],
                       art.wheat(VB_W - 58, VB_H - 42, angle=14, scale=0.62,
-                                stroke=P["husk"])),
+                                stroke=P["wheat_ink"])),
     inside_r_body=msg(
         "Thank you for serving our country.",
         "It is a privilege to care for the men and women who powered America&rsquo;s "
@@ -205,18 +205,18 @@ T1 = Concept(
 T2_ART = (
     # top band, y < 150
     art.maple_leaf(58, 62, angle=-28, scale=1.02, fill=P["rust"])
-    + art.oak_leaf(128, 104, angle=24, scale=0.86, fill=P["goldenrod"])
+    + art.oak_leaf(128, 104, angle=24, scale=0.86, fill=P["chestnut"])
     + art.leaf_simple(196, 48, angle=-46, scale=0.92, fill=P["moss"])
-    + art.maple_leaf(300, 88, angle=34, scale=0.82, fill=P["amber"])
-    + art.oak_leaf(382, 52, angle=-16, scale=0.90, fill=P["pumpkin"])
+    + art.maple_leaf(300, 88, angle=34, scale=0.82, fill=P["pumpkin"])
+    + art.oak_leaf(382, 52, angle=-16, scale=0.90, fill=P["wheat_ink"])
     + art.berry_cluster(238, 112, scale=0.92, fill=P["cranberry"])
     # bottom band, y > 455
     # Kept out of x=140-285: that band is reserved for the front-cover logo.
-    + art.wheat(52, VB_H - 30, angle=-18, scale=0.94, stroke=P["husk"], grains=6)
+    + art.wheat(52, VB_H - 30, angle=-18, scale=0.94, stroke=P["wheat_ink"], grains=6)
     + art.oak_leaf(112, VB_H - 68, angle=18, scale=0.90, fill=P["chestnut"])
     + art.maple_leaf(96, VB_H - 18, angle=-24, scale=0.84, fill=P["pumpkin"])
     + art.leaf_simple(322, VB_H - 88, angle=42, scale=0.96, fill=P["moss"])
-    + art.maple_leaf(352, VB_H - 30, angle=16, scale=0.88, fill=P["amber"])
+    + art.maple_leaf(352, VB_H - 30, angle=16, scale=0.88, fill=P["rust"])
     + art.berry_cluster(392, VB_H - 96, scale=0.86, fill=P["cranberry"])
 )
 
@@ -239,7 +239,7 @@ T2 = Concept(
     .t2-in .lead   {{ color: {P['rust']}; }}
     .t2-in .copy   {{ color: {P['ink']}; }}
     .t2-in .sign   {{ color: {P['navy']}; }}
-    .t2-in .msg-rule {{ background: {P['goldenrod']}; }}
+    .t2-in .msg-rule {{ background: {P['chestnut']}; }}
     """,
     front_bg=flood(P["harvest"], T2_ART),
     front_body=(
@@ -282,14 +282,14 @@ T2 = Concept(
 # One ring, one node, one sprig. The restraint is the concept — a second ellipse
 # turned the mark into a lens shape and fought the word for attention.
 T3_ART = (
-    art.orbits(CX_R, 252, 158, 158, angles=(0,), stroke=P["amber"], width=1.25,
-               opacity=0.85)
+    art.orbits(CX_R, 252, 158, 158, angles=(0,), stroke=P["husk"], width=1.25,
+               opacity=0.9)
     + art.nodes(CX_R, 252, 158, count=1, phase=-118, radius=4.6, fill=P["harvest"])
     # Sprig clears the ring rather than piercing it — a botanical crossing a
     # geometric rule looks accidental at this size.
     + art.wheat(CX_R, 452, angle=0, scale=0.92, stroke=P["husk"], grains=6)
-    + art.leaf_simple(CX_R - 36, 442, angle=-62, scale=0.70, fill=P["amber"])
-    + art.leaf_simple(CX_R + 36, 442, angle=62, scale=0.70, fill=P["amber"])
+    + art.leaf_simple(CX_R - 36, 442, angle=-62, scale=0.70, fill=P["husk"])
+    + art.leaf_simple(CX_R + 36, 442, angle=62, scale=0.70, fill=P["husk"])
 )
 
 T3 = Concept(
@@ -306,11 +306,11 @@ T3 = Concept(
     .t3-front .display-sc {{ color: {P['harvest']}; font-size: 30pt; font-weight: 500;
                              letter-spacing: 0.20em; text-indent: 0.20em; }}
     .t3-front .eyebrow    {{ color: {P['harvest']}; }}
-    .t3-front .year       {{ color: {P['husk']}; }}
+    .t3-front .year       {{ color: {P['harvest']}; }}
     .t3-in .lead   {{ color: {P['rust']}; }}
     .t3-in .copy   {{ color: {P['ink']}; }}
     .t3-in .sign   {{ color: {P['navy']}; }}
-    .t3-in .msg-rule {{ background: {P['goldenrod']}; }}
+    .t3-in .msg-rule {{ background: {P['chestnut']}; }}
     """,
     front_bg=glow(P["rust"], P["pumpkin"], CX_R, 252, 300, T3_ART),
     front_body=(
@@ -379,7 +379,7 @@ C1 = Concept(
     .c1-front .script  {{ color: {P['cream']}; font-size: 46pt; }}
     .c1-front .year    {{ color: {P['gold']}; }}
     .c1-front .rule    {{ background: {P['gold']}; opacity: 0.85; margin: 0.15in 0; }}
-    .c1-in .lead   {{ color: {P['coral']}; }}
+    .c1-in .lead   {{ color: {P['coral_ink']}; }}
     .c1-in .copy   {{ color: {P['ink']}; }}
     .c1-in .sign   {{ color: {P['navy']}; }}
     .c1-in .msg-rule {{ background: {P['gold']}; }}
@@ -451,12 +451,12 @@ C2 = Concept(
         "colour, no heavy ink coverage) and the easiest to read at arm's length."
     ),
     css=f"""
-    .c2-front .eyebrow {{ color: {P['coral']}; }}
+    .c2-front .eyebrow {{ color: {P['coral_ink']}; }}
     .c2-front .display {{ color: {P['navy']}; font-size: 34pt; font-weight: 500; }}
     .c2-front .display em {{ font-style: italic; }}
     .c2-front .year    {{ color: {P['navy']}; opacity: 0.68; }}
     .c2-front .rule    {{ background: {P['coral']}; margin: 0.12in 0; }}
-    .c2-in .lead   {{ color: {P['coral']}; }}
+    .c2-in .lead   {{ color: {P['coral_ink']}; }}
     .c2-in .copy   {{ color: {P['ink']}; }}
     .c2-in .sign   {{ color: {P['navy']}; }}
     .c2-in .msg-rule {{ background: {P['peach']}; }}
@@ -521,7 +521,7 @@ C3 = Concept(
     .c3-front .eyebrow    {{ color: {P['peach']}; }}
     .c3-front .year       {{ color: {P['gold']}; }}
     .c3-front .rule       {{ background: {P['gold']}; opacity: 0.8; margin: 0.13in 0; }}
-    .c3-in .lead   {{ color: {P['coral']}; }}
+    .c3-in .lead   {{ color: {P['coral_ink']}; }}
     .c3-in .copy   {{ color: {P['ink']}; }}
     .c3-in .sign   {{ color: {P['navy']}; }}
     .c3-in .msg-rule {{ background: {P['gold']}; }}

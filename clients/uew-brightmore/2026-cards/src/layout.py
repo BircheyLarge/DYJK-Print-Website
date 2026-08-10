@@ -76,6 +76,16 @@ PALETTE = {
     "chestnut": "#8A4E2B",
     "harvest": "#F7EDDC",
     "husk": "#E0C395",
+    # Light tones (amber/goldenrod/husk) are for dark grounds; deep tones
+    # (rust/pumpkin/chestnut/moss/cranberry) for light. wheat_ink is the wheat
+    # colour for light grounds — husk on harvest cream is 1.46:1 and vanishes.
+    "wheat_ink": "#9C7328",
+    # Brand coral as *text* on cream/ivory is only 3.1:1. This is that same hue
+    # walked dark enough to clear AA (4.67:1 on cream, 4.98:1 on ivory). The
+    # recipients are largely older adults, where contrast sensitivity is reduced,
+    # so this is legibility rather than box-ticking. Bright coral still does all
+    # the illustration work and all text on navy.
+    "coral_ink": "#C93A1B",
 }
 
 BASE_CSS = f"""
