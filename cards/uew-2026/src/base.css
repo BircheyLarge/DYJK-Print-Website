@@ -20,6 +20,10 @@
   --navy-deep: #0e2e4f;
   --navy-night: #0a2340;
   --coral: #f15933;
+  /* Brand coral is only 3.11:1 on cream — fine for illustration, short of AA as
+     text. coral-ink is the same hue walked dark enough to clear it (4.68:1);
+     bright coral keeps every drawn element and any text on navy. */
+  --coral-ink: #c93a1b;
   --coral-light: #f8a484;
   --cream: #faf5ec;
   --cream-deep: #f3ead9;
@@ -59,9 +63,18 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: #6b7280;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
+}
+
+/* Screen-only. Left unscoped this paints a full-page grey plate underneath
+   every print file — invisible because the sheet covers it, but a hidden
+   heavy-ink object is not something to hand a printer. */
+@media screen {
+  html,
+  body {
+    background: #6b7280;
+  }
 }
 
 .sheet {

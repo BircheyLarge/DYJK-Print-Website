@@ -436,7 +436,7 @@ export function buildCards(logos) {
       }),
       css: `
         .c3-front { color: var(--navy); }
-        .c3-eyebrow { color: var(--coral); }
+        .c3-eyebrow { color: var(--coral-ink); }
         .c3-head { margin-top: 0.5in; }
         .c3-h { font-size: 44pt; line-height: 0.96; font-weight: 500; }
         .c3-sub {
@@ -477,7 +477,7 @@ export function renderCard(card, { proof = false, cssHref = './base.css' } = {})
 
   .back-logo { width: 2.02in; }
   .inside-msg { text-align: center; color: var(--ink); }
-  .inside-eyebrow { color: var(--coral); }
+  .inside-eyebrow { color: var(--coral-ink); }
   .inside-head {
     margin-top: 0.16in; font-size: 26pt; line-height: 1.06; color: var(--navy);
   }

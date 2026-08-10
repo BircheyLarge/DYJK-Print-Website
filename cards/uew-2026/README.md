@@ -109,8 +109,13 @@ one field colour Thanksgiving and Christmas would otherwise no longer share.
 It is a choice for the client, not a replacement — the main contact sheets
 still show three per holiday.
 
+Brand coral is `#F15933` in illustration, but **`--coral-ink #C93A1B` for coral
+set as type on light stock**: the brand value is only 3.11:1 on cream, which is
+short of AA at eyebrow size. Same hue, walked dark enough to clear it at 4.71:1.
+Bright coral keeps every drawn element and any coral text on navy.
+
 Every text pairing clears WCAG AA; the tightest is the 7.6pt rust eyebrow on oat
-at 5.19:1. One caveat worth recording: **goldenrod on oat is 2.84:1**, just under
+at 5.15:1. One caveat worth recording: **goldenrod on oat is 2.84:1**, just under
 the 3:1 non-text floor. It is therefore only ever used as one of three wheat
 tones inside the wreath, never for type and never as the only colour carrying an
 element — the hairline rules and the write-in sprigs use chestnut (5.66:1)
@@ -126,9 +131,22 @@ python3 finalize.py # exact page size, Trim/Bleed boxes, proofs, contact sheets
 `build.mjs --html` writes HTML only; open `out/html/gallery.html` to review in a
 browser.
 
-`finalize.py` also runs two checks and fails if either does: every page is exactly
+```bash
+python3 verify_contrast.py   # slower; run before handing files over
+```
+
+`finalize.py` runs two checks and fails if either does: every page is exactly
 619.2 x 439.2 pt with the right TrimBox, and no live text sits outside the vendor
 safe box or straddles the score line.
+
+`verify_contrast.py` is the third. It deliberately does **not** work from a list
+of ink/ground pairings — a list only covers what someone remembered to write
+down, which is how brand coral on cream survived several rounds of review here.
+It reads the ink colour off every text span in the finished PDFs and samples the
+stock from the pixels around it, then does the same for every vector fill and
+stroke, so a pairing cannot exist in the artwork without being measured. Text
+must clear WCAG AA for its size; artwork must clear 3:1 unless it is listed as a
+deliberate exception with a reason.
 
 Fonts are self-hosted in `assets/fonts/` (Cormorant Garamond, Gelasio, Pinyon
 Script, Montserrat — all SIL Open Font Licence). Gelasio is metrically compatible
@@ -150,6 +168,12 @@ with Georgia, which the 2025 card used for body copy.
 - Text is live vector with embedded subset fonts rather than converted to
   outlines. GotPrint accepts this; if their preflight ever objects, the same
   build can emit a fully flattened version.
+- **Two colours inside the supplied logo are low-contrast on warm stock**: the
+  light coral orbit rings are 1.69:1 on oat and 1.82:1 on cream, and the coral
+  in the wordmark is 2.89:1 on oat. That is the client's own artwork, so it is
+  reported here rather than altered — but on a card read by older recipients it
+  is worth knowing that the orbit rings will look faint on warm paper. The
+  navy-ground cards do not have this problem.
 - **The only raster content in these files is in the client's own logo.** Each
   logo instance carries three inline bitmaps — the highlight dots on the three
   electrons, baked into the supplied artwork — at 90 dpi in the Brightmore
