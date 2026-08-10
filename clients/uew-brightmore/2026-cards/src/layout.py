@@ -42,6 +42,13 @@ PAD_OUT = BLEED + MARGIN  # 0.47in — outer edges carry the bleed too
 PAD_FOLD = MARGIN  # 0.42in — measured from the score line
 PAD_V = BLEED + MARGIN
 
+# ---- front-cover logo ----------------------------------------------------- #
+# Centre of the right (front) panel's trim, and the strip reserved for the mark.
+FRONT_LOGO_CX = FOLD_X + PANEL_TRIM_W / 2  # 6.425in
+FRONT_LOGO_CY = 5.26
+FRONT_LOGO_W = 1.45
+FRONT_LOGO_SLOT = 0.84  # padding-bottom on the front panel's content column
+
 # ---- palette -------------------------------------------------------------- #
 PALETTE = {
     "navy": "#123C64",
@@ -54,6 +61,21 @@ PALETTE = {
     "gold": "#D9A566",
     "wheat": "#E8C48A",
     "ink": "#12283D",
+    # --- autumn extension, Thanksgiving set only ---------------------------- #
+    # Anchored on the brand coral (#F05932): rust and pumpkin are that hue walked
+    # darker, so the harvest range still reads as UEW rather than as stock autumn.
+    # Contrast against the rust ground: harvest 5.5:1, husk 3.9:1 (decorative).
+    "rust": "#A8431E",
+    "rust_deep": "#8E3616",
+    "pumpkin": "#C9622A",
+    "amber": "#DE9A3E",
+    "goldenrod": "#B8842B",
+    "moss": "#878B57",
+    "olive": "#6B7148",
+    "cranberry": "#8E2F3C",
+    "chestnut": "#8A4E2B",
+    "harvest": "#F7EDDC",
+    "husk": "#E0C395",
 }
 
 BASE_CSS = f"""
@@ -150,6 +172,11 @@ html, body {{
 /* The logo is placed as vector PDF in post-processing; this reserves its box
    so nothing else can drift into the space. */
 .logo-slot {{ width: 100%; flex: 0 0 auto; }}
+
+/* Front covers carry the mark at the foot of the panel. Reserving the strip with
+   padding (rather than a flex child) lets each concept's existing composition
+   simply shift up into the shorter box instead of being re-tuned one by one. */
+.has-front-logo .content {{ padding-bottom: {FRONT_LOGO_SLOT}in; }}
 
 /* Preview-only raster stand-in for the stamped vector logo. Positioned in sheet
    coordinates so the preview and the print stamp use the identical numbers. */

@@ -20,6 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 import art
+import layout
 from layout import PALETTE as P
 
 
@@ -58,6 +59,12 @@ VB_W, VB_H = 430, 610
 CX_L, CX_R, CY = 217.5, 212.5, 305
 
 
+def front_logo(variant: str) -> "LogoBox":
+    """The mark at the foot of the front cover, from shared layout constants."""
+    return LogoBox(1, variant, layout.FRONT_LOGO_CX, layout.FRONT_LOGO_CY,
+                   layout.FRONT_LOGO_W)
+
+
 def flood(colour: str, body: str = "") -> str:
     return art.svg(
         f'<rect x="0" y="0" width="{VB_W}" height="{VB_H}" fill="{colour}"/>{body}',
@@ -68,13 +75,16 @@ def flood(colour: str, body: str = "") -> str:
 
 
 def glow(colour: str, halo: str, cx: float, cy: float, r: float, body: str = "") -> str:
-    """Flood + a soft radial lift behind the focal point (SVG gradient = stays vector)."""
+    """Flood + a soft radial lift behind the focal point.
+
+    Built from concentric flat fills rather than an SVG gradient — see
+    `art.radial_rings`; a gradient here gets flattened to a 72 dpi bitmap under
+    the entire front cover.
+    """
     return art.svg(
-        f'<defs><radialGradient id="g" cx="{cx / VB_W:.4f}" cy="{cy / VB_H:.4f}" '
-        f'r="{r / VB_W:.4f}">'
-        f'<stop offset="0" stop-color="{halo}"/>'
-        f'<stop offset="1" stop-color="{colour}"/></radialGradient></defs>'
-        f'<rect x="0" y="0" width="{VB_W}" height="{VB_H}" fill="url(#g)"/>{body}',
+        f'<rect x="0" y="0" width="{VB_W}" height="{VB_H}" fill="{colour}"/>'
+        + art.radial_rings(cx, cy, r, halo, colour)
+        + body,
         w=VB_W,
         h=VB_H,
         extra='preserveAspectRatio="none"',
@@ -124,36 +134,36 @@ def corner_orbit(colour: str, opacity: float = 0.5) -> str:
 # A harvest crown, not a harvest pile: one gold orbit, two wheat sprigs sweeping
 # up either side, and three leaves big enough to actually read as leaves at 4.25in.
 T1_ART = (
-    art.orbits(CX_R, 208, 146, 63, angles=(0, 62, 124), stroke=P["gold"], width=1.25,
-               opacity=0.62)
-    + art.wheat(CX_R - 116, 296, angle=-38, scale=1.16, stroke=P["wheat"], grains=7)
-    + art.wheat(CX_R + 116, 296, angle=38, scale=1.16, stroke=P["wheat"], grains=7)
-    + art.maple_leaf(CX_R - 96, 176, angle=-28, scale=1.14, fill=P["coral"])
-    + art.maple_leaf(CX_R + 96, 176, angle=28, scale=1.14, fill=P["gold"])
-    + art.oak_leaf(CX_R, 116, angle=0, scale=1.22, fill=P["peach"], vein=P["navy_deep"])
-    + art.oak_leaf(CX_R - 60, 268, angle=-40, scale=0.88, fill=P["gold"])
-    + art.oak_leaf(CX_R + 60, 268, angle=40, scale=0.88, fill=P["coral"])
-    + art.berry_cluster(CX_R - 8, 262, scale=0.94, fill=P["coral"])
+    art.orbits(CX_R, 208, 146, 63, angles=(0, 62, 124), stroke=P["goldenrod"],
+               width=1.25, opacity=0.75)
+    + art.wheat(CX_R - 116, 296, angle=-38, scale=1.16, stroke=P["husk"], grains=7)
+    + art.wheat(CX_R + 116, 296, angle=38, scale=1.16, stroke=P["husk"], grains=7)
+    + art.maple_leaf(CX_R - 96, 176, angle=-28, scale=1.14, fill=P["pumpkin"])
+    + art.maple_leaf(CX_R + 96, 176, angle=28, scale=1.14, fill=P["amber"])
+    + art.oak_leaf(CX_R, 116, angle=0, scale=1.22, fill=P["moss"], vein=P["navy_deep"])
+    + art.oak_leaf(CX_R - 60, 268, angle=-40, scale=0.88, fill=P["goldenrod"])
+    + art.oak_leaf(CX_R + 60, 268, angle=40, scale=0.88, fill=P["rust"])
+    + art.berry_cluster(CX_R - 8, 262, scale=0.94, fill=P["cranberry"])
 )
 
 T1 = Concept(
     key="thanksgiving-01-grateful",
     season="thanksgiving",
-    title="Grateful — navy & harvest gold",
+    title="Grateful — deep navy & harvest (rust, goldenrod, moss, cranberry)",
     pitch=(
         "The most formal of the three and the closest sibling to the 2025 card: deep "
         "navy, gold script, a harvest crown riding the brand's atom orbits. Reads as "
         "a corporate holiday card without feeling cold."
     ),
     css=f"""
-    .t1-front .eyebrow {{ color: {P['peach']}; }}
-    .t1-front .script  {{ color: {P['cream']}; font-size: 62pt; margin-top: 0.06in; }}
-    .t1-front .year    {{ color: {P['gold']}; }}
-    .t1-front .rule    {{ background: {P['gold']}; opacity: 0.8; margin: 0.14in 0; }}
-    .t1-in .lead   {{ color: {P['coral']}; }}
+    .t1-front .eyebrow {{ color: {P['amber']}; }}
+    .t1-front .script  {{ color: {P['harvest']}; font-size: 62pt; margin-top: 0.06in; }}
+    .t1-front .year    {{ color: {P['amber']}; }}
+    .t1-front .rule    {{ background: {P['goldenrod']}; margin: 0.14in 0; }}
+    .t1-in .lead   {{ color: {P['rust']}; }}
     .t1-in .copy   {{ color: {P['ink']}; }}
     .t1-in .sign   {{ color: {P['navy']}; }}
-    .t1-in .msg-rule {{ background: {P['peach']}; }}
+    .t1-in .msg-rule {{ background: {P['goldenrod']}; }}
     """,
     front_bg=glow(P["navy_deep"], P["navy"], CX_R, 200, 300, T1_ART),
     front_body=(
@@ -166,20 +176,21 @@ T1 = Concept(
     back_bg=back_panel(P["navy_deep"], mark=art.orbits(CX_L, 96, 74, 32,
                        angles=(0, 60, 120), stroke=P["navy_soft"], width=1.2)),
     back_body="",
-    inside_l_bg=flood(P["cream"], corner_orbit(P["peach"], 0.42)),
+    inside_l_bg=flood(P["harvest"], corner_orbit(P["goldenrod"], 0.34)),
     inside_l_body="",
-    inside_r_bg=flood(P["cream"],
+    inside_r_bg=flood(P["harvest"],
                       art.wheat(VB_W - 58, VB_H - 42, angle=14, scale=0.62,
-                                stroke=P["wheat"])),
+                                stroke=P["husk"])),
     inside_r_body=msg(
-        "For every door that opened to us this year&thinsp;&mdash;",
-        "thank you. It is a privilege to care for the men and women who powered this "
-        "country, and for the families who stand beside them. May your Thanksgiving be "
+        "Thank you for serving our country.",
+        "It is a privilege to care for the men and women who powered America&rsquo;s "
+        "energy program, and for the families who stand beside them. We are grateful "
+        "you are part of the United Energy Workers family. May your Thanksgiving be "
         "warm, unhurried, and full of the people you love.",
         "With gratitude from all of us",
     ),
     logos=[
-        LogoBox(1, "uew-logo-brightmore-ko", 2.175, 3.05, 1.95),
+        front_logo("uew-logo-brightmore-ko"),
         LogoBox(2, "uew-logo-brightmore", 6.425, 5.06, 1.58),
     ],
 )
@@ -193,43 +204,44 @@ T1 = Concept(
 # centred title block sits in clean paper and nothing collides with the type.
 T2_ART = (
     # top band, y < 150
-    art.maple_leaf(58, 62, angle=-28, scale=1.02, fill=P["coral"])
-    + art.oak_leaf(128, 104, angle=24, scale=0.86, fill=P["gold"])
-    + art.leaf_simple(196, 48, angle=-46, scale=0.92, fill=P["peach"])
-    + art.maple_leaf(300, 88, angle=34, scale=0.82, fill=P["wheat"])
-    + art.oak_leaf(382, 52, angle=-16, scale=0.90, fill=P["peach"])
-    + art.berry_cluster(238, 112, scale=0.92, fill=P["coral"])
+    art.maple_leaf(58, 62, angle=-28, scale=1.02, fill=P["rust"])
+    + art.oak_leaf(128, 104, angle=24, scale=0.86, fill=P["goldenrod"])
+    + art.leaf_simple(196, 48, angle=-46, scale=0.92, fill=P["moss"])
+    + art.maple_leaf(300, 88, angle=34, scale=0.82, fill=P["amber"])
+    + art.oak_leaf(382, 52, angle=-16, scale=0.90, fill=P["pumpkin"])
+    + art.berry_cluster(238, 112, scale=0.92, fill=P["cranberry"])
     # bottom band, y > 455
-    + art.wheat(66, VB_H - 34, angle=-18, scale=0.94, stroke=P["wheat"], grains=6)
-    + art.oak_leaf(146, VB_H - 74, angle=18, scale=0.94, fill=P["gold"])
-    + art.maple_leaf(222, VB_H - 34, angle=-24, scale=0.90, fill=P["coral"])
-    + art.leaf_simple(300, VB_H - 84, angle=42, scale=1.0, fill=P["peach"])
-    + art.maple_leaf(378, VB_H - 44, angle=16, scale=0.86, fill=P["wheat"])
-    + art.berry_cluster(104, VB_H - 96, scale=0.86, fill=P["coral"])
+    # Kept out of x=140-285: that band is reserved for the front-cover logo.
+    + art.wheat(52, VB_H - 30, angle=-18, scale=0.94, stroke=P["husk"], grains=6)
+    + art.oak_leaf(112, VB_H - 68, angle=18, scale=0.90, fill=P["chestnut"])
+    + art.maple_leaf(96, VB_H - 18, angle=-24, scale=0.84, fill=P["pumpkin"])
+    + art.leaf_simple(322, VB_H - 88, angle=42, scale=0.96, fill=P["moss"])
+    + art.maple_leaf(352, VB_H - 30, angle=16, scale=0.88, fill=P["amber"])
+    + art.berry_cluster(392, VB_H - 96, scale=0.86, fill=P["cranberry"])
 )
 
 T2 = Concept(
     key="thanksgiving-02-give-thanks",
     season="thanksgiving",
-    title="Give Thanks — ivory & falling leaves",
+    title="Give Thanks — harvest paper & falling autumn leaves",
     pitch=(
-        "The friendliest of the three. Light ivory stock feel, hand-drawn leaves "
-        "scattered top and bottom, navy Playfair. Prints beautifully on uncoated "
-        "and photographs well for social."
+        "The friendliest of the three. Warm harvest paper, hand-drawn leaves in the "
+        "full autumn range — rust, chestnut, goldenrod, moss, cranberry — framing "
+        "navy Playfair. Prints beautifully on uncoated and photographs well for social."
     ),
     css=f"""
-    .t2-front .eyebrow {{ color: {P['coral']}; }}
+    .t2-front .eyebrow {{ color: {P['rust']}; }}
     .t2-front .display {{ color: {P['navy']}; font-size: 40pt; font-weight: 500;
                           margin: 0.10in 0; }}
     .t2-front .display em {{ font-style: italic; }}
     .t2-front .year    {{ color: {P['navy']}; opacity: 0.7; }}
-    .t2-front .rule    {{ background: {P['coral']}; margin: 0.12in 0; }}
-    .t2-in .lead   {{ color: {P['coral']}; }}
+    .t2-front .rule    {{ background: {P['rust']}; margin: 0.12in 0; }}
+    .t2-in .lead   {{ color: {P['rust']}; }}
     .t2-in .copy   {{ color: {P['ink']}; }}
     .t2-in .sign   {{ color: {P['navy']}; }}
-    .t2-in .msg-rule {{ background: {P['gold']}; }}
+    .t2-in .msg-rule {{ background: {P['goldenrod']}; }}
     """,
-    front_bg=flood(P["ivory"], T2_ART),
+    front_bg=flood(P["harvest"], T2_ART),
     front_body=(
         '<div class="grow"></div>'
         '<p class="eyebrow">Wishing you a warm</p>'
@@ -238,25 +250,26 @@ T2 = Concept(
         '<p class="year">Thanksgiving 2026</p>'
         '<div class="grow"></div>'
     ),
-    back_bg=back_panel(P["cream"], mark=art.leaf_simple(CX_L, 96, scale=0.8,
-                       fill=P["peach"], opacity=0.55)),
+    back_bg=back_panel(P["harvest"], mark=art.leaf_simple(CX_L, 96, scale=0.8,
+                       fill=P["moss"], opacity=0.5)),
     back_body="",
-    inside_l_bg=flood(P["ivory"], corner_orbit(P["gold"], 0.30)),
+    inside_l_bg=flood(P["harvest"], corner_orbit(P["goldenrod"], 0.30)),
     inside_l_body="",
-    inside_r_bg=flood(P["ivory"],
+    inside_r_bg=flood(P["harvest"],
                       art.maple_leaf(VB_W - 54, 62, angle=22, scale=0.52,
-                                     fill=P["peach"], opacity=0.85)
+                                     fill=P["pumpkin"], opacity=0.8)
                       + art.oak_leaf(46, VB_H - 56, angle=-20, scale=0.50,
-                                     fill=P["wheat"], opacity=0.85)),
+                                     fill=P["moss"], opacity=0.8)),
     inside_r_body=msg(
         "Gratitude looks a lot like you.",
-        "Thank you for welcoming our caregivers into your home, for your patience, and "
-        "for the trust you place in us every week. We hope your Thanksgiving is full of "
-        "good food, familiar faces, and time that feels like rest.",
+        "Thank you for serving our country, and for welcoming our caregivers into your "
+        "home. We are proud you are part of the United Energy Workers family. May your "
+        "Thanksgiving be full of good food, familiar faces, and time that feels like "
+        "rest.",
         "Happy Thanksgiving from all of us",
     ),
     logos=[
-        LogoBox(1, "uew-logo-brightmore", 2.175, 3.05, 1.95),
+        front_logo("uew-logo-brightmore"),
         LogoBox(2, "uew-logo-brightmore", 6.425, 5.06, 1.58),
     ],
 )
@@ -269,36 +282,37 @@ T2 = Concept(
 # One ring, one node, one sprig. The restraint is the concept — a second ellipse
 # turned the mark into a lens shape and fought the word for attention.
 T3_ART = (
-    art.orbits(CX_R, 252, 158, 158, angles=(0,), stroke=P["coral"], width=1.15,
-               opacity=0.62)
-    + art.nodes(CX_R, 252, 158, count=1, phase=-118, radius=4.6, fill=P["coral"])
+    art.orbits(CX_R, 252, 158, 158, angles=(0,), stroke=P["amber"], width=1.25,
+               opacity=0.85)
+    + art.nodes(CX_R, 252, 158, count=1, phase=-118, radius=4.6, fill=P["harvest"])
     # Sprig clears the ring rather than piercing it — a botanical crossing a
     # geometric rule looks accidental at this size.
-    + art.wheat(CX_R, 524, angle=0, scale=0.98, stroke=P["wheat"], grains=6)
-    + art.leaf_simple(CX_R - 38, 512, angle=-62, scale=0.74, fill=P["peach"])
-    + art.leaf_simple(CX_R + 38, 512, angle=62, scale=0.74, fill=P["peach"])
+    + art.wheat(CX_R, 452, angle=0, scale=0.92, stroke=P["husk"], grains=6)
+    + art.leaf_simple(CX_R - 36, 442, angle=-62, scale=0.70, fill=P["amber"])
+    + art.leaf_simple(CX_R + 36, 442, angle=62, scale=0.70, fill=P["amber"])
 )
 
 T3 = Concept(
     key="thanksgiving-03-thankful",
     season="thanksgiving",
-    title="Thankful — editorial cream & coral",
+    title="Thankful — burnt rust & cream, editorial",
     pitch=(
-        "The modern one. A single engraved word, one coral orbit, a wheat sprig, and "
-        "a lot of quiet. Feels current rather than seasonal-generic, and the restraint "
-        "makes the inside message do the emotional work."
+        "The modern one, and the most unmistakably autumn: a full burnt-rust field "
+        "with a single engraved word in cream, one amber orbit, one wheat sprig. Rust "
+        "is the brand coral walked darker, so it reads as UEW rather than as generic "
+        "harvest. Heaviest ink coverage of the six."
     ),
     css=f"""
-    .t3-front .display-sc {{ color: {P['navy']}; font-size: 30pt; font-weight: 500;
+    .t3-front .display-sc {{ color: {P['harvest']}; font-size: 30pt; font-weight: 500;
                              letter-spacing: 0.20em; text-indent: 0.20em; }}
-    .t3-front .eyebrow    {{ color: {P['coral']}; }}
-    .t3-front .year       {{ color: {P['navy']}; opacity: 0.65; }}
-    .t3-in .lead   {{ color: {P['coral']}; }}
+    .t3-front .eyebrow    {{ color: {P['harvest']}; }}
+    .t3-front .year       {{ color: {P['husk']}; }}
+    .t3-in .lead   {{ color: {P['rust']}; }}
     .t3-in .copy   {{ color: {P['ink']}; }}
     .t3-in .sign   {{ color: {P['navy']}; }}
-    .t3-in .msg-rule {{ background: {P['coral']}; }}
+    .t3-in .msg-rule {{ background: {P['goldenrod']}; }}
     """,
-    front_bg=flood(P["cream"], T3_ART),
+    front_bg=glow(P["rust"], P["pumpkin"], CX_R, 252, 300, T3_ART),
     front_body=(
         '<div class="grow"></div>'
         '<p class="eyebrow">Twenty twenty-six</p>'
@@ -307,22 +321,24 @@ T3 = Concept(
         '<div class="grow"></div>'
         '<p class="year">Happy Thanksgiving</p>'
     ),
-    back_bg=back_panel(P["navy_deep"]),
+    back_bg=back_panel(P["rust"]),
     back_body="",
-    inside_l_bg=flood(P["ivory"], corner_orbit(P["coral"], 0.28)),
+    inside_l_bg=flood(P["harvest"], corner_orbit(P["goldenrod"], 0.30)),
     inside_l_body="",
-    inside_r_bg=flood(P["ivory"],
+    inside_r_bg=flood(P["harvest"],
                       art.orbits(VB_W - 30, 54, 96, 40, angles=(-22,),
-                                 stroke=P["coral"], width=1.0, opacity=0.45)),
+                                 stroke=P["rust"], width=1.0, opacity=0.42)),
     inside_r_body=msg(
         "Some things are worth saying plainly.",
-        "Thank you &mdash; for your service, for your trust, and for the privilege of "
-        "caring for you and your family this year. We are grateful to be part of it, "
-        "and we hope your Thanksgiving is a good one.",
+        "Thank you for serving our country. Thank you for trusting us with your care. "
+        "And thank you for being part of the United Energy Workers family &mdash; it "
+        "is the honour of our work. Happy Thanksgiving to you and yours.",
         "Thanksgiving 2026",
     ),
     logos=[
-        LogoBox(1, "uew-logo-brightmore-ko", 2.175, 3.05, 1.95),
+        # mono-white, not the knockout: on a rust field the knockout's coral
+        # "UNITED"/"HEALTHCARE" sit almost on top of the background hue.
+        front_logo("uew-logo-brightmore-mono-white"),
         LogoBox(2, "uew-logo-brightmore", 6.425, 5.06, 1.58),
     ],
 )
@@ -333,11 +349,11 @@ T3 = Concept(
 # --------------------------------------------------------------------------- #
 
 C1_ART = (
-    art.orbits(CX_R, 208, 150, 64, angles=(0, 60, 120), stroke=P["peach"], width=1.4,
+    art.orbits(CX_R, 182, 150, 58, angles=(0, 60, 120), stroke=P["peach"], width=1.4,
                opacity=0.85)
-    + art.starburst(CX_R, 208, 104, fill=P["cream"], waist=0.085)
-    + art.starburst(CX_R, 208, 58, fill=P["gold"], waist=0.11)
-    + art.nodes(CX_R, 208, 150, count=3, phase=-90, radius=4.6, fill=P["coral"])
+    + art.starburst(CX_R, 182, 100, fill=P["cream"], waist=0.085)
+    + art.starburst(CX_R, 182, 56, fill=P["gold"], waist=0.11)
+    + art.nodes(CX_R, 182, 150, count=3, phase=-90, radius=4.6, fill=P["coral"])
     + art.sparkle(CX_R - 168, 118, 15, fill=P["gold"], opacity=0.9)
     + art.sparkle(CX_R + 172, 96, 11, fill=P["peach"], opacity=0.85)
     + art.sparkle(CX_R + 154, 340, 9, fill=P["gold"], opacity=0.7)
@@ -368,7 +384,7 @@ C1 = Concept(
     .c1-in .sign   {{ color: {P['navy']}; }}
     .c1-in .msg-rule {{ background: {P['gold']}; }}
     """,
-    front_bg=glow(P["navy_deep"], P["navy"], CX_R, 208, 330, C1_ART),
+    front_bg=glow(P["navy_deep"], P["navy"], CX_R, 182, 330, C1_ART),
     front_body=(
         '<div class="grow"></div>'
         '<p class="eyebrow">Wishing you</p>'
@@ -387,12 +403,12 @@ C1 = Concept(
     inside_r_body=msg(
         "May your home be full of light this Christmas&thinsp;&mdash;",
         "and your new year full of health, comfort, and the people who make it feel "
-        "like home. Thank you for letting us be part of your family&rsquo;s year. It is our "
-        "privilege to care for you.",
+        "like home. Thank you for serving our country, and for being part of the "
+        "United Energy Workers family. It is our privilege to care for you.",
         "Merry Christmas from all of us",
     ),
     logos=[
-        LogoBox(1, "uew-logo-brightmore-ko", 2.175, 3.05, 1.95),
+        front_logo("uew-logo-brightmore-ko"),
         LogoBox(2, "uew-logo-brightmore", 6.425, 5.06, 1.58),
     ],
 )
@@ -404,7 +420,7 @@ C1 = Concept(
 
 # Ground band is painted FIRST so the trees stand on it; painting it last clipped
 # the trunks and left coral stubs floating above the snow line.
-GROUND_Y = 534
+GROUND_Y = 470
 C2_ART = (
     f'<rect x="0" y="{GROUND_Y}" width="{VB_W}" height="{VB_H - GROUND_Y}" '
     f'fill="{P["cream"]}"/>'
@@ -419,9 +435,8 @@ C2_ART = (
     + art.geo_tree(370, GROUND_Y + 4, h=142, w=72, tiers=4, fill=P["navy"],
                    trunk=P["coral"])
     + art.snow([(52, 196, 2.4), (128, 244, 1.8), (196, 172, 2.0), (272, 228, 2.3),
-                (344, 184, 1.9), (392, 252, 2.2), (88, 308, 2.0), (232, 322, 1.7),
-                (352, 344, 2.1), (150, 376, 1.6), (300, 406, 1.9), (60, 432, 1.8),
-                (398, 424, 1.7), (208, 452, 1.5)],
+                (344, 184, 1.9), (392, 252, 2.2), (30, 300, 1.8), (404, 320, 1.7),
+                (24, 384, 1.6), (410, 402, 1.5)],
                fill=P["peach"], opacity=0.7)
     + art.sparkle(CX_R, 300, 16, fill=P["gold"], opacity=0.9)
 )
@@ -465,13 +480,14 @@ C2 = Concept(
                                fill=P["peach"], opacity=0.8)),
     inside_r_body=msg(
         "Warmest wishes for a bright and peaceful season.",
-        "Thank you for the trust you placed in us this year. May your Christmas be "
-        "merry, your home be warm, and your new year bring good health and the good "
-        "company of everyone you love.",
+        "Thank you for serving our country, and for the trust you place in us every "
+        "week. We are glad you are part of the United Energy Workers family. May your "
+        "Christmas be merry, your home be warm, and your new year bring good health "
+        "and good company.",
         "Christmas 2026",
     ),
     logos=[
-        LogoBox(1, "uew-logo-brightmore", 2.175, 3.05, 1.95),
+        front_logo("uew-logo-brightmore"),
         LogoBox(2, "uew-logo-brightmore", 6.425, 5.06, 1.58),
     ],
 )
@@ -528,13 +544,13 @@ C3 = Concept(
                       + art.berry_cluster(46, VB_H - 62, scale=0.72, fill=P["coral"])),
     inside_r_body=msg(
         "From our family to yours&thinsp;&mdash;",
-        "thank you for a year of trust, patience, and open doors. May your Christmas "
-        "be peaceful, your table full, and your new year kind to you and everyone "
-        "you love.",
+        "thank you for serving our country, and for being part of the United Energy "
+        "Workers family. May your Christmas be peaceful, your table full, and your "
+        "new year kind to you and everyone you love.",
         "Season&rsquo;s Greetings &middot; 2026",
     ),
     logos=[
-        LogoBox(1, "uew-logo-brightmore-ko", 2.175, 3.05, 1.95),
+        front_logo("uew-logo-brightmore-ko"),
         LogoBox(2, "uew-logo-brightmore", 6.425, 5.06, 1.58),
     ],
 )

@@ -16,9 +16,9 @@ Pick one per season; the rest are alternatives, not drafts.
 
 | | Concept | Feel |
 |---|---|---|
-| **T1** | `thanksgiving-01-grateful` | Formal. Deep navy, gold script "Grateful", a harvest crown riding the brand's atom orbits. Closest sibling to the 2025 card. |
-| **T2** | `thanksgiving-02-give-thanks` | Friendly. Ivory, hand-drawn leaves framing the type top and bottom, navy Playfair. Lightest ink coverage of the set. |
-| **T3** | `thanksgiving-03-thankful` | Modern editorial. One engraved word, one coral orbit, one wheat sprig, a lot of quiet. |
+| **T1** | `thanksgiving-01-grateful` | Formal. Deep navy ground with a harvest crown in rust, goldenrod, moss and cranberry riding the brand's atom orbits; cream script. Closest sibling to the 2025 card. |
+| **T2** | `thanksgiving-02-give-thanks` | Friendly. Warm harvest paper, hand-drawn leaves across the full autumn range framing navy Playfair. Lightest ink coverage of the set. |
+| **T3** | `thanksgiving-03-thankful` | Modern editorial, and the most unmistakably autumn: a full burnt-rust field, one engraved word in cream, one amber orbit. Heaviest ink coverage. |
 
 ### Christmas
 
@@ -28,9 +28,23 @@ Pick one per season; the rest are alternatives, not drafts.
 | **C2** | `christmas-02-merry-and-bright` | Light and contemporary. Geometric treeline in the two navies, coral trunks, peach snow. |
 | **C3** | `christmas-03-seasons-greetings` | Classic. Laurel wreath on deep navy, engraved Cinzel caps. The one that looks like a card someone keeps on the mantel. |
 
-Copy is new on every card — nothing reused from 2025. It leans on what this client
-actually does (in-home care for the people who worked the country's energy program),
-so the gratitude reads as specific rather than as generic card sentiment.
+Copy is new on every card — nothing reused from 2025. Every inside message now thanks
+the recipient **for serving our country** and for **being part of the United Energy
+Workers family**, in wording tuned to each card's register rather than pasted in.
+
+> Spelled out as "the United Energy Workers family" rather than "the UEW family" —
+> the audience includes patients and family members who may not read the initialism
+> at a glance. One find-and-replace if you'd rather have "UEW".
+
+**Autumn palette (Thanksgiving only).** Rust `#A8431E` and pumpkin `#C9622A` are the
+brand coral `#F05932` walked darker, so the harvest range reads as UEW rather than as
+stock autumn. Full set: rust, pumpkin, amber, goldenrod, moss, cranberry, chestnut,
+husk, harvest cream. The Christmas three keep the core brand palette.
+
+**The UEW mark appears twice per card:** at the foot of the front cover (the first
+thing the recipient sees) and under the inside message (signing it off). The back
+panel is deliberately left clear — a third impression on a 4.25in card reads as
+branding noise. Say the word and I'll add it back.
 
 ---
 
@@ -66,12 +80,27 @@ If GotPrint asks for two separate files rather than one 2-page PDF, split page 1
 
 - artboard exactly 619.2 × 439.2 pt, 2 pages
 - `TrimBox` and `BleedBox` declared
-- **zero raster images** — 100% vector, so there is no effective-DPI to worry about
+- **no rasterised artwork** — everything we draw is vector, so there is no
+  effective-DPI to worry about
 - every font embedded (nothing can substitute on the RIP)
 - background colour reaches all four bleed corners
 
 The client's logo is placed as **vector CMYK art lifted straight from their own
-Illustrator PDF** — it is never rasterised at any point in the pipeline.
+Illustrator PDF** — we never rasterise it.
+
+> **Two things worth knowing about the raster check.**
+>
+> 1. The supplied logo artwork itself contains **three inline bitmaps per instance** —
+>    the highlight dots on the electrons, about 0.05–0.13in across. They are in the
+>    client's own file. We place their mark unmodified rather than silently redrawing
+>    it, so the verifier allows rasters up to 0.2in and flags anything larger.
+> 2. `page.get_images()` does **not** report inline (`BI`/`ID`/`EI`) images, which is
+>    exactly what Skia emits when Chromium flattens a gradient. An earlier build of
+>    these cards carried a 311x440px **72 dpi bitmap under the whole front cover** — an
+>    SVG `radialGradient` — and passed a check written against `get_images()`. The
+>    verifier now uses `get_image_info()`, which sees both, and the glow is built from
+>    concentric flat fills (`art.radial_rings`). **If you build print PDFs out of
+>    Chromium anywhere else, check with `get_image_info()`.**
 
 ---
 
@@ -84,8 +113,8 @@ Illustrator PDF** — it is never rasterised at any point in the pipeline.
    matches the 2025 card and the envelope file. The corporate lockup without the
    Brightmore line is also built (`uew-logo-corporate*.pdf`) if you'd rather.
 3. **No phone number, URL or address anywhere.** I don't have verified contact details
-   and I won't invent them. Back panel is logo-only, same as 2025. Send me the details
-   and I'll add them to the back panel.
+   and I won't invent them. Send them over and the back panel — currently clear — is
+   the natural place for them.
 4. **Fonts are embedded, not outlined.** The GotPrint template says "convert text to
    outline"; embedding achieves the same guarantee (no substitution) and every check
    passes. If their preflight insists on true outlines, that's one pass in

@@ -6,3 +6,6 @@ out/.raw/
 
 # generated HTML + the 1 MB base64 font bundle; edit src/concepts.py, not these
 out/html/
+
+# python bytecode
+src/__pycache__/

@@ -137,10 +137,16 @@ def build_html(c: Concept, *, preview: bool, guides: bool) -> str:
                 lb.cx, lb.cy, lb.w, h, f"../../assets/logo/{lb.variant}.png"
             )
 
+    # A page-1 logo sitting right of the score is on the front cover, so that
+    # panel must reserve the strip its mark will be stamped into.
+    front_cls = f"{code}-front"
+    if any(lb.page == 1 and lb.cx > layout.FOLD_X for lb in c.logos):
+        front_cls += " has-front-logo"
+
     outside = layout.sheet_html(
         layout.panel("left", bg=c.back_bg, body=c.back_body, cls=f"{code}-back"),
         layout.panel("right", bg=c.front_bg, body=c.front_body,
-                     cls=f"{code}-front", align="between"),
+                     cls=front_cls, align="between"),
         guides=guides,
         extra=stamps[1],
     )

@@ -88,6 +88,36 @@ def starburst(cx: float, cy: float, r: float, *, points: int = 8, fill: str = GO
     return "".join(out)
 
 
+def mix(a: str, b: str, t: float) -> str:
+    """Blend two #rrggbb colours; t=0 -> a, t=1 -> b."""
+    ca = [int(a[i : i + 2], 16) for i in (1, 3, 5)]
+    cb = [int(b[i : i + 2], 16) for i in (1, 3, 5)]
+    return "#%02x%02x%02x" % tuple(
+        round(x + (y - x) * t) for x, y in zip(ca, cb)
+    )
+
+
+def radial_rings(cx: float, cy: float, r: float, inner: str, outer: str,
+                 *, steps: int = 44) -> str:
+    """A radial lift built from concentric flat-filled circles.
+
+    An SVG `radialGradient` is the obvious way to do this, and it is a trap:
+    Chromium's print-to-PDF hands gradients to Skia, which flattens them to a
+    72 dpi bitmap. On a 4.3 x 6.1in panel that is a 311 x 440px image sitting
+    under the whole front cover. Flat fills stay vector, and at 44 steps between
+    two near-identical navies each band moves a single value per channel — well
+    under what any press can resolve.
+    """
+    parts = []
+    for i in range(steps, 0, -1):
+        t = i / steps  # 1 at the outer edge, where it must match the flood
+        parts.append(
+            f'<circle cx="{cx}" cy="{cy}" r="{r * t:.2f}" '
+            f'fill="{mix(inner, outer, t)}"/>'
+        )
+    return "".join(parts)
+
+
 def hairline(x1: float, y1: float, x2: float, y2: float, *, stroke: str = PEACH,
              width: float = 1.0, opacity: float = 1.0) -> str:
     return (
