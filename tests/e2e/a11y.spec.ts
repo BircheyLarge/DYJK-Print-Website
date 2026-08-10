@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { SERVICES } from '../../src/data/catalog';
+import { PRODUCTS, SERVICES } from '../../src/data/catalog';
 
 // Cover every generated route (sourced from the catalog so it stays in sync),
 // plus the 404 page.
@@ -13,10 +13,12 @@ const STATIC_ROUTES = [
   '/about/',
   '/contact/',
   '/request-a-quote/',
+  '/quote-received/',
 ];
 const pages = [
   ...STATIC_ROUTES,
   ...SERVICES.map((service) => service.href),
+  ...PRODUCTS.map((product) => product.href),
   '/this-route-does-not-exist/',
 ];
 

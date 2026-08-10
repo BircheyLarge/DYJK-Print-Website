@@ -1,0 +1,190 @@
+---
+/**
+ * Product detail pages — the heaviest commercial-intent routes on the site
+ * ("brochure printing", "business card printing"). Each one carries concrete
+ * specs, use cases and an FAQ so it answers the query rather than bouncing
+ * the visitor straight to a contact form.
+ */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Button from '../../components/Button.astro';
+import { PRODUCTS, serviceBySlug } from '../../data/catalog';
+import { QUOTE_PATH } from '../../consts';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
+
+export const getStaticPaths = (() => {
+  return PRODUCTS.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}) satisfies GetStaticPaths;
+
+const { product } = Astro.props;
+const service = serviceBySlug(product.relatedService);
+
+// Service (not Product) schema: we publish no prices or SKUs, and a Product
+// node without an Offer is a weaker, less honest signal than describing the
+// printing service we actually provide.
+const schema = [
+  serviceSchema({
+    name: product.printingName,
+    description: product.metaDescription,
+    path: product.href,
+  }),
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products/' },
+    { name: product.name, path: product.href },
+  ]),
+  faqSchema(product.faqs),
+];
+
+const others = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
+---
+
+<BaseLayout
+  title={product.printingName}
+  description={product.metaDescription}
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Products"
+    title={product.printingName}
+    subtitle={product.blurb}
+  />
+
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
+      <div class="min-w-0">
+        <p class="text-lg leading-relaxed text-brand-slate">{product.intro}</p>
+
+        <h2 class="mt-12 text-2xl font-bold tracking-tight text-brand-ink">
+          Specifications
+        </h2>
+        <dl class="mt-6 divide-y divide-slate-200 border-y border-slate-200">
+          {
+            product.specs.map((spec) => (
+              <div class="grid gap-1 py-4 sm:grid-cols-[12rem_1fr] sm:gap-6">
+                <dt class="text-sm font-semibold text-brand-ink">
+                  {spec.label}
+                </dt>
+                <dd class="text-sm text-brand-slate">{spec.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="mt-4 text-sm text-brand-muted">
+          Need something outside these specs? Ask — custom sizes and stocks are
+          routine.
+        </p>
+
+        <h2 class="mt-12 text-2xl font-bold tracking-tight text-brand-ink">
+          What people use them for
+        </h2>
+        <ul class="mt-6 space-y-3">
+          {
+            product.useCases.map((useCase) => (
+              <li class="flex gap-3">
+                <svg
+                  class="mt-1 h-5 w-5 shrink-0 text-brand-blue"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <span class="text-brand-slate">{useCase}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2 class="mt-12 text-2xl font-bold tracking-tight text-brand-ink">
+          {product.name} — common questions
+        </h2>
+        <dl class="mt-6 space-y-8">
+          {
+            product.faqs.map((faq) => (
+              <div>
+                <dt class="text-lg font-semibold text-brand-ink">
+                  {faq.question}
+                </dt>
+                <dd class="mt-2 leading-relaxed text-brand-slate">
+                  {faq.answer}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <aside class="lg:pt-2">
+        <div class="rounded-xl border border-slate-200 bg-brand-surface p-6">
+          <h2 class="text-base font-bold text-brand-ink">
+            Get a price for this
+          </h2>
+          <p class="mt-2 text-sm text-brand-muted">
+            Send quantity, size and your deadline. We'll come back with an
+            itemized quote — usually within one business day.
+          </p>
+          <Button href={QUOTE_PATH} size="sm" block class="mt-4">
+            Request a Quote
+          </Button>
+        </div>
+
+        {
+          service && (
+            <div class="mt-6 rounded-xl border border-slate-200 p-6">
+              <h2 class="text-base font-bold text-brand-ink">
+                How we print these
+              </h2>
+              <p class="mt-2 text-sm text-brand-muted">{service.blurb}</p>
+              <p class="mt-3">
+                <a
+                  href={service.href}
+                  class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+                >
+                  About {service.name} →
+                </a>
+              </p>
+            </div>
+          )
+        }
+
+        <div class="mt-6 rounded-xl border border-slate-200 p-6">
+          <h2 class="text-base font-bold text-brand-ink">Also printed</h2>
+          <ul class="mt-3 space-y-2">
+            {
+              others.map((other) => (
+                <li>
+                  <a
+                    href={other.href}
+                    class="text-sm text-brand-blue hover:text-brand-blue-dark"
+                  >
+                    {other.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-3">
+            <a
+              href="/products/"
+              class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+            >
+              All products →
+            </a>
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <QuoteCta heading={`Ready to print ${product.name.toLowerCase()}?`} />
+</BaseLayout>

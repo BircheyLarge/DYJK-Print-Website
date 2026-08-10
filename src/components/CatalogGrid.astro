@@ -1,19 +1,41 @@
 ---
+/**
+ * Card grid for the section hubs.
+ *
+ * Items with an `href` render as links; items without one render as plain
+ * cards. That distinction is deliberate — some sections still have entries
+ * whose detail pages aren't built yet, and a card that looks clickable but
+ * isn't is worse than a card that never invited the click.
+ */
 import type { CatalogItem } from '../data/catalog';
 
 interface Props {
   items: ReadonlyArray<CatalogItem>;
 }
-const { items } = Astro.props;
+const { items }: Props = Astro.props;
+
+const card = 'rounded-xl border border-slate-200 p-6 transition-shadow';
 ---
 
 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
   {
-    items.map((item) => (
-      <div class="rounded-xl border border-slate-200 p-6">
-        <h2 class="text-lg font-semibold text-brand-ink">{item.name}</h2>
-        <p class="mt-2 text-sm text-brand-muted">{item.blurb}</p>
-      </div>
-    ))
+    items.map((item) =>
+      item.href ? (
+        <a href={item.href} class:list={[card, 'group block hover:shadow-lg']}>
+          <h2 class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
+            {item.name}
+          </h2>
+          <p class="mt-2 text-sm text-brand-muted">{item.blurb}</p>
+          <span class="mt-4 inline-block text-sm font-semibold text-brand-blue">
+            Learn more →
+          </span>
+        </a>
+      ) : (
+        <div class={card}>
+          <h2 class="text-lg font-semibold text-brand-ink">{item.name}</h2>
+          <p class="mt-2 text-sm text-brand-muted">{item.blurb}</p>
+        </div>
+      ),
+    )
   }
 </div>
