@@ -158,11 +158,18 @@ with Georgia, which the 2025 card used for body copy.
   part of the UEW family**, at the client's direction. Each card says it in the
   voice of its own art direction rather than repeating one sentence six times —
   see `paras` in `src/cards.mjs`, which is the only place copy lives.
-- **The logo is the master lockup the client supplied** (`UEW Logo.pdf`), used on
-  the back cover and as the signature inside. The lockup that carries
-  "Brightmore Home Care of Kentucky, LLC" is also built, as
-  `assets/logo-brightmore*.svg`, if the entity line needs to appear as it did on
-  the 2025 card — it is a one-word change in `src/cards.mjs`.
+- **The logo is the master lockup the client supplied** (`UEW Logo.pdf`), at the
+  foot of every front cover, again on the back cover, and as the signature
+  inside. The front placement is the only one the recipient sees before opening
+  the card. It also matches 2025: on that card's outside sheet the photo panel
+  carries a 180-degree transform and the navy panel with the logo is upright,
+  and on a top-fold card it is the *back* that gets pre-rotated — so the panel
+  that faced outward was the one with the mark on it. (Caveat: the 7x10 template
+  that file was built to was not supplied, so the imposition is inferred from
+  the rotation rather than confirmed against the vendor's own guide.)
+- The lockup carrying "Brightmore Home Care of Kentucky, LLC" is also built, as
+  `assets/logo-brightmore*.svg`, if the entity line is wanted — a one-word change
+  in `src/cards.mjs`.
 - **No phone number, address or URL appears anywhere** — none was supplied. If
   contact details should go on the back cover, send them and they will be set.
 - Text is live vector with embedded subset fonts rather than converted to

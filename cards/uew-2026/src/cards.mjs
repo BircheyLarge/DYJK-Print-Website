@@ -93,6 +93,7 @@ export function buildCards(logos) {
     /* ------------------------------------------------------------------ */
     {
       id: 'thanksgiving-01-gathered',
+      frontMark: master,
       holiday: 'Thanksgiving',
       number: '01',
       name: 'Gathered',
@@ -147,6 +148,7 @@ export function buildCards(logos) {
     /* ------------------------------------------------------------------ */
     {
       id: 'thanksgiving-02-harvest',
+      frontMark: masterWhite,
       holiday: 'Thanksgiving',
       number: '02',
       name: 'Harvest',
@@ -199,6 +201,7 @@ export function buildCards(logos) {
     /* ------------------------------------------------------------------ */
     {
       id: 'thanksgiving-02b-harvest-navy',
+      frontMark: masterWhite,
       holiday: 'Thanksgiving',
       number: '02b',
       name: 'Harvest — navy colourway',
@@ -250,6 +253,7 @@ export function buildCards(logos) {
     /* ------------------------------------------------------------------ */
     {
       id: 'thanksgiving-03-give-thanks',
+      frontMark: master,
       holiday: 'Thanksgiving',
       number: '03',
       name: 'Give Thanks',
@@ -282,6 +286,7 @@ export function buildCards(logos) {
         ruleSvg: dottedRule({ width: 150, ink: CHESTNUT, accent: RUST }),
       }),
       css: `
+        .front-mark { margin-inline: 0; }
         .inside-eyebrow { color: var(--fall-rust); }
         .inside-head { color: var(--fall-rust-deep); }
         .t3-front { color: var(--fall-rust-deep); }
@@ -306,6 +311,7 @@ export function buildCards(logos) {
     /* ------------------------------------------------------------------ */
     {
       id: 'christmas-01-ornament',
+      frontMark: master,
       holiday: 'Christmas',
       number: '01',
       name: 'Ornament',
@@ -357,6 +363,7 @@ export function buildCards(logos) {
     /* ------------------------------------------------------------------ */
     {
       id: 'christmas-02-starlight',
+      frontMark: masterWhite,
       holiday: 'Christmas',
       number: '02',
       name: 'Starlight',
@@ -406,6 +413,7 @@ export function buildCards(logos) {
     /* ------------------------------------------------------------------ */
     {
       id: 'christmas-03-evergreen',
+      frontMark: master,
       holiday: 'Christmas',
       number: '03',
       name: 'Evergreen',
@@ -441,6 +449,7 @@ export function buildCards(logos) {
         ruleSvg: dottedRule({ width: 150, ink: NAVY, accent: CORAL }),
       }),
       css: `
+        .front-mark { margin-inline: 0; }
         .c3-front { color: var(--navy); }
         .c3-eyebrow { color: var(--coral-ink); }
         .c3-head { margin-top: 0.5in; }
@@ -482,6 +491,14 @@ export function renderCard(card, { proof = false, cssHref = './base.css' } = {})
   .sheet--inside  { --sheet-bg: ${card.insideBg};  background: ${card.insideBg}; }
 
   .back-logo { width: 2.02in; }
+  /* the mark sits in a reserved band at the foot, so it never crowds the art */
+  .panel--marked { padding-bottom: calc(var(--safe-inset) + 0.46in); }
+  .front-mark {
+    position: absolute; bottom: var(--safe-inset);
+    left: var(--margin); right: var(--safe-inset);
+    width: 1.24in; margin-inline: auto;
+  }
+  .front-mark--left { margin-inline: 0; }
   .inside-msg { text-align: center; color: var(--ink); }
   .inside-eyebrow { color: var(--coral-ink); }
   .inside-head {
@@ -503,7 +520,10 @@ ${card.css}
 <body>
   <div class="sheet sheet--outside">
     <div class="panel panel--left">${card.back}</div>
-    <div class="panel panel--right">${card.front}</div>
+    <div class="panel panel--right panel--marked">
+      ${card.front}
+      <div class="logo front-mark">${card.frontMark}</div>
+    </div>
     ${proof ? GUIDES('Back cover', 'Front cover') : ''}
   </div>
   <div class="sheet sheet--inside">
