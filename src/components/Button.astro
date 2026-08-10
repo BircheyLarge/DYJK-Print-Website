@@ -1,0 +1,70 @@
+---
+/**
+ * The one button/CTA primitive. Every call-to-action on the site renders
+ * through this so padding, radius, weight and hover states can't drift —
+ * the variants below are the ones already in use, codified rather than
+ * re-typed per page.
+ *
+ * Renders <a> when `href` is set, otherwise <button>.
+ */
+interface Props {
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  /** primary: filled brand. secondary: outlined on light. onDark: outlined on ink. */
+  variant?: 'primary' | 'secondary' | 'onDark';
+  size?: 'sm' | 'md';
+  /** Stretch to the container width (mobile CTAs, form submit). */
+  block?: boolean;
+  disabled?: boolean;
+  id?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  type = 'button',
+  variant = 'primary',
+  size = 'md',
+  block = false,
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors ' +
+  'disabled:cursor-not-allowed disabled:opacity-60';
+
+const sizes = {
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-6 py-3 text-base',
+} as const;
+
+const variants = {
+  primary: 'bg-brand-blue text-white hover:bg-brand-blue-dark',
+  secondary:
+    'border border-slate-300 text-brand-slate hover:border-brand-blue hover:text-brand-blue',
+  onDark: 'border border-slate-600 text-white hover:border-white',
+} as const;
+
+const classes = [
+  base,
+  sizes[size],
+  variants[variant],
+  block && 'w-full',
+  className,
+];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes} disabled={disabled} {...rest}>
+      <slot />
+    </button>
+  )
+}

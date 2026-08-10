@@ -1,4 +1,5 @@
 ---
+import Button from './Button.astro';
 import { NAV, QUOTE_PATH, SITE } from '../consts';
 
 const path = Astro.url.pathname;
@@ -43,12 +44,9 @@ const isActive = (href: string) =>
     </ul>
 
     <div class="flex items-center gap-3">
-      <a
-        href={QUOTE_PATH}
-        class="hidden rounded-md bg-brand-blue px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-dark sm:inline-block"
-      >
+      <Button href={QUOTE_PATH} size="sm" class="hidden sm:inline-flex">
         Request a Quote
-      </a>
+      </Button>
       <button
         type="button"
         id="nav-toggle"
@@ -89,13 +87,8 @@ const isActive = (href: string) =>
           </li>
         ))
       }
-      <li>
-        <a
-          href={QUOTE_PATH}
-          class="mt-2 block rounded-md bg-brand-blue px-4 py-2 text-center text-base font-semibold text-white"
-        >
-          Request a Quote
-        </a>
+      <li class="pt-2">
+        <Button href={QUOTE_PATH} block>Request a Quote</Button>
       </li>
     </ul>
   </div>

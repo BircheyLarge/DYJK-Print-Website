@@ -1,4 +1,5 @@
 ---
+import Button from './Button.astro';
 import { NAV, QUOTE_PATH, SITE } from '../consts';
 const year = new Date().getFullYear();
 ---
@@ -44,12 +45,7 @@ const year = new Date().getFullYear();
       <p class="mt-3 text-sm text-brand-muted">
         Tell us about your project and we'll turn it around fast.
       </p>
-      <a
-        href={QUOTE_PATH}
-        class="mt-3 inline-block rounded-md bg-brand-blue px-4 py-2 text-sm font-semibold text-white hover:bg-brand-blue-dark"
-      >
-        Request a Quote
-      </a>
+      <Button href={QUOTE_PATH} size="sm" class="mt-3">Request a Quote</Button>
     </div>
 
     <div>
@@ -71,8 +67,11 @@ const year = new Date().getFullYear();
 
   <div class="border-t border-slate-200">
     <p class="mx-auto max-w-6xl px-4 py-4 text-xs text-brand-muted">
-      &copy; {year}
-      {SITE.name}. All rights reserved.
+      {
+        /* Keep on one line: a newline between two expressions collapses to
+          nothing, which rendered as "© 2026DYJK Print". */
+      }
+      &copy; {`${year} ${SITE.name}`}. All rights reserved.
     </p>
   </div>
 </footer>
