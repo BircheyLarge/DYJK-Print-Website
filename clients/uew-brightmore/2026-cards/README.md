@@ -142,6 +142,15 @@ effectively invisible. Two rules came out of it:
 Watermarks are exempt and listed in the script — they're drawn at 30–40% opacity
 on purpose.
 
+**One for the client, reported not fixed.** Inside the supplied logo, the light-coral
+orbit rings measure **1.71:1 on the harvest ground**, 1.82:1 on cream and 1.94:1 on
+ivory; the coral "UNITED / HEALTHCARE" line is 2.93:1 on harvest. On warm uncoated
+stock those rings will look faint. That is UEW's own mark, so redrawing it to satisfy
+a checker isn't our call — but it's worth them knowing, especially for an audience
+that skews older. It doesn't affect the navy or rust cards, which use the knockout
+and mono-white variants. `verify_contrast.py` prints these every run without failing
+the build.
+
 ---
 
 ## Decisions worth your sign-off

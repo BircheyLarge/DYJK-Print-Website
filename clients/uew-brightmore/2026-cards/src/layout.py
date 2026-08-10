@@ -95,10 +95,17 @@ BASE_CSS = f"""
 
 html, body {{
   width: {SHEET_W}in;
-  background: #fff;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
   text-rendering: geometricPrecision;
+}}
+
+/* Screen only. An unscoped background here lands in the print PDF as a
+   full-sheet plate under the artwork — invisible, because the panels cover it,
+   and it passes every geometry and raster check. Paper is the background on
+   press; a print file should not carry a plate nothing asked for. */
+@media screen {{
+  html, body {{ background: #fff; }}
 }}
 
 .sheet {{

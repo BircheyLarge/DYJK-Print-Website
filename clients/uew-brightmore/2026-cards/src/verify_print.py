@@ -112,6 +112,22 @@ def verify(pdf: Path, rep: Report) -> None:
         rep.check(not not_embedded, f"{tag} all {len(fonts)} fonts embedded",
                   ", ".join(not_embedded))
 
+        # A full-sheet fill is never intentional here: the two panel floods are
+        # 4.3in wide each. Anything spanning the whole 8.6in sheet is a stray
+        # plate from an unscoped CSS background, riding under the artwork where
+        # nothing can see it and every other check passes.
+        plates = [
+            d for d in page.get_drawings()
+            if d["rect"].width > EXPECT_W * 0.98
+            and d["rect"].height > EXPECT_H * 0.98
+            and d.get("fill") is not None
+        ]
+        rep.check(
+            not plates, f"{tag} no full-sheet plate under the artwork",
+            "; ".join("#%02x%02x%02x" % tuple(round(v * 255) for v in d["fill"])
+                      for d in plates),
+        )
+
         corners = corner_colours(page)
         white = [c for c in corners if all(v > 250 for v in c)]
         rep.check(not white, f"{tag} colour reaches all 4 bleed corners",

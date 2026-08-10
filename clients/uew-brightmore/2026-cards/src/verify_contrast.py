@@ -83,6 +83,18 @@ PAIRINGS = [
     ("C3  body ink / cream", "ink", "cream", TEXT),
 ]
 
+# The client's supplied logo, measured against the grounds we actually place it
+# on. REPORTED, NOT ENFORCED — this is their mark, and redrawing it so it passes
+# a checker is not our call. Colours sampled from their own vector file.
+LOGO_ON_LIGHT = [
+    ("orbit rings (light coral)", "#F8A383", "harvest"),
+    ("orbit rings (light coral)", "#F8A383", "cream"),
+    ("orbit rings (light coral)", "#F8A383", "ivory"),
+    ("UNITED / HEALTHCARE (coral)", "#F05932", "harvest"),
+    ("UNITED / HEALTHCARE (coral)", "#F05932", "cream"),
+    ("UNITED / HEALTHCARE (coral)", "#F05932", "ivory"),
+]
+
 # Drawn at 30-40% opacity on purpose; they are texture, never information.
 EXEMPT = [
     "corner_orbit watermark on the inside-left write-in panel (goldenrod/peach, 30-42% opacity)",
@@ -113,6 +125,15 @@ def main() -> None:
         print(f"  [{mark}] {r:5.2f}:1  {label}{note}")
         if not ok:
             failures.append((label, r, floor))
+
+    print(f"\n{DIM}client's own logo artwork on light grounds "
+          f"(reported, not enforced — their mark, not ours to redraw):{OFF}")
+    for element, colour, ground in LOGO_ON_LIGHT:
+        r = ratio(colour, P[ground])
+        note = "" if r >= 3.0 else "   faint on warm uncoated stock"
+        print(f"{DIM}    {r:5.2f}:1  {element} on {ground}{note}{OFF}")
+    print(f"{DIM}    (navy and rust cards use the knockout / mono-white "
+          f"variants, so this does not apply there){OFF}")
 
     print(f"\n{DIM}exempt by design:{OFF}")
     for e in EXEMPT:
