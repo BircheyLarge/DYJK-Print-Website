@@ -135,6 +135,7 @@ body {
 
 .display {
   font-family: 'Cormorant Garamond', Georgia, serif;
+  text-wrap: balance;
   font-weight: 500;
   line-height: 0.98;
   letter-spacing: -0.005em;
@@ -164,6 +165,9 @@ body {
   line-height: 1.66;
   margin: 0;
   font-weight: 400;
+  /* centred copy strands a single short word badly; let the engine balance
+     the last lines rather than hand-tuning every sentence to fit */
+  text-wrap: pretty;
 }
 .body + .body {
   margin-top: 0.9em;

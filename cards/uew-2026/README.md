@@ -95,13 +95,15 @@ with Georgia, which the 2025 card used for body copy.
 
 ## Notes for the client
 
-- **Copy is a first draft and is meant to be edited.** The Thanksgiving messages
-  lean on the idea that UEW's patients are former DOE / energy-programme workers
-  and that the card is thanking them for that service. If that framing is wrong
-  for any part of the mailing list, say so and it is a one-line change per card.
-- **The back cover uses the lockup with "Brightmore Home Care of Kentucky, LLC"**
-  (as the 2025 card did); the signature inside uses the plain master logo. Easy
-  to swap either way.
+- **Every message thanks the recipient for serving the country and for being
+  part of the UEW family**, at the client's direction. Each card says it in the
+  voice of its own art direction rather than repeating one sentence six times —
+  see `paras` in `src/cards.mjs`, which is the only place copy lives.
+- **The logo is the master lockup the client supplied** (`UEW Logo.pdf`), used on
+  the back cover and as the signature inside. The lockup that carries
+  "Brightmore Home Care of Kentucky, LLC" is also built, as
+  `assets/logo-brightmore*.svg`, if the entity line needs to appear as it did on
+  the 2025 card — it is a one-word change in `src/cards.mjs`.
 - **No phone number, address or URL appears anywhere** — none was supplied. If
   contact details should go on the back cover, send them and they will be set.
 - Text is live vector with embedded subset fonts rather than converted to

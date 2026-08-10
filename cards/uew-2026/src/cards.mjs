@@ -97,14 +97,14 @@ export function buildCards(logos) {
         </div>
         <p class="caps t1-sub">Happy Thanksgiving</p>
       </div>`,
-      back: backPanel(brightmore),
+      back: backPanel(master),
       insideLeft: insideLeftPanel(wheatSprig({ ink: NAVY, accent: CORAL }), 'inside-art--wheat'),
       insideRight: insideRightPanel({
         eyebrow: 'With gratitude',
         headline: 'Thank&nbsp;you.',
         paras: [
-          'For the work you did for this country, long before we ever met you. For trusting us with your care. For letting us be part of your week.',
-          'May your table be full and your home be warm this Thanksgiving.',
+          'Thank you for serving our country — for the work you did long before we ever met you.',
+          'And thank you for being part of the UEW family. May your table be full and your home be warm this Thanksgiving.',
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
         logoSvg: master,
@@ -143,14 +143,14 @@ export function buildCards(logos) {
         <p class="caps t2-thanks">Thanksgiving</p>
         <div class="t2-arc">${harvestArc({ ink: GOLD_LIGHT, accent: CORAL_LIGHT, seed: 31 })}</div>
       </div>`,
-      back: backPanel(brightmoreWhite),
+      back: backPanel(masterWhite),
       insideLeft: insideLeftPanel(wheatSprig({ ink: NAVY, accent: CORAL }), 'inside-art--wheat'),
       insideRight: insideRightPanel({
         eyebrow: 'Thanksgiving 2026',
         headline: 'With&nbsp;gratitude.',
         paras: [
-          'You spent your working life on something far bigger than yourself, and this country is still living on the strength of it.',
-          'Caring for you now is the privilege of our year. Wishing you and your family a warm and peaceful Thanksgiving.',
+          'Thank you for serving our country. You spent your working life on something far bigger than yourself, and this country is still living on the strength of it.',
+          'Thank you, too, for being part of the UEW family. Caring for you is the privilege of our year.',
         ],
         signoff: '— Your team at United Energy Workers Healthcare',
         logoSvg: master,
@@ -189,15 +189,15 @@ export function buildCards(logos) {
         <div class="t3-leaf">${leafCluster({ ink: NAVY, accent: CORAL })}</div>
       </div>`,
       back: `<div class="stack stack--end">
-        <div class="logo back-logo back-logo--left">${brightmore}</div>
+        <div class="logo back-logo back-logo--left">${master}</div>
       </div>`,
       insideLeft: insideLeftPanel(leafCluster({ ink: NAVY, accent: CORAL }), 'inside-art--leaf'),
       insideRight: insideRightPanel({
         eyebrow: 'Happy Thanksgiving',
         headline: 'For all of it,<br>thank&nbsp;you.',
         paras: [
-          'For hands that built something bigger than themselves. For the families who stood behind them. For one more year together.',
-          'Happy Thanksgiving from all of us at United Energy Workers Healthcare.',
+          'For serving our country. For hands that built something bigger than themselves. For the families who stood behind them.',
+          'And for being part of the UEW family — thank you. Happy Thanksgiving from all of us.',
         ],
         signoff: '— With gratitude, your care team',
         logoSvg: master,
@@ -241,7 +241,7 @@ export function buildCards(logos) {
           <p class="caps c1-christmas">Christmas</p>
         </div>
       </div>`,
-      back: backPanel(brightmore),
+      back: backPanel(master),
       insideLeft: insideLeftPanel(
         atomOrnament({ r: 40, ink: NAVY, accent: CORAL, hang: 190, width: 140 }),
         'inside-art--orn',
@@ -250,7 +250,7 @@ export function buildCards(logos) {
         eyebrow: 'Christmas 2026',
         headline: 'Peace to<br>your&nbsp;home.',
         paras: [
-          'Thank you for letting us be part of your care this year — it is a privilege we do not take lightly.',
+          'Thank you for serving our country, and for being part of the UEW family. Caring for you is a privilege we do not take lightly.',
           'May your Christmas be warm and unhurried, spent with the people you love most, and may the new year be gentle and good to you.',
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
@@ -290,7 +290,7 @@ export function buildCards(logos) {
         <p class="caps c2-merry">Merry Christmas</p>
         <p class="c2-sub">peace, joy and light</p>
       </div>`,
-      back: backPanel(brightmoreWhite),
+      back: backPanel(masterWhite),
       insideLeft: insideLeftPanel(
         starBurst({ size: 200, ink: NAVY, accent: CORAL, glow: false }),
         'inside-art--star',
@@ -299,7 +299,7 @@ export function buildCards(logos) {
         eyebrow: 'Christmas 2026',
         headline: 'May your season<br>be&nbsp;bright.',
         paras: [
-          'From all of us at United Energy Workers Healthcare — thank you for another year of your trust.',
+          'Thank you for serving our country, and for another year as part of the UEW family.',
           'Wishing you a Christmas full of light, a home full of family, and a new year that treats you well.',
         ],
         signoff: '— With warmest wishes, your care team',
@@ -343,7 +343,7 @@ export function buildCards(logos) {
         <div class="c3-sprig">${firSprig({ ink: NAVY, accent: CORAL, length: 250, pairs: 28, seed: 5 })}</div>
       </div>`,
       back: `<div class="stack stack--end">
-        <div class="logo back-logo back-logo--left">${brightmore}</div>
+        <div class="logo back-logo back-logo--left">${master}</div>
       </div>`,
       insideLeft: insideLeftPanel(
         firSprig({ ink: NAVY, accent: CORAL, length: 190, pairs: 20, seed: 5 }),
@@ -353,7 +353,7 @@ export function buildCards(logos) {
         eyebrow: 'Merry Christmas',
         headline: 'From our family<br>to&nbsp;yours.',
         paras: [
-          'Thank you for trusting us with your care this year. It has been the honor of our work.',
+          'Thank you for serving our country, and for being part of the UEW family this year. It has been the honor of our work.',
           'Wishing you a Christmas of good health and good company, and a new year that is kind to you and yours.',
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
@@ -401,7 +401,7 @@ export function renderCard(card, { proof = false, cssHref = './base.css' } = {})
   .sheet--outside { --sheet-bg: ${card.outsideBg}; background: ${card.outsideBg}; }
   .sheet--inside  { --sheet-bg: ${card.insideBg};  background: ${card.insideBg}; }
 
-  .back-logo { width: 1.86in; }
+  .back-logo { width: 2.02in; }
   .inside-msg { text-align: center; color: var(--ink); }
   .inside-eyebrow { color: var(--coral); }
   .inside-head {
