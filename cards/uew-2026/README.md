@@ -13,11 +13,11 @@ as-is.
 Each holiday gets the same three art directions, numbered to match — so `01`/`01`,
 `02`/`02` or `03`/`03` can be chosen together and read as one season's set.
 
-| # | Direction | Thanksgiving | Christmas |
+| # | Direction | Thanksgiving (autumn ramp) | Christmas (brand hues) |
 |---|---|---|---|
-| 01 | Traditional — cream stock, navy line art, one script word | **Gathered** — wheat wreath around "grateful" | **Ornament** — the logo's atom hung as an ornament |
-| 02 | Formal — deep navy full bleed, gold art | **Harvest** — gold wheat sheaf | **Starlight** — gold star with orbit rings |
-| 03 | Editorial — cream stock, oversized flush-left type, coral accent | **Give Thanks** | **Evergreen** |
+| 01 | Traditional — light stock, line art, one script word | **Gathered** — oat ground, wheat-and-foliage wreath around "grateful" in sienna | **Ornament** — cream ground, the logo's atom hung as an ornament |
+| 02 | Formal — dark full bleed, metallic art | **Harvest** — sienna ground, wheat-gold sheaf | **Starlight** — navy ground, gold star with orbit rings |
+| 03 | Editorial — light stock, oversized flush-left type | **Give Thanks** — sienna type, rust rule, three-tone leaf cluster | **Evergreen** — navy type, coral berries |
 
 The artwork is not stock. Every motif is derived from the client's own mark —
 the caduceus inside three crossed ellipses with three electron dots. The wreath
