@@ -1,0 +1,262 @@
+@import url('../assets/fonts/fonts.css');
+
+/* ---------------------------------------------------------------------------
+   Print geometry — GotPrint greeting card, 6" x 8.5" vertical
+   Flat sheet 8.5 x 6.0 in, vertical score at centre, 0.05in bleed per side.
+   Page 1 = outside (left panel BACK, right panel FRONT)
+   Page 2 = inside  (left panel INSIDE-LEFT, right panel INSIDE-RIGHT)
+   --------------------------------------------------------------------------- */
+:root {
+  --sheet-w: 8.6in;
+  --sheet-h: 6.1in;
+  --bleed: 0.05in; /* trim sits this far inside every sheet edge */
+  --fold-x: 4.3in; /* score line, dead centre */
+  --panel-w: 4.3in;
+  --vendor-safe: 0.05in; /* vendor's blue box: 0.05in inside trim */
+  --margin: 0.44in; /* our design margin, measured from trim */
+
+  /* Brand — sampled from the client's master logo artwork. No other hues. */
+  --navy: #133d64;
+  --navy-deep: #0e2e4f;
+  --navy-night: #0a2340;
+  --coral: #f15933;
+  --coral-light: #f8a484;
+  --cream: #faf5ec;
+  --cream-deep: #f3ead9;
+  --gold: #cba55f;
+  --gold-light: #e2c68d;
+  --ink: #12283d;
+
+  --safe-inset: calc(var(--bleed) + var(--margin));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@page {
+  size: 8.6in 6.1in;
+  margin: 0;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #6b7280;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.sheet {
+  position: relative;
+  width: var(--sheet-w);
+  height: var(--sheet-h);
+  overflow: hidden;
+  background: var(--sheet-bg, #fff);
+  break-after: page;
+  page-break-after: always;
+}
+.sheet:last-of-type {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  height: var(--sheet-h);
+  width: var(--panel-w);
+  overflow: hidden;
+}
+.panel--left {
+  left: 0;
+  padding: var(--safe-inset) var(--margin) var(--safe-inset) var(--safe-inset);
+}
+.panel--right {
+  left: var(--fold-x);
+  padding: var(--safe-inset) var(--safe-inset) var(--safe-inset) var(--margin);
+}
+
+/* Panel content grid: everything sits in a single column so vertical rhythm
+   is controlled by one gap value rather than ad-hoc margins. */
+.stack {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.stack--center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.stack--end {
+  justify-content: flex-end;
+}
+.stack--between {
+  justify-content: space-between;
+}
+.grow {
+  flex: 1 1 auto;
+}
+
+/* Full-bleed art layers, positioned against the sheet not the padded panel. */
+.bleed {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Type — Cormorant Garamond (display), Gelasio (body, Georgia metrics for
+   continuity with the client's previous card), Pinyon Script (one accent word),
+   Montserrat (eyebrows only, echoing the logo wordmark).
+   --------------------------------------------------------------------------- */
+body {
+  font-family: 'Gelasio', Georgia, serif;
+  color: var(--ink);
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: geometricPrecision;
+}
+
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 7.6pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+
+.script {
+  font-family: 'Pinyon Script', 'Cormorant Garamond', cursive;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+}
+
+.caps {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* Body copy is set at 11.5pt: the audience skews older and this card is meant
+   to be read across a kitchen table, not admired at arm's length. */
+.body {
+  font-size: 11.5pt;
+  line-height: 1.66;
+  margin: 0;
+  font-weight: 400;
+}
+.body + .body {
+  margin-top: 0.9em;
+}
+.body--lead {
+  font-size: 12.5pt;
+  line-height: 1.58;
+}
+
+.signoff {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 12pt;
+  font-style: italic;
+  line-height: 1.42;
+  margin: 0;
+}
+
+.rule {
+  border: 0;
+  border-top: 0.75pt solid currentColor;
+  opacity: 0.32;
+  margin: 0;
+  width: 100%;
+}
+
+/* Logo lockups — the SVG is inlined so it stays vector through the PDF. */
+.logo {
+  display: block;
+  height: auto;
+}
+.logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Proof guides — only rendered in proof builds, never in the print PDF.
+   --------------------------------------------------------------------------- */
+.guides {
+  position: absolute;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+}
+.guides i {
+  position: absolute;
+  display: block;
+}
+.guides .trim {
+  inset: var(--bleed);
+  border: 0.5pt solid rgba(236, 0, 140, 0.85);
+}
+.guides .safe {
+  inset: calc(var(--bleed) + var(--vendor-safe));
+  border: 0.5pt solid rgba(0, 160, 227, 0.85);
+}
+.guides .safe-fold-l {
+  top: calc(var(--bleed) + var(--vendor-safe));
+  bottom: calc(var(--bleed) + var(--vendor-safe));
+  left: calc(var(--fold-x) - var(--vendor-safe));
+  width: 0;
+  border-left: 0.5pt solid rgba(0, 160, 227, 0.85);
+}
+.guides .safe-fold-r {
+  top: calc(var(--bleed) + var(--vendor-safe));
+  bottom: calc(var(--bleed) + var(--vendor-safe));
+  left: calc(var(--fold-x) + var(--vendor-safe));
+  width: 0;
+  border-left: 0.5pt solid rgba(0, 160, 227, 0.85);
+}
+.guides .fold {
+  top: 0;
+  bottom: 0;
+  left: var(--fold-x);
+  width: 0;
+  border-left: 0.75pt dashed rgba(120, 120, 120, 0.95);
+}
+.guides .design {
+  inset: var(--safe-inset);
+  border: 0.5pt dashed rgba(20, 160, 90, 0.6);
+}
+.guides b {
+  position: absolute;
+  bottom: 9pt;
+  font: 600 5pt 'Montserrat', sans-serif;
+  letter-spacing: 0.12em;
+  color: rgba(236, 0, 140, 0.9);
+  text-transform: uppercase;
+}
+.guides b.l {
+  left: 6pt;
+}
+.guides b.r {
+  left: calc(var(--fold-x) + 6pt);
+}
