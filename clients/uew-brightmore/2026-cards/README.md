@@ -171,9 +171,21 @@ python3 src/verify_contrast.py     # contrast audit    (exit 1 on failure)
 | `out/html/` | generated HTML previews (not committed — `build_cards.py` recreates them) |
 | `reference/` | the GotPrint template + last year's card |
 
-Proof naming: `--1-outside` / `--2-inside` are the flat press sheets,
-`--front-folded` is the front cover at finished size, `--guides-*` overlays the
-trim (magenta), safe zone (blue) and score line (grey).
+### Reviewing
+
+| Proof | Shows |
+|---|---|
+| `00-contact-sheet.png` | all six front covers, quick glance |
+| `01-thanksgiving-all-panels.png` | **three Thanksgiving cards, every panel** |
+| `02-christmas-all-panels.png` | **three Christmas cards, every panel** |
+| `<concept>--all-panels.png` | one concept on its own sheet, every panel |
+| `<concept>--1-outside` / `--2-inside` | the flat press sheets as imposed |
+| `<concept>--front-folded` | front cover at finished size |
+| `<concept>--guides-*` | trim (magenta), safe zone (blue), score line (grey) |
+
+The all-panels sheets draw each panel at true trim size (1:1 in points) and in the
+order the recipient meets them — front cover, inside spread, back cover — so what
+you are judging is the finished 4.25 x 6in card rather than a thumbnail.
 
 Everything is generated — no binary design files to keep in sync. Change the copy in
 `src/concepts.py`, re-run the two build commands, and all six PDFs and every proof

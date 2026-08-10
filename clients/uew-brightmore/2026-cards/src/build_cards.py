@@ -247,6 +247,107 @@ def proofs(pdf: Path, c: Concept, guides_pdf: Path | None) -> None:
         g.close()
 
 
+# Trim-box clips, in PDF points, for each panel of each face.
+def _clip(x0: float, x1: float) -> pymupdf.Rect:
+    return pymupdf.Rect(x0 * PT, layout.BLEED * PT, x1 * PT,
+                        (layout.SHEET_H - layout.BLEED) * PT)
+
+
+CLIP_BACK = _clip(layout.BLEED, layout.FOLD_X)
+CLIP_FRONT = _clip(layout.FOLD_X, layout.SHEET_W - layout.BLEED)
+CLIP_INSIDE = _clip(layout.BLEED, layout.SHEET_W - layout.BLEED)
+
+PANEL_W = layout.PANEL_TRIM_W * PT  # 306pt
+SPREAD_W = layout.TRIM_W * PT  # 612pt
+PANEL_H = layout.TRIM_H * PT  # 432pt
+
+
+def _draw_card_block(page: pymupdf.Page, c: Concept, x: float, y: float) -> float:
+    """One concept, every panel, left to right as the recipient meets them.
+
+    Returns the y of the next block. Panels are drawn at true trim size (1:1 in
+    points) so what you see is the finished 4.25 x 6in card, not a thumbnail.
+    """
+    src = pymupdf.open(PRINT_DIR / f"{c.key}.pdf")
+    title_h, cap_h = 26, 15
+
+    page.insert_text((x, y + 11), c.key, fontsize=10.5, fontname="hebo",
+                     color=(0.08, 0.08, 0.08))
+    page.insert_text((x + 168, y + 11), c.title, fontsize=9, fontname="helv",
+                     color=(0.42, 0.42, 0.42))
+    top = y + title_h
+
+    panels = [
+        (CLIP_FRONT, PANEL_W, 0, "FRONT COVER  (folded, 4.25 x 6in)"),
+        (CLIP_INSIDE, SPREAD_W, 1, "INSIDE SPREAD  (left: blank for a handwritten note  ·  right: message)"),
+        (CLIP_BACK, PANEL_W, 0, "BACK COVER"),
+    ]
+    px = x
+    for clip, w, pno, caption in panels:
+        rect = pymupdf.Rect(px, top, px + w, top + PANEL_H)
+        page.show_pdf_page(rect, src, pno, clip=clip)
+        page.draw_rect(rect, color=(0.78, 0.78, 0.78), width=0.6)
+        if w == SPREAD_W:  # mark where the card folds
+            fold = px + w / 2
+            page.draw_line(pymupdf.Point(fold, top), pymupdf.Point(fold, top + PANEL_H),
+                           color=(0.72, 0.72, 0.72), width=0.5, dashes="[2 3] 0")
+        page.insert_text((px, top + PANEL_H + 11), caption, fontsize=7.2,
+                         fontname="helv", color=(0.45, 0.45, 0.45))
+        px += w + 18
+
+    src.close()
+    return top + PANEL_H + cap_h + 30
+
+
+def season_sheets() -> None:
+    """One review sheet per season: three concepts, every panel of each."""
+    for season, label in (("thanksgiving", "Thanksgiving"), ("christmas", "Christmas")):
+        cards = [c for c in CONCEPTS if c.season == season]
+        pad = 30
+        block_w = PANEL_W + SPREAD_W + PANEL_W + 18 * 2
+        block_h = 26 + PANEL_H + 15 + 30
+        W = pad * 2 + block_w
+        H = pad * 2 + 30 + block_h * len(cards)
+
+        out = pymupdf.open()
+        page = out.new_page(width=W, height=H)
+        page.draw_rect(page.rect, color=None, fill=(1, 1, 1))
+        page.insert_text((pad, pad + 4),
+                         f"United Energy Workers Healthcare — {label} 2026",
+                         fontsize=14, fontname="hebo", color=(0.07, 0.24, 0.39))
+        page.insert_text((pad, pad + 20),
+                         "Three concepts, complete. Finished card folds to 4.25 x 6in "
+                         "portrait with the fold on the left.",
+                         fontsize=8.5, fontname="helv", color=(0.45, 0.45, 0.45))
+
+        y = pad + 34
+        for c in cards:
+            y = _draw_card_block(page, c, pad, y)
+
+        stem = PROOF_DIR / f"{'01' if season == 'thanksgiving' else '02'}-{season}-all-panels"
+        out.save(stem.with_suffix(".pdf"))
+        pymupdf.open(stem.with_suffix(".pdf"))[0].get_pixmap(
+            dpi=110, alpha=False).save(stem.with_suffix(".png"))
+        out.close()
+        print(f"  {stem.name}.png  {len(cards)} concepts x 4 panels")
+
+
+def full_card_sheet(c: Concept) -> None:
+    """A single concept on its own sheet, every panel."""
+    pad = 26
+    W = pad * 2 + PANEL_W + SPREAD_W + PANEL_W + 18 * 2
+    H = pad * 2 + 26 + PANEL_H + 15 + 6
+    out = pymupdf.open()
+    page = out.new_page(width=W, height=H)
+    page.draw_rect(page.rect, color=None, fill=(1, 1, 1))
+    _draw_card_block(page, c, pad, pad)
+    stem = PROOF_DIR / f"{c.key}--all-panels"
+    out.save(stem.with_suffix(".pdf"))
+    pymupdf.open(stem.with_suffix(".pdf"))[0].get_pixmap(
+        dpi=130, alpha=False).save(stem.with_suffix(".png"))
+    out.close()
+
+
 def contact_sheet() -> None:
     """All six front covers side by side, at folded proportions."""
     cols, rows = 3, 2
@@ -315,6 +416,11 @@ def main() -> None:
         print(f"  {c.key:<36} {size // 1024:>5} KB")
 
     contact_sheet()
+    print("review sheets:")
+    for c in CONCEPTS:
+        full_card_sheet(c)
+    season_sheets()
+
     print(f"\nprint files -> {PRINT_DIR}")
     print(f"proofs      -> {PROOF_DIR}")
 
