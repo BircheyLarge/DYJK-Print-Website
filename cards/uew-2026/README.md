@@ -5,8 +5,10 @@ Thanksgiving, three Christmas. Built on the GotPrint **6" x 8.5" vertical
 greeting card** template the client supplied, so the print files can be uploaded
 as-is.
 
-**Pick from `out/contact-sheet-thanksgiving-2026.png` and
-`out/contact-sheet-christmas-2026.png`.** Print files are in `out/print-final/`.
+**Pick from `out/cards-thanksgiving-2026.png` and `out/cards-christmas-2026.png`** —
+each shows all four panels of every concept, cropped to trim, in the order you
+meet them: front cover, inside spread, back. Print files are in
+`out/print-final/`.
 
 ## The six concepts
 
@@ -64,7 +66,9 @@ the card is meant to be read across a kitchen table.
 | `out/print-final/` | **Upload these.** 2-page PDFs, exact template size, Trim/Bleed boxes set |
 | `out/print-final-split/` | Same files split into one PDF per side, if the vendor flow wants that |
 | `out/proof/` | Same designs with trim / safe / score guides and panel labels, for review only |
-| `out/contact-sheet-*.png` | All three concepts per holiday, side by side |
+| `out/cards-*.png` | **Start here.** Three concepts per holiday, all four panels of each, cropped to trim |
+| `out/imposition-*.png` | The same concepts as printed sheets, for checking the fold and bleed |
+| `out/comparison-*.png` | Colourway alternatives shown against the card they vary |
 | `out/proof-png/` | 150 dpi PNGs of every page |
 | `assets/logo*.svg` | Client's master logo, vector, in colour / white / knockout variants |
 | `src/art.mjs` | The seasonal line art, drawn procedurally |

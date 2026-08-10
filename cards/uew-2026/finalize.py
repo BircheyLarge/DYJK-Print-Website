@@ -119,6 +119,66 @@ def contact_sheet(rows, dst: Path, title: str) -> None:
     canvas.save(dst)
 
 
+# The four panels of a finished card, in the order you meet them: the cover you
+# see closed, the spread you see open, then the back. Each is cropped to trim,
+# so these are the card as it will be held rather than the flat printed sheet.
+PANELS = [
+    ("Front cover", 0, "right"),
+    ("Inside left", 1, "left"),
+    ("Inside right", 1, "right"),
+    ("Back cover", 0, "left"),
+]
+PANEL_TRIM = {
+    "left": (TRIM[0], TRIM[1], FOLD_X, TRIM[3]),
+    "right": (FOLD_X, TRIM[1], TRIM[2], TRIM[3]),
+}
+
+
+def card_panels(pdf: Path, width: int):
+    doc = pymupdf.open(pdf)
+    out = []
+    for label, page_no, side in PANELS:
+        page = doc[page_no]
+        clip = pymupdf.Rect(*PANEL_TRIM[side])
+        zoom = width / clip.width
+        pix = page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom), clip=clip, alpha=False)
+        out.append((label, Image.frombytes("RGB", (pix.width, pix.height), pix.samples)))
+    doc.close()
+    return out
+
+
+def panel_sheet(rows, dst: Path, title: str) -> None:
+    """One row per concept, all four panels of the finished card broken out."""
+    pw = 384
+    pad, gap, rowgap = 38, 20, 30
+    lab_h, head = 34, 104
+
+    sets = [(name, card_panels(pdf, pw)) for name, pdf in rows]
+    ph = sets[0][1][0][1].height
+
+    W = pad * 2 + len(PANELS) * pw + (len(PANELS) - 1) * gap
+    H = head + len(sets) * (lab_h + ph + rowgap) + pad
+    canvas = Image.new("RGB", (W, H), "#4c555f")
+    draw = ImageDraw.Draw(canvas)
+    draw.text((pad, 24), title, font=label_font(36), fill="#ffffff")
+
+    f_col = label_font(20)
+    for i, (label, _, _) in enumerate(PANELS):
+        draw.text((pad + i * (pw + gap), head - 30), label.upper(), font=f_col, fill="#aeb6bf")
+
+    f_row = label_font(26)
+    for r, (name, panels) in enumerate(sets):
+        y = head + r * (lab_h + ph + rowgap)
+        draw.text((pad, y), name, font=f_row, fill="#ffffff")
+        for i, (_, im) in enumerate(panels):
+            x = pad + i * (pw + gap)
+            top = y + lab_h
+            canvas.paste(im, (x, top))
+            # cream and white panels need an edge to read against the ground
+            draw.rectangle([x, top, x + im.width - 1, top + im.height - 1], outline="#2b3138")
+    canvas.save(dst)
+
+
 # Vendor safe box: 0.05in inside trim, and 0.05in clear of the score line.
 SAFE = (7.2, 7.2, 612.0, 432.0)
 SAFE_FOLD_L, SAFE_FOLD_R = 306.0, 313.2
@@ -180,7 +240,12 @@ def main() -> int:
         ]
         contact_sheet(
             rows,
-            OUT / f"contact-sheet-{holiday.lower()}-2026.png",
+            OUT / f"imposition-{holiday.lower()}-2026.png",
+            f"United Energy Workers Healthcare — {holiday} 2026 (printed sheets)",
+        )
+        panel_sheet(
+            rows,
+            OUT / f"cards-{holiday.lower()}-2026.png",
             f"United Energy Workers Healthcare — {holiday} 2026",
         )
 
@@ -193,7 +258,7 @@ def main() -> int:
             and not c.get("variant")
             and c["number"] == alt["number"].rstrip("ab")
         )
-        contact_sheet(
+        panel_sheet(
             [
                 (f"{base['number']} · {base['name']}", final / f"UEW-2026-{base['id']}.pdf"),
                 (f"{alt['number']} · {alt['name']}", final / f"UEW-2026-{alt['id']}.pdf"),
