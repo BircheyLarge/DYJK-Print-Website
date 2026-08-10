@@ -63,3 +63,35 @@ describe('brand tokens meet WCAG AA (4.5:1) for normal text', () => {
     ).toBeGreaterThanOrEqual(AA_NORMAL);
   });
 });
+
+/*
+ * Non-text contrast (WCAG 2.2 SC 1.4.11). A border is what tells you an input
+ * or an outlined button is there at all, so it needs 3:1 against whatever it
+ * sits on — a rule that is easy to lose the next time someone reaches for a
+ * lighter grey. brand-line is exempt on purpose: it draws card edges and
+ * dividers, which carry no information you'd miss.
+ */
+describe('interactive boundaries meet WCAG AA (3:1) non-text contrast', () => {
+  const AA_NON_TEXT = 3;
+  const SURFACES = [
+    ['white', WHITE],
+    ['brand-surface', token('brand-surface')],
+    ['brand-ink', token('brand-ink')],
+  ] as const;
+
+  for (const [label, background] of SURFACES) {
+    it(`brand-line-strong on ${label}`, () => {
+      expect(
+        contrastRatio(token('brand-line-strong'), background),
+      ).toBeGreaterThanOrEqual(AA_NON_TEXT);
+    });
+  }
+
+  it('the focus outline is visible against every surface it can land on', () => {
+    for (const [, background] of SURFACES) {
+      expect(
+        contrastRatio(token('brand-blue'), background),
+      ).toBeGreaterThanOrEqual(AA_NON_TEXT);
+    }
+  });
+});

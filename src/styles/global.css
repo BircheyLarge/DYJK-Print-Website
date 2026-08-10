@@ -2,18 +2,16 @@
 
 /*
  * ──────────────────────────────────────────────────────────────────────────
- * BRAND TOKENS — single swap point.
- * Values sampled from the logo (references/dyjk-logo-from-invoice.png).
- * Replace with exact brand values once the high-res logo lands; nothing else
- * in the codebase hard-codes brand colors.
+ * BRAND TOKENS — single swap point. Confirmed values; see BRAND.md for the
+ * full palette, logo usage rules and rationale. Nothing else in the
+ * codebase hard-codes brand colors.
  * ──────────────────────────────────────────────────────────────────────────
  */
 @theme {
   /*
-   * brand-blue is the AA-adjusted UI blue: the logo's true #2880c0 only hits
-   * 4.25:1 on white (fails WCAG AA for normal text and for white button
+   * brand-blue is the AA-adjusted UI blue: the logo's true #2a81c4 only hits
+   * ~4.2:1 on white (fails WCAG AA for normal text and for white button
    * labels), so the interactive/text blue is darkened to #1d6fa8 (~5.4:1).
-   * The exact logo hue is preserved in the logo image itself.
    * Contrast of text-bearing tokens is enforced by tests/unit/color.test.ts.
    */
   --color-brand-blue: #1d6fa8;
@@ -22,6 +20,30 @@
   --color-brand-ink: #0b1a22;
   --color-brand-muted: #5b6b73;
   --color-brand-surface: #f5f8fa;
+
+  /*
+   * brand-blue-logo is the true mark blue, exactly as it appears in
+   * /public/brand/logo.svg (#2a81c4). It fails AA for text, so it is for
+   * large decorative fills only — never body text, never a button label.
+   * See BRAND.md "Two blues" before reaching for this token.
+   */
+  --color-brand-blue-logo: #2a81c4;
+
+  /*
+   * Two hairlines, and the difference is not decorative.
+   *
+   * `line` draws edges you only need to *see* — card borders, dividers, the
+   * rule under a section. Deliberately faint.
+   *
+   * `line-strong` draws the boundary of anything you can *operate*: text
+   * inputs, the checkbox, outlined buttons. WCAG 2.2 SC 1.4.11 requires 3:1
+   * there, because that edge is the only thing telling you a control exists.
+   * This value clears 3:1 against all three surfaces the site paints on —
+   * white (3.50), brand-surface (3.29) and brand-ink (5.06) — so one token
+   * covers light and dark bands alike. Enforced by tests/unit/color.test.ts.
+   */
+  --color-brand-line: #e2e8f0;
+  --color-brand-line-strong: #7d8b94;
 
   --font-sans:
     'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
@@ -42,10 +64,19 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Visible keyboard focus for accessibility (WCAG 2.2). */
+/*
+ * Visible keyboard focus for accessibility (WCAG 2.2).
+ *
+ * transition-duration is zeroed because Tailwind v4's `transition-colors`
+ * includes outline-color, and most focusable things on this site carry it —
+ * so the ring animated from currentColor to brand blue over 150ms, trailing
+ * behind the Tab key on a twelve-field form. Focus should be where you left
+ * it the instant you get there.
+ */
 :focus-visible {
   outline: 3px solid var(--color-brand-blue);
   outline-offset: 2px;
+  transition-duration: 0s;
 }
 
 /* Respect reduced-motion preferences. */

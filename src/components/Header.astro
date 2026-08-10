@@ -8,7 +8,7 @@ const isActive = (href: string) =>
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur"
+  class="sticky top-0 z-50 border-b border-brand-line bg-white/95 backdrop-blur"
 >
   <nav
     class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3"
@@ -16,11 +16,11 @@ const isActive = (href: string) =>
   >
     <a href="/" class="flex items-center" aria-label={`${SITE.name} home`}>
       <img
-        src="/brand/logo.png"
-        width="299"
-        height="78"
+        src="/brand/logo.svg"
+        width="305"
+        height="82"
         alt={`${SITE.name} — ${SITE.tagline}`}
-        class="h-9 w-auto"
+        class="h-8 w-auto sm:h-9"
       />
     </a>
 
@@ -72,7 +72,7 @@ const isActive = (href: string) =>
     </div>
   </nav>
 
-  <div id="mobile-nav" class="hidden border-t border-slate-200 md:hidden">
+  <div id="mobile-nav" class="hidden border-t border-brand-line md:hidden">
     <ul class="space-y-1 px-4 py-3">
       {
         NAV.map((item) => (
