@@ -41,11 +41,14 @@ const sizes = {
   md: 'px-6 py-3 text-base',
 } as const;
 
+// The outlined variants carry no fill, so their border *is* the control —
+// hence brand-line-strong (3:1 on every surface) rather than a decorative
+// hairline. The old slate-300/slate-600 edges measured 1.48:1 and 2.34:1.
 const variants = {
   primary: 'bg-brand-blue text-white hover:bg-brand-blue-dark',
   secondary:
-    'border border-slate-300 text-brand-slate hover:border-brand-blue hover:text-brand-blue',
-  onDark: 'border border-slate-600 text-white hover:border-white',
+    'border border-brand-line-strong text-brand-slate hover:border-brand-blue hover:text-brand-blue',
+  onDark: 'border border-brand-line-strong text-white hover:border-white',
 } as const;
 
 const classes = [

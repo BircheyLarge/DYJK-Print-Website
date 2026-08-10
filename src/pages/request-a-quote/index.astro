@@ -68,14 +68,14 @@ const steps = [
     subtitle="Tell us what you're printing and we'll come back with pricing and a production timeline — usually within one business day."
   />
 
-  <div class="mx-auto max-w-6xl px-4 py-16">
+  <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
     <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
       <div class="min-w-0">
         <QuoteForm />
       </div>
 
       <aside class="lg:pt-2">
-        <div class="rounded-xl border border-slate-200 bg-brand-surface p-6">
+        <div class="rounded-xl border border-brand-line bg-brand-surface p-6">
           <h2 class="text-base font-bold text-brand-ink">What happens next</h2>
           <ol class="mt-4 space-y-5">
             {
@@ -99,7 +99,7 @@ const steps = [
           </ol>
         </div>
 
-        <div class="mt-6 rounded-xl border border-slate-200 p-6">
+        <div class="mt-6 rounded-xl border border-brand-line p-6">
           <h2 class="text-base font-bold text-brand-ink">
             Rather talk it through?
           </h2>
@@ -125,12 +125,12 @@ const steps = [
     </div>
   </div>
 
-  <section class="border-t border-slate-200 bg-brand-surface">
+  <section class="border-t border-brand-line bg-brand-surface">
     {
       /* max-w-6xl so the heading lines up with the form's left edge above it;
         the list itself stays measure-width for readability. */
     }
-    <div class="mx-auto max-w-6xl px-4 py-16">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
       <h2 class="text-3xl font-bold tracking-tight text-brand-ink">
         Common questions
       </h2>

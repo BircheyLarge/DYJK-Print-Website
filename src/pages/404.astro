@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
 import { QUOTE_PATH } from '../consts';
 ---
 
@@ -15,19 +16,15 @@ import { QUOTE_PATH } from '../consts';
       The page may have moved. Head back home or request a quote and we'll point
       you in the right direction.
     </p>
+    {
+      /* "Back home" stays the filled action here even though the quote is the
+        site's primary CTA everywhere else — someone who landed on a dead link
+        wants their way back, not a sales form. The one screen where the
+        hierarchy inverts, and deliberately. */
+    }
     <div class="mt-8 flex flex-wrap justify-center gap-4">
-      <a
-        href="/"
-        class="rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white hover:bg-brand-blue-dark"
-      >
-        Back home
-      </a>
-      <a
-        href={QUOTE_PATH}
-        class="rounded-md border border-slate-300 px-6 py-3 text-base font-semibold text-brand-slate hover:border-brand-blue hover:text-brand-blue"
-      >
-        Request a Quote
-      </a>
+      <Button href="/">Back home</Button>
+      <Button href={QUOTE_PATH} variant="secondary">Request a Quote</Button>
     </div>
   </section>
 </BaseLayout>

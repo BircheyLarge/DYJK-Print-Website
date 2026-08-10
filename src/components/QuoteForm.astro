@@ -91,13 +91,13 @@ const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
           label="Your name"
           required
           autocomplete="name"
-          placeholder="Jane Rivera"
+          placeholder="e.g. Jane Rivera"
         />
         <Field
           name="company"
           label="Company"
           autocomplete="organization"
-          placeholder="Rivera Creative"
+          placeholder="e.g. Rivera Creative"
         />
         <Field
           name="email"
@@ -106,7 +106,7 @@ const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
           required
           autocomplete="email"
           inputmode="email"
-          placeholder="jane@company.com"
+          placeholder="e.g. jane@company.com"
         />
         <Field
           name="phone"
@@ -114,7 +114,7 @@ const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
           type="tel"
           autocomplete="tel"
           inputmode="tel"
-          placeholder="(801) 555-0134"
+          placeholder="e.g. (801) 555-0134"
           hint="Fastest way to sort out specs."
         />
       </div>
@@ -135,7 +135,7 @@ const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
           name="quantity"
           label="Quantity"
           required
-          placeholder="5,000"
+          placeholder="e.g. 5,000"
           hint="A rough number is fine — “not sure yet” works too."
         />
         <Field
@@ -184,7 +184,7 @@ const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
           inputmode="numeric"
           autocomplete="postal-code"
           maxlength={10}
-          placeholder="84020"
+          placeholder="e.g. 84020"
           hint="Sharpens the freight estimate."
         />
       </div>
@@ -211,7 +211,7 @@ const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
     <input type="hidden" name="utmMedium" value="" />
     <input type="hidden" name="utmCampaign" value="" />
 
-    <div class="space-y-5 border-t border-slate-200 pt-6">
+    <div class="space-y-5 border-t border-brand-line pt-6">
       <div>
         <div class="flex items-start gap-3">
           <input
@@ -220,9 +220,8 @@ const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
             type="checkbox"
             required
             aria-describedby="qf-consent-error"
-            class="mt-1 h-5 w-5 shrink-0 rounded border-slate-400 text-brand-blue
-                   focus:ring-2 focus:ring-brand-blue/30
-                   aria-[invalid=true]:border-red-600"
+            class="mt-1 h-5 w-5 shrink-0 rounded border-brand-line-strong
+                   text-brand-blue aria-[invalid=true]:border-red-600"
           />
           <label for="qf-consent" class="text-sm text-brand-slate">
             I agree that DYJK Print may contact me about this request.
