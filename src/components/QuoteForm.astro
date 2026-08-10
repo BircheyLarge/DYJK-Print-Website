@@ -1,0 +1,450 @@
+---
+/**
+ * The quote request form — the site's single conversion point.
+ *
+ * Progressive enhancement, deliberately:
+ *  - No JS: a plain POST to /api/quote. The browser enforces `required`,
+ *    the Function validates and redirects to /quote-received/. Fully working.
+ *  - With JS: the same validation rules (imported from lib/quote, so they
+ *    cannot drift from the server's) run inline, errors land next to their
+ *    field, and submission happens over fetch without losing what was typed.
+ *
+ * Every state is rendered here rather than constructed in JS: idle, sending,
+ * success and error all exist in the markup, so the script only toggles
+ * `hidden` and fills text.
+ */
+import Button from './Button.astro';
+import Field from './Field.astro';
+import { PROJECT_TYPES, US_STATES } from '../lib/quote';
+import { SITE } from '../consts';
+
+const projectOptions = PROJECT_TYPES.map((t) => [t, t] as const);
+---
+
+<div class="relative">
+  {/* ── Success ─────────────────────────────────────────────────────────── */}
+  <div
+    id="quote-success"
+    hidden
+    tabindex="-1"
+    class="rounded-xl border border-green-700/25 bg-green-50 p-6 focus:outline-none sm:p-8"
+  >
+    <div class="flex items-start gap-4">
+      <svg
+        class="mt-0.5 h-7 w-7 shrink-0 text-green-700"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m9 12 2 2 4-4"></path>
+      </svg>
+      <div>
+        <h2 class="text-xl font-bold text-brand-ink">
+          Thanks — your request is in.
+        </h2>
+        <p class="mt-2 text-brand-slate">
+          A real person reviews every request. We'll come back with pricing and
+          a production timeline, usually within one business day.
+        </p>
+        <p class="mt-4 text-sm text-brand-muted">
+          Need it sooner? Call{' '}
+          <a
+            href={`tel:${SITE.phone}`}
+            class="font-semibold text-brand-blue hover:text-brand-blue-dark"
+            >{SITE.phoneDisplay}</a
+          >.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* ── Form ────────────────────────────────────────────────────────────── */}
+  <form
+    id="quote-form"
+    method="post"
+    action="/api/quote"
+    class="space-y-8"
+    aria-describedby="quote-form-error"
+  >
+    {
+      /* Form-level error. role=alert so a failed submit is announced even
+        though focus moves to the offending field. */
+    }
+    <div
+      id="quote-form-error"
+      role="alert"
+      hidden
+      class="rounded-md border border-red-700/30 bg-red-50 p-4 text-sm font-medium text-red-800"
+    >
+    </div>
+
+    <fieldset class="space-y-5">
+      <legend class="text-lg font-bold text-brand-ink">About you</legend>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <Field
+          name="name"
+          label="Your name"
+          required
+          autocomplete="name"
+          placeholder="Jane Rivera"
+        />
+        <Field
+          name="company"
+          label="Company"
+          autocomplete="organization"
+          placeholder="Rivera Creative"
+        />
+        <Field
+          name="email"
+          label="Email"
+          type="email"
+          required
+          autocomplete="email"
+          inputmode="email"
+          placeholder="jane@company.com"
+        />
+        <Field
+          name="phone"
+          label="Phone"
+          type="tel"
+          autocomplete="tel"
+          inputmode="tel"
+          placeholder="(801) 555-0134"
+          hint="Fastest way to sort out specs."
+        />
+      </div>
+    </fieldset>
+
+    <fieldset class="space-y-5">
+      <legend class="text-lg font-bold text-brand-ink">Your project</legend>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <Field
+          name="projectType"
+          label="What are you printing?"
+          as="select"
+          required
+          options={projectOptions}
+          optionsPlaceholder="Select a product…"
+        />
+        <Field
+          name="quantity"
+          label="Quantity"
+          required
+          placeholder="5,000"
+          hint="A rough number is fine — “not sure yet” works too."
+        />
+        <Field
+          name="deadline"
+          label="Need it by"
+          type="date"
+          hint="We'll tell you straight away if it's tight."
+        />
+        <Field
+          name="artworkUrl"
+          label="Link to your artwork"
+          type="url"
+          placeholder="https://drive.google.com/…"
+          hint="Drive, Dropbox or WeTransfer. Or send files after we reply."
+        />
+        <Field
+          name="message"
+          label="Specs & details"
+          as="textarea"
+          wide
+          maxlength={5000}
+          placeholder="Size, stock, finish, folds, colors — whatever you know so far."
+          hint="Not sure about specs? Tell us what it's for and we'll advise."
+        />
+      </div>
+    </fieldset>
+
+    <fieldset class="space-y-5">
+      <legend class="text-lg font-bold text-brand-ink">Where it ships</legend>
+      <p class="-mt-2 text-sm text-brand-muted">
+        We print for clients in all 50 states — shipping destination drives
+        freight and timeline.
+      </p>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <Field
+          name="shipState"
+          label="Ship-to state"
+          as="select"
+          required
+          options={US_STATES}
+          optionsPlaceholder="Select a state…"
+        />
+        <Field
+          name="shipZip"
+          label="ZIP code"
+          inputmode="numeric"
+          autocomplete="postal-code"
+          maxlength={10}
+          placeholder="84020"
+          hint="Sharpens the freight estimate."
+        />
+      </div>
+    </fieldset>
+
+    {/* Honeypot. Off-screen rather than display:none, and hidden from AT. */}
+    <div
+      class="absolute left-[-9999px] top-0 h-px w-px overflow-hidden"
+      aria-hidden="true"
+    >
+      <label for="qf-website">Website</label>
+      <input
+        id="qf-website"
+        type="text"
+        name="website"
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
+
+    {/* Attribution — filled by the script, empty (and harmless) without JS. */}
+    <input type="hidden" name="source" value="" />
+    <input type="hidden" name="utmSource" value="" />
+    <input type="hidden" name="utmMedium" value="" />
+    <input type="hidden" name="utmCampaign" value="" />
+
+    <div class="space-y-5 border-t border-slate-200 pt-6">
+      <div>
+        <div class="flex items-start gap-3">
+          <input
+            id="qf-consent"
+            name="consent"
+            type="checkbox"
+            required
+            aria-describedby="qf-consent-error"
+            class="mt-1 h-5 w-5 shrink-0 rounded border-slate-400 text-brand-blue
+                   focus:ring-2 focus:ring-brand-blue/30
+                   aria-[invalid=true]:border-red-600"
+          />
+          <label for="qf-consent" class="text-sm text-brand-slate">
+            I agree that DYJK Print may contact me about this request.
+            <span class="text-red-700" aria-hidden="true"> *</span>
+            <span class="mt-1 block text-brand-muted">
+              We use your details to quote your job — nothing else, and we don't
+              sell them.
+            </span>
+          </label>
+        </div>
+        <p
+          id="qf-consent-error"
+          data-error-for="consent"
+          hidden
+          class="mt-1.5 text-sm font-medium text-red-700"
+        >
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <Button type="submit" id="quote-submit" size="md">
+          <span data-submit-idle>Request my quote</span>
+          <span data-submit-busy hidden class="inline-flex items-center gap-2">
+            <svg
+              class="h-4 w-4 animate-spin"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-opacity="0.3"
+                stroke-width="4"></circle>
+              <path
+                d="M22 12a10 10 0 0 0-10-10"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"></path>
+            </svg>
+            Sending…
+          </span>
+        </Button>
+        <p class="text-sm text-brand-muted">
+          Or call{' '}
+          <a
+            href={`tel:${SITE.phone}`}
+            class="font-semibold text-brand-blue hover:text-brand-blue-dark"
+            >{SITE.phoneDisplay}</a
+          >
+        </p>
+      </div>
+    </div>
+
+    {/* Polite status for screen readers — progress without stealing focus. */}
+    <p id="quote-status" class="sr-only" role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<script>
+  import {
+    firstErrorField,
+    toQuoteValues,
+    validateQuote,
+    type QuoteErrors,
+    type QuoteFieldName,
+  } from '../lib/quote';
+
+  const form = document.querySelector<HTMLFormElement>('#quote-form');
+  const success = document.querySelector<HTMLElement>('#quote-success');
+  const banner = document.querySelector<HTMLElement>('#quote-form-error');
+  const status = document.querySelector<HTMLElement>('#quote-status');
+  const submit = document.querySelector<HTMLButtonElement>('#quote-submit');
+
+  if (form && success && banner && status && submit) {
+    // We own validation messaging from here — turn off the native bubbles.
+    // (Left on until now so no-JS visitors still get browser validation.)
+    form.noValidate = true;
+
+    const idle = submit.querySelector<HTMLElement>('[data-submit-idle]');
+    const busy = submit.querySelector<HTMLElement>('[data-submit-busy]');
+
+    const controlFor = (field: string) =>
+      form.querySelector<HTMLInputElement>(`[name="${field}"]`);
+    const errorNodeFor = (field: string) =>
+      form.querySelector<HTMLElement>(`[data-error-for="${field}"]`);
+
+    /** A past deadline is a validation error; don't let the picker offer one. */
+    const deadline = controlFor('deadline');
+    if (deadline) {
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      deadline.min = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    }
+
+    // Attribution: where this lead came from. Hidden inputs, no cookies.
+    const params = new URLSearchParams(window.location.search);
+    const setHidden = (name: string, value: string) => {
+      const el = form.querySelector<HTMLInputElement>(
+        `input[type="hidden"][name="${name}"]`,
+      );
+      if (el) el.value = value;
+    };
+    setHidden('source', document.referrer || 'direct');
+    setHidden('utmSource', params.get('utm_source') ?? '');
+    setHidden('utmMedium', params.get('utm_medium') ?? '');
+    setHidden('utmCampaign', params.get('utm_campaign') ?? '');
+
+    function clearErrors() {
+      banner!.hidden = true;
+      banner!.textContent = '';
+      form!
+        .querySelectorAll<HTMLElement>('[data-error-for]')
+        .forEach((node) => {
+          node.hidden = true;
+          node.textContent = '';
+          const control = controlFor(node.dataset.errorFor ?? '');
+          control?.removeAttribute('aria-invalid');
+        });
+    }
+
+    function showErrors(errors: QuoteErrors, summary?: string) {
+      let shown = 0;
+      (Object.keys(errors) as QuoteFieldName[]).forEach((field) => {
+        const node = errorNodeFor(field);
+        const control = controlFor(field);
+        if (!node) return;
+        node.textContent = errors[field] ?? '';
+        node.hidden = false;
+        control?.setAttribute('aria-invalid', 'true');
+        shown += 1;
+      });
+
+      banner!.textContent =
+        summary ??
+        (shown === 1
+          ? 'One field needs a look before we can send this.'
+          : `${shown} fields need a look before we can send this.`);
+      banner!.hidden = false;
+
+      const first = firstErrorField(errors);
+      if (first) controlFor(first)?.focus();
+    }
+
+    function setBusy(isBusy: boolean) {
+      submit!.disabled = isBusy;
+      form!.setAttribute('aria-busy', String(isBusy));
+      if (idle) idle.hidden = isBusy;
+      if (busy) busy.hidden = !isBusy;
+      status!.textContent = isBusy ? 'Sending your request…' : '';
+    }
+
+    // Clear a field's error as soon as the visitor starts fixing it —
+    // stale red text next to a field you've just corrected reads as broken.
+    form.addEventListener('input', (event) => {
+      const target = event.target as HTMLElement | null;
+      const name = target?.getAttribute('name');
+      if (!name) return;
+      const node = errorNodeFor(name);
+      if (node && !node.hidden) {
+        node.hidden = true;
+        node.textContent = '';
+        target?.removeAttribute('aria-invalid');
+      }
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearErrors();
+
+      const data = new FormData(form);
+      const raw = Object.fromEntries(data.entries());
+      const values = toQuoteValues(raw);
+      const result = validateQuote(values);
+
+      if (!result.valid) {
+        showErrors(result.errors);
+        return;
+      }
+
+      setBusy(true);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            accept: 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+
+        if (response.ok) {
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+          status.textContent = 'Your request was sent.';
+          return;
+        }
+
+        // Server disagreed. Surface field errors when it sent them.
+        const payload = await response.json().catch(() => null);
+        setBusy(false);
+        if (payload?.errors && Object.keys(payload.errors).length > 0) {
+          showErrors(payload.errors as QuoteErrors);
+        } else {
+          showErrors(
+            {},
+            payload?.message ??
+              "We couldn't send that just now. Please try again, or call us and we'll take the details over the phone.",
+          );
+          banner!.focus?.();
+        }
+      } catch {
+        // Offline, DNS, blocked request — never strand the lead.
+        setBusy(false);
+        showErrors(
+          {},
+          "We couldn't reach our server — check your connection and try again. You can also email sales@dyjkprint.com or call us directly.",
+        );
+      }
+    });
+  }
+</script>
