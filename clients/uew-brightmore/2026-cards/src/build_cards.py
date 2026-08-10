@@ -44,6 +44,7 @@ OUT = ROOT / "out"
 HTML_DIR = OUT / "html"
 PRINT_DIR = OUT / "print"
 PROOF_DIR = OUT / "proof"
+SHARE_DIR = OUT / "share"
 
 PT = 72.0
 SHEET_PT = pymupdf.Rect(0, 0, layout.SHEET_W * PT, layout.SHEET_H * PT)
@@ -348,6 +349,144 @@ def full_card_sheet(c: Concept) -> None:
     out.close()
 
 
+# --------------------------------------------------------------------------- #
+# shareable deck
+# --------------------------------------------------------------------------- #
+
+PAGE_W, PAGE_H = 8.5 * PT, 11 * PT  # US Letter portrait — emails and prints anywhere
+MARGIN_PT = 0.5 * PT
+NAVY_RGB = (0.071, 0.235, 0.392)
+GREY = (0.42, 0.42, 0.42)
+HAIR = (0.84, 0.84, 0.84)
+
+
+def _concept_page(page: pymupdf.Page, c: Concept) -> None:
+    """One concept: front and back side by side, inside spread beneath."""
+    src = pymupdf.open(PRINT_DIR / f"{c.key}.pdf")
+    scale = 0.65
+    pw, ph = layout.PANEL_TRIM_W * PT * scale, layout.TRIM_H * PT * scale
+    sw = layout.TRIM_W * PT * scale
+    gap, cap = 0.35 * PT * 2, 13
+
+    page.insert_text((MARGIN_PT, MARGIN_PT + 16), c.title, fontsize=15,
+                     fontname="hebo", color=NAVY_RGB)
+    page.insert_text((MARGIN_PT, MARGIN_PT + 32), c.key, fontsize=8,
+                     fontname="helv", color=GREY)
+    page.draw_line(pymupdf.Point(MARGIN_PT, MARGIN_PT + 42),
+                   pymupdf.Point(PAGE_W - MARGIN_PT, MARGIN_PT + 42),
+                   color=HAIR, width=0.6)
+
+    y = MARGIN_PT + 62
+    row1_w = pw * 2 + gap
+    x = (PAGE_W - row1_w) / 2
+    for clip, caption in ((CLIP_FRONT, "FRONT COVER"), (CLIP_BACK, "BACK COVER")):
+        r = pymupdf.Rect(x, y, x + pw, y + ph)
+        page.show_pdf_page(r, src, 0, clip=clip)
+        page.draw_rect(r, color=HAIR, width=0.6)
+        page.insert_text((x, y + ph + cap), caption, fontsize=7,
+                         fontname="helv", color=GREY)
+        x += pw + gap
+
+    y += ph + cap + 16
+    x = (PAGE_W - sw) / 2
+    r = pymupdf.Rect(x, y, x + sw, y + ph)
+    page.show_pdf_page(r, src, 1, clip=CLIP_INSIDE)
+    page.draw_rect(r, color=HAIR, width=0.6)
+    page.draw_line(pymupdf.Point(x + sw / 2, y), pymupdf.Point(x + sw / 2, y + ph),
+                   color=(0.78, 0.78, 0.78), width=0.5, dashes="[2 3] 0")
+    page.insert_text((x, y + ph + cap),
+                     "INSIDE  —  left panel is left blank for a handwritten note",
+                     fontsize=7, fontname="helv", color=GREY)
+
+    wrapped = []
+    line = ""
+    for word in c.pitch.split():
+        if len(line) + len(word) > 96:
+            wrapped.append(line)
+            line = word
+        else:
+            line = f"{line} {word}".strip()
+    wrapped.append(line)
+    ty = y + ph + cap + 22
+    for ln in wrapped[:4]:
+        page.insert_text((MARGIN_PT, ty), ln, fontsize=8.5, fontname="helv",
+                         color=(0.25, 0.25, 0.25))
+        ty += 12
+    src.close()
+
+
+def _cover_page(page: pymupdf.Page, cards: list[Concept], subtitle: str) -> None:
+    page.insert_text((MARGIN_PT, MARGIN_PT + 26),
+                     "United Energy Workers Healthcare", fontsize=21,
+                     fontname="hebo", color=NAVY_RGB)
+    page.insert_text((MARGIN_PT, MARGIN_PT + 46), subtitle, fontsize=13,
+                     fontname="helv", color=(0.30, 0.30, 0.30))
+    page.insert_text((MARGIN_PT, MARGIN_PT + 66),
+                     "Brightmore Home Care of Kentucky, LLC   ·   prepared by DYJK Print",
+                     fontsize=8.5, fontname="helv", color=GREY)
+    page.draw_line(pymupdf.Point(MARGIN_PT, MARGIN_PT + 78),
+                   pymupdf.Point(PAGE_W - MARGIN_PT, MARGIN_PT + 78),
+                   color=HAIR, width=0.6)
+
+    cols = 3
+    avail = PAGE_W - MARGIN_PT * 2
+    gap = 14
+    pw = (avail - gap * (cols - 1)) / cols
+    ph = pw * (layout.TRIM_H / layout.PANEL_TRIM_W)
+    y = MARGIN_PT + 100
+    for i, c in enumerate(cards):
+        r_, col = divmod(i, cols)
+        x = MARGIN_PT + col * (pw + gap)
+        yy = y + r_ * (ph + 26)
+        src = pymupdf.open(PRINT_DIR / f"{c.key}.pdf")
+        rect = pymupdf.Rect(x, yy, x + pw, yy + ph)
+        page.show_pdf_page(rect, src, 0, clip=CLIP_FRONT)
+        page.draw_rect(rect, color=HAIR, width=0.6)
+        page.insert_text((x, yy + ph + 11), c.key, fontsize=6.6,
+                         fontname="helv", color=GREY)
+        src.close()
+
+    rows = (len(cards) + cols - 1) // cols
+    fy = y + rows * (ph + 26) + 14
+    notes = [
+        "Each concept follows on its own page: front cover, back cover, and the inside spread.",
+        "Finished card is 4.25 x 6in portrait, folding on the left. Printed 6 x 8.5in vertical (GotPrint).",
+        "This document is for choosing. The press-ready files are separate and imposed as flat sheets.",
+    ]
+    for n in notes:
+        page.insert_text((MARGIN_PT, fy), n, fontsize=8.5, fontname="helv",
+                         color=(0.28, 0.28, 0.28))
+        fy += 13
+
+
+def share_pdf(cards: list[Concept], subtitle: str, dest: Path) -> None:
+    out = pymupdf.open()
+    cover = out.new_page(width=PAGE_W, height=PAGE_H)
+    cover.draw_rect(cover.rect, color=None, fill=(1, 1, 1))
+    _cover_page(cover, cards, subtitle)
+    for c in cards:
+        page = out.new_page(width=PAGE_W, height=PAGE_H)
+        page.draw_rect(page.rect, color=None, fill=(1, 1, 1))
+        _concept_page(page, c)
+    out.set_metadata({
+        "title": f"UEW / Brightmore — {subtitle}",
+        "subject": "Card concepts for review. Press-ready files supplied separately.",
+        "creator": "DYJK Print",
+    })
+    out.save(dest, garbage=4, deflate=True)
+    out.close()
+    print(f"  {dest.name:<44} {dest.stat().st_size // 1024:>5} KB, {len(cards) + 1} pages")
+
+
+def share_pdfs() -> None:
+    SHARE_DIR.mkdir(parents=True, exist_ok=True)
+    tg = [c for c in CONCEPTS if c.season == "thanksgiving"]
+    xm = [c for c in CONCEPTS if c.season == "christmas"]
+    share_pdf(CONCEPTS, "2026 Holiday Card Concepts", SHARE_DIR / "UEW-2026-Card-Concepts.pdf")
+    share_pdf(tg, "Thanksgiving 2026 — Card Concepts", SHARE_DIR / "UEW-2026-Thanksgiving-Concepts.pdf")
+    share_pdf(xm, "Christmas 2026 — Card Concepts", SHARE_DIR / "UEW-2026-Christmas-Concepts.pdf")
+
+
 def contact_sheet() -> None:
     """All six front covers side by side, at folded proportions."""
     cols, rows = 3, 2
@@ -385,7 +524,7 @@ def contact_sheet() -> None:
 
 
 def main() -> None:
-    for d in (HTML_DIR, PRINT_DIR, PROOF_DIR):
+    for d in (HTML_DIR, PRINT_DIR, PROOF_DIR, SHARE_DIR):
         d.mkdir(parents=True, exist_ok=True)
 
     print("fonts:")
@@ -420,6 +559,8 @@ def main() -> None:
     for c in CONCEPTS:
         full_card_sheet(c)
     season_sheets()
+    print("shareable decks:")
+    share_pdfs()
 
     print(f"\nprint files -> {PRINT_DIR}")
     print(f"proofs      -> {PROOF_DIR}")

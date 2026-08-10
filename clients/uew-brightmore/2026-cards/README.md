@@ -48,6 +48,24 @@ branding noise. Say the word and I'll add it back.
 
 ---
 
+## Sending these to someone
+
+`out/share/` — built for emailing, US Letter, one concept per page (front cover,
+back cover, inside spread) with a contact-sheet cover:
+
+| File | |
+|---|---|
+| `UEW-2026-Card-Concepts.pdf` | all six, 7 pages, ~860 KB |
+| `UEW-2026-Thanksgiving-Concepts.pdf` | the three Thanksgiving, 4 pages |
+| `UEW-2026-Christmas-Concepts.pdf` | the three Christmas, 4 pages |
+
+**Send these for choosing, not the files in `out/print/`.** The press files are
+imposed as flat sheets — back cover printed alongside the front, inside-left
+alongside inside-right — which is correct for the printer and looks broken to
+everyone else.
+
+---
+
 ## What to upload
 
 `out/print/<concept>.pdf` — one file per concept, **2 pages**:
