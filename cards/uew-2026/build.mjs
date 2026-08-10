@@ -110,6 +110,7 @@ for (const card of cards) {
     number: card.number,
     name: card.name,
     direction: card.direction,
+    variant: Boolean(card.variant),
     blurb: card.blurb,
   });
 }

@@ -96,8 +96,14 @@ extension rather than two:
 Rust and rust-deep are the client's coral walked down in value at the same hue,
 so the season reads warm without introducing a colour that isn't traceable to
 the mark. The greens are the only genuinely new hues and appear as leaves only.
-Navy stays as the body-copy ink and on the "Happy Thanksgiving" line, which
-keeps the cards recognisably UEW rather than generic autumn stock.
+To be precise about how far the shift goes: navy is kept for **body copy, the
+sign-offs and the small-caps "Happy Thanksgiving" line**, but the display type
+moved — the front headline on 03 and the inside leads on all three are set in
+rust-deep, not navy. `02b` is a colourway alternative that keeps the 2025 navy
+field and carries the autumn palette in the sheaf instead, since navy is the
+one field colour Thanksgiving and Christmas would otherwise no longer share.
+It is a choice for the client, not a replacement — the main contact sheets
+still show three per holiday.
 
 Every text pairing clears WCAG AA; the tightest is the 7.6pt rust eyebrow on oat
 at 5.19:1. One caveat worth recording: **goldenrod on oat is 2.84:1**, just under

@@ -176,12 +176,30 @@ def main() -> int:
         rows = [
             (f"{c['number']} · {c['name']} · {c['direction']}", final / f"UEW-2026-{c['id']}.pdf")
             for c in index
-            if c["holiday"] == holiday
+            if c["holiday"] == holiday and not c.get("variant")
         ]
         contact_sheet(
             rows,
             OUT / f"contact-sheet-{holiday.lower()}-2026.png",
             f"United Energy Workers Healthcare — {holiday} 2026",
+        )
+
+    # A colourway alternative gets its own comparison sheet, so the
+    # three-per-holiday choice the client is actually making stays uncluttered.
+    for alt in [c for c in index if c.get("variant")]:
+        base = next(
+            c for c in index
+            if c["holiday"] == alt["holiday"]
+            and not c.get("variant")
+            and c["number"] == alt["number"].rstrip("ab")
+        )
+        contact_sheet(
+            [
+                (f"{base['number']} · {base['name']}", final / f"UEW-2026-{base['id']}.pdf"),
+                (f"{alt['number']} · {alt['name']}", final / f"UEW-2026-{alt['id']}.pdf"),
+            ],
+            OUT / f"comparison-{alt['id']}.png",
+            f"{alt['holiday']} {base['number']} {base['name']} — colourway comparison",
         )
 
     # Split copies, for vendor flows that want one file per side.

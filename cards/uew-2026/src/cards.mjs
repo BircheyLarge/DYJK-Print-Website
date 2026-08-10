@@ -194,6 +194,55 @@ export function buildCards(logos) {
 
     /* ------------------------------------------------------------------ */
     {
+      id: 'thanksgiving-02b-harvest-navy',
+      holiday: 'Thanksgiving',
+      number: '02b',
+      name: 'Harvest — navy colourway',
+      direction: 'Formal',
+      variant: true,
+      blurb:
+        'The same card keeping the 2025 navy field, with the autumn palette carried in the sheaf instead. Navy is the one field colour Thanksgiving and Christmas would otherwise no longer share.',
+      outsideBg: 'var(--navy-deep)',
+      insideBg: OAT,
+      front: `<div class="stack stack--center t2-front">
+        <p class="script t2-happy">Happy</p>
+        <p class="caps t2-thanks">Thanksgiving</p>
+        <div class="t2-arc">${harvestArc({
+          width: 430, height: 218, spread: 74, stalkLen: 160,
+          inks: [HUSK, AMBER, GOLDENROD], leafInks: [AMBER, GOLDENROD],
+          accent: PUMPKIN, seed: 31,
+        })}</div>
+      </div>`,
+      back: backPanel(masterWhite),
+      insideLeft: insideLeftPanel(wheatSprig({ ink: CHESTNUT, accent: CRANBERRY }), 'inside-art--wheat'),
+      insideRight: insideRightPanel({
+        eyebrow: 'Thanksgiving 2026',
+        headline: 'With&nbsp;gratitude.',
+        paras: [
+          'Thank you for serving our country. You spent your working life on something far bigger than yourself, and this country is still living on the strength of it.',
+          'Thank you, too, for being part of the UEW family. Caring for you is the privilege of our year.',
+        ],
+        signoff: '— Your team at United Energy Workers Healthcare',
+        logoSvg: master,
+        ruleSvg: dottedRule({ width: 150, ink: CHESTNUT, accent: RUST }),
+      }),
+      css: `
+        .inside-eyebrow { color: var(--fall-rust); }
+        .inside-head { color: var(--fall-rust-deep); }
+        .t2-front { color: var(--cream); padding-bottom: 0.18in; }
+        .t2-happy { font-size: 44pt; color: ${HUSK}; }
+        .t2-thanks {
+          margin-top: 0.16in; font-size: 17pt; color: var(--cream);
+          letter-spacing: 0.28em; text-indent: 0.28em;
+        }
+        .t2-arc { width: 3.37in; margin-top: 0.24in; }
+        .t2-arc svg { display: block; width: 100%; height: auto; }
+        .inside-art--wheat { width: 0.9in; }
+      `,
+    },
+
+    /* ------------------------------------------------------------------ */
+    {
       id: 'thanksgiving-03-give-thanks',
       holiday: 'Thanksgiving',
       number: '03',
