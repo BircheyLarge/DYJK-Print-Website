@@ -110,7 +110,15 @@ def msg(lead: str, body: str, sign: str, *, lead_cls: str = "serif") -> str:
 
 
 def back_panel(colour: str, *, mark: str = "") -> str:
-    """Back cover: flood colour, a whisper of ornament, logo stamped at centre."""
+    """Back cover: flood colour plus a centred colophon.
+
+    These were previously a single small ornament drifting near the top of an
+    otherwise empty panel at 40-50% opacity. Seen at full size that reads as
+    something forgotten, not as restraint. The mark is now centred, sized to
+    about 1.6in, and coloured to clear the 3:1 non-text floor so it prints as a
+    deliberate colophon. It is not a third logo — the logo is already on the
+    front cover and again under the inside message.
+    """
     return flood(colour, mark)
 
 
@@ -173,8 +181,10 @@ T1 = Concept(
         '<hr class="rule">'
         '<p class="year">2026</p>'
     ),
-    back_bg=back_panel(P["navy_deep"], mark=art.orbits(CX_L, 96, 74, 32,
-                       angles=(0, 60, 120), stroke=P["navy_soft"], width=1.2)),
+    back_bg=back_panel(P["navy_deep"], mark=art.orbits(CX_L, CY, 78, 34,
+                       angles=(0, 60, 120), stroke=P["goldenrod"], width=1.15)
+                       + art.nodes(CX_L, CY, 78, count=3, radius=3.2,
+                                   fill=P["pumpkin"])),
     back_body="",
     inside_l_bg=flood(P["harvest"], corner_orbit(P["goldenrod"], 0.34)),
     inside_l_body="",
@@ -250,8 +260,13 @@ T2 = Concept(
         '<p class="year">Thanksgiving 2026</p>'
         '<div class="grow"></div>'
     ),
-    back_bg=back_panel(P["harvest"], mark=art.leaf_simple(CX_L, 96, scale=0.8,
-                       fill=P["moss"], opacity=0.5)),
+    back_bg=back_panel(P["harvest"],
+                      mark=art.wheat(CX_L, CY + 52, angle=0, scale=1.0,
+                                     stroke=P["wheat_ink"], grains=6)
+                      + art.leaf_simple(CX_L - 40, CY + 40, angle=-62, scale=0.78,
+                                        fill=P["moss"])
+                      + art.leaf_simple(CX_L + 40, CY + 40, angle=62, scale=0.78,
+                                        fill=P["chestnut"])),
     back_body="",
     inside_l_bg=flood(P["harvest"], corner_orbit(P["goldenrod"], 0.30)),
     inside_l_body="",
@@ -321,7 +336,11 @@ T3 = Concept(
         '<div class="grow"></div>'
         '<p class="year">Happy Thanksgiving</p>'
     ),
-    back_bg=back_panel(P["rust"]),
+    back_bg=back_panel(P["rust"],
+                      mark=art.orbits(CX_L, CY, 82, 82, angles=(0,),
+                                      stroke=P["husk"], width=1.15)
+                      + art.nodes(CX_L, CY, 82, count=1, phase=-118, radius=3.6,
+                                  fill=P["harvest"])),
     back_body="",
     inside_l_bg=flood(P["harvest"], corner_orbit(P["goldenrod"], 0.30)),
     inside_l_body="",
@@ -392,8 +411,10 @@ C1 = Concept(
         '<hr class="rule">'
         '<p class="year">2026</p>'
     ),
-    back_bg=back_panel(P["navy_deep"], mark=art.starburst(CX_L, 92, 26,
-                       fill=P["navy_soft"], waist=0.1)),
+    back_bg=back_panel(P["navy_deep"],
+                      mark=art.orbits(CX_L, CY, 76, 32, angles=(0, 60, 120),
+                                      stroke=P["peach"], width=1.15, opacity=0.9)
+                      + art.starburst(CX_L, CY, 30, fill=P["gold"], waist=0.1)),
     back_body="",
     inside_l_bg=flood(P["cream"], corner_orbit(P["peach"], 0.40)),
     inside_l_body="",
@@ -469,8 +490,9 @@ C2 = Concept(
         '<p class="year">Christmas 2026</p>'
         '<div class="grow grow--3"></div>'
     ),
-    back_bg=back_panel(P["cream"], mark=art.geo_tree(CX_L, 118, h=64, w=34, tiers=3,
-                       fill=P["peach"], trunk=P["peach"], opacity=0.75)),
+    back_bg=back_panel(P["ivory"],
+                      mark=art.geo_tree(CX_L, CY + 58, h=118, w=60, tiers=4,
+                                        fill=P["navy"], trunk=P["coral"])),
     back_body="",
     inside_l_bg=flood(P["ivory"], corner_orbit(P["peach"], 0.34)),
     inside_l_body="",
@@ -533,8 +555,10 @@ C3 = Concept(
         '<hr class="rule">'
         '<p class="year">2026</p>'
     ),
-    back_bg=back_panel(P["navy_deep"], mark=art.pine_sprig(CX_L, 118, scale=0.7,
-                       stroke=P["navy_soft"], length=58)),
+    back_bg=back_panel(P["navy_deep"],
+                      mark=art.laurel_wreath(CX_L, CY, 62, leaves=24,
+                                             fill=P["peach"], berry=P["coral"],
+                                             leaf_scale=0.42, berries=4)),
     back_body="",
     inside_l_bg=flood(P["cream"], corner_orbit(P["peach"], 0.38)),
     inside_l_body="",
