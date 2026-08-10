@@ -28,13 +28,17 @@ const CORAL_LIGHT = '#f8a484';
 const GOLD = '#cba55f';
 const GOLD_LIGHT = '#e2c68d';
 const CREAM = '#faf5ec';
-const OAT = '#f7eedc';
-const WHEAT = '#e3c892';
-const AMBER = '#c68a2c';
-const OCHRE = '#a9741f';
-const RUST = '#b4491f';
-const SIENNA = '#8a3616';
-const OLIVE = '#6e7248';
+const OAT = '#f7eddc';
+const HUSK = '#e0c395';
+const AMBER = '#de9a3e';
+const GOLDENROD = '#b8842b';
+const PUMPKIN = '#c9622a';
+const RUST = '#a8431e';
+const RUST_DEEP = '#8e3616';
+const CHESTNUT = '#8a4e2b';
+const CRANBERRY = '#8e2f3c';
+const MOSS = '#878b57';
+const OLIVE = '#6b7148';
 const NAVY_NIGHT = '#0a2340'; // must match --navy-night; the halo blends against it
 
 /** A single wheat stalk, used quietly on the inside-left write-in panel. */
@@ -101,15 +105,15 @@ export function buildCards(logos) {
         <div class="t1-wreath">
           ${wheatWreath({
             size: 372, radius: 132, stalks: 22,
-            inks: [AMBER, OCHRE, '#8f6318'], leaves: 7, leafInks: [RUST, OLIVE, SIENNA],
-            accent: RUST, seed: 11,
+            inks: [GOLDENROD, CHESTNUT, AMBER], leaves: 7, leafInks: [PUMPKIN, OLIVE, MOSS],
+            accent: CRANBERRY, seed: 11,
           })}
           <p class="script t1-word">grateful</p>
         </div>
         <p class="caps t1-sub">Happy Thanksgiving</p>
       </div>`,
       back: backPanel(master),
-      insideLeft: insideLeftPanel(wheatSprig({ ink: OCHRE, accent: RUST }), 'inside-art--wheat'),
+      insideLeft: insideLeftPanel(wheatSprig({ ink: CHESTNUT, accent: CRANBERRY }), 'inside-art--wheat'),
       insideRight: insideRightPanel({
         eyebrow: 'With gratitude',
         headline: 'Thank&nbsp;you.',
@@ -119,17 +123,17 @@ export function buildCards(logos) {
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
         logoSvg: master,
-        ruleSvg: dottedRule({ width: 150, ink: OCHRE, accent: RUST }),
+        ruleSvg: dottedRule({ width: 150, ink: CHESTNUT, accent: RUST }),
       }),
       css: `
         .inside-eyebrow { color: var(--fall-rust); }
-        .inside-head { color: var(--fall-sienna); }
+        .inside-head { color: var(--fall-rust-deep); }
         .t1-wreath { position: relative; width: 3.02in; margin-top: -0.16in; }
         .t1-wreath svg { display: block; width: 100%; height: auto; }
         .t1-word {
           position: absolute; inset: 0; display: flex;
           align-items: center; justify-content: center;
-          font-size: 41pt; color: var(--fall-sienna);
+          font-size: 41pt; color: var(--fall-rust-deep);
           transform: translateY(-0.05in);
         }
         .t1-sub {
@@ -149,19 +153,19 @@ export function buildCards(logos) {
       direction: 'Formal',
       blurb:
         'Deep sienna across the whole outside, wheat-gold harvest sheaf, script and letterspaced caps. The premium option, and the most seasonal.',
-      outsideBg: SIENNA,
+      outsideBg: RUST_DEEP,
       insideBg: OAT,
       front: `<div class="stack stack--center t2-front">
         <p class="script t2-happy">Happy</p>
         <p class="caps t2-thanks">Thanksgiving</p>
         <div class="t2-arc">${harvestArc({
           width: 430, height: 218, spread: 74, stalkLen: 160,
-          inks: [WHEAT, '#f0dcb0', '#d8bc85'], leafInks: ['#e0a86a', '#cbb078'],
-          accent: '#f0dcb0', seed: 31,
+          inks: [HUSK, CREAM, AMBER], leafInks: [AMBER, HUSK],
+          accent: HUSK, seed: 31,
         })}</div>
       </div>`,
       back: backPanel(masterWhite),
-      insideLeft: insideLeftPanel(wheatSprig({ ink: OCHRE, accent: RUST }), 'inside-art--wheat'),
+      insideLeft: insideLeftPanel(wheatSprig({ ink: CHESTNUT, accent: CRANBERRY }), 'inside-art--wheat'),
       insideRight: insideRightPanel({
         eyebrow: 'Thanksgiving 2026',
         headline: 'With&nbsp;gratitude.',
@@ -171,13 +175,13 @@ export function buildCards(logos) {
         ],
         signoff: '— Your team at United Energy Workers Healthcare',
         logoSvg: master,
-        ruleSvg: dottedRule({ width: 150, ink: OCHRE, accent: RUST }),
+        ruleSvg: dottedRule({ width: 150, ink: CHESTNUT, accent: RUST }),
       }),
       css: `
         .inside-eyebrow { color: var(--fall-rust); }
-        .inside-head { color: var(--fall-sienna); }
+        .inside-head { color: var(--fall-rust-deep); }
         .t2-front { color: var(--cream); padding-bottom: 0.18in; }
-        .t2-happy { font-size: 44pt; color: ${WHEAT}; }
+        .t2-happy { font-size: 44pt; color: ${HUSK}; }
         .t2-thanks {
           margin-top: 0.16in; font-size: 17pt; color: var(--cream);
           letter-spacing: 0.28em; text-indent: 0.28em;
@@ -205,12 +209,12 @@ export function buildCards(logos) {
           <h1 class="display t3-h">Give<br>thanks<span class="t3-dot">.</span></h1>
           <div class="t3-rule"></div>
         </div>
-        <div class="t3-leaf">${leafCluster({ inks: [RUST, AMBER, OLIVE], accent: RUST })}</div>
+        <div class="t3-leaf">${leafCluster({ inks: [RUST, GOLDENROD, OLIVE], accent: CRANBERRY })}</div>
       </div>`,
       back: `<div class="stack stack--end">
         <div class="logo back-logo back-logo--left">${master}</div>
       </div>`,
-      insideLeft: insideLeftPanel(leafCluster({ inks: [RUST, AMBER, OLIVE], accent: RUST }), 'inside-art--leaf'),
+      insideLeft: insideLeftPanel(leafCluster({ inks: [RUST, GOLDENROD, OLIVE], accent: CRANBERRY }), 'inside-art--leaf'),
       insideRight: insideRightPanel({
         eyebrow: 'Happy Thanksgiving',
         headline: 'For all of it,<br>thank&nbsp;you.',
@@ -220,12 +224,12 @@ export function buildCards(logos) {
         ],
         signoff: '— With gratitude, your care team',
         logoSvg: master,
-        ruleSvg: dottedRule({ width: 150, ink: OCHRE, accent: RUST }),
+        ruleSvg: dottedRule({ width: 150, ink: CHESTNUT, accent: RUST }),
       }),
       css: `
         .inside-eyebrow { color: var(--fall-rust); }
-        .inside-head { color: var(--fall-sienna); }
-        .t3-front { color: var(--fall-sienna); }
+        .inside-head { color: var(--fall-rust-deep); }
+        .t3-front { color: var(--fall-rust-deep); }
         .t3-eyebrow { color: var(--fall-rust); }
         .t3-head { margin-top: 0.52in; }
         .t3-h { font-size: 54pt; line-height: 0.9; font-weight: 500; }

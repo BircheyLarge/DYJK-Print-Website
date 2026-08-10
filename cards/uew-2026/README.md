@@ -76,25 +76,35 @@ the card is meant to be read across a kitchen table.
 The Christmas cards run on the client's own three hues — navy `#133D64`, coral
 `#F15933`, light coral `#F8A484` — plus a warm cream ground and a gold.
 
-The Thanksgiving cards use an autumn ramp defined in `src/base.css`:
+The Thanksgiving cards use an autumn ramp defined in `src/base.css`. These are
+the same values the parallel Thanksgiving set uses, so the client sees one brand
+extension rather than two:
 
 | Token | Hex | Used for |
 |---|---|---|
-| `--fall-oat` | `#F7EEDC` | ground on 01 and 03, and every inside panel |
-| `--fall-wheat` | `#E3C892` | script and wheat on the sienna ground |
-| `--fall-amber` / `--fall-ochre` | `#C68A2C` / `#A9741F` | wheat |
-| `--fall-rust` | `#B4491F` | eyebrows, rules, berries |
-| `--fall-sienna` | `#8A3616` | ground on 02; display type on 01 and 03 |
-| `--fall-olive` | `#6E7248` | foliage only — never type |
+| `--fall-oat` | `#F7EDDC` | ground on 01 and 03, and every inside panel |
+| `--fall-husk` | `#E0C395` | script and wheat on the dark ground |
+| `--fall-amber` | `#DE9A3E` | wheat highlights |
+| `--fall-goldenrod` | `#B8842B` | wheat — never on its own, see below |
+| `--fall-pumpkin` | `#C9622A` | foliage |
+| `--fall-rust` | `#A8431E` | eyebrows, rules, leaves |
+| `--fall-rust-deep` | `#8E3616` | ground on 02; display type on 01 and 03 |
+| `--fall-chestnut` | `#8A4E2B` | deepest wheat; hairline rules; write-in sprigs |
+| `--fall-cranberry` | `#8E2F3C` | berries |
+| `--fall-moss` / `--fall-olive` | `#878B57` / `#6B7148` | foliage only — never type |
 
-Rust is the client's coral walked down in value at the same hue, and sienna
-continues that ramp, so the season reads warm without introducing a colour that
-isn't traceable to the mark. Olive is the one genuinely new hue and appears only
-as leaves. Navy stays as the body-copy ink and on the "Happy Thanksgiving" line,
-which keeps the cards recognisably UEW rather than generic autumn stock.
+Rust and rust-deep are the client's coral walked down in value at the same hue,
+so the season reads warm without introducing a colour that isn't traceable to
+the mark. The greens are the only genuinely new hues and appear as leaves only.
+Navy stays as the body-copy ink and on the "Happy Thanksgiving" line, which
+keeps the cards recognisably UEW rather than generic autumn stock.
 
-Every text pairing in the ramp clears WCAG AA: the tightest is the 7.6pt rust
-eyebrow on oat at 4.66:1.
+Every text pairing clears WCAG AA; the tightest is the 7.6pt rust eyebrow on oat
+at 5.19:1. One caveat worth recording: **goldenrod on oat is 2.84:1**, just under
+the 3:1 non-text floor. It is therefore only ever used as one of three wheat
+tones inside the wreath, never for type and never as the only colour carrying an
+element — the hairline rules and the write-in sprigs use chestnut (5.66:1)
+instead.
 
 ## Rebuilding
 

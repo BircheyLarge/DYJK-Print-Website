@@ -27,18 +27,21 @@
   --gold-light: #e2c68d;
   --ink: #12283d;
 
-  /* Autumn ramp for the Thanksgiving cards. Rust is the client's coral walked
-     down in value at the same hue, and sienna continues that ramp — so the
-     season reads warm without introducing a colour that isn't traceable to the
-     mark. Olive is the one genuinely new hue, and it only ever appears as
-     foliage, never as type. */
-  --fall-oat: #f7eedc;
-  --fall-wheat: #e3c892;
-  --fall-amber: #c68a2c;
-  --fall-ochre: #a9741f;
-  --fall-rust: #b4491f;
-  --fall-sienna: #8a3616;
-  --fall-olive: #6e7248;
+  /* Autumn ramp — shared with the parallel Thanksgiving set so the client sees
+     one brand extension rather than two. Rust and rust-deep are the client's
+     coral walked down in value at the same hue; the greens are the only
+     genuinely new hues and appear as foliage only, never as type. */
+  --fall-oat: #f7eddc;
+  --fall-husk: #e0c395;
+  --fall-amber: #de9a3e;
+  --fall-goldenrod: #b8842b;
+  --fall-pumpkin: #c9622a;
+  --fall-rust: #a8431e;
+  --fall-rust-deep: #8e3616;
+  --fall-chestnut: #8a4e2b;
+  --fall-cranberry: #8e2f3c;
+  --fall-moss: #878b57;
+  --fall-olive: #6b7148;
 
   --safe-inset: calc(var(--bleed) + var(--margin));
 }
