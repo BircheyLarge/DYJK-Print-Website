@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
+import CatalogGrid from '../components/CatalogGrid.astro';
 import QuoteCta from '../components/QuoteCta.astro';
 import { QUOTE_PATH, SITE } from '../consts';
 import { organizationSchema, websiteSchema } from '../lib/schema';
@@ -58,8 +59,47 @@ const STEPS = [
   schema={schema}
 >
   <!-- Hero -->
-  <section class="border-b border-slate-200 bg-brand-surface">
-    <div class="mx-auto max-w-6xl px-4 py-20 text-center sm:py-28">
+  <section
+    class="relative overflow-hidden border-b border-brand-line bg-brand-surface"
+  >
+    {
+      /* Decorative only: the monogram as a large watermark, plus a pair of
+        print registration marks — the crosshair a press uses to align color
+        plates, which is what "precision" in the tagline actually refers to.
+        Both sit behind the copy at low opacity so they read as texture, not
+        content; aria-hidden and inert to layout. */
+    }
+    <div class="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+      <img
+        src="/brand/logo-mark.svg"
+        alt=""
+        class="absolute top-1/2 -right-24 h-[130%] w-auto -translate-y-1/2 opacity-[0.05] sm:-right-16 sm:h-[150%]"
+      />
+      <svg
+        class="absolute top-10 left-6 h-8 w-8 text-brand-line-strong opacity-40 sm:top-14 sm:left-10"
+        viewBox="0 0 32 32"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+      >
+        <circle cx="16" cy="16" r="9"></circle>
+        <path d="M16 1v8M16 23v8M1 16h8M23 16h8"></path>
+      </svg>
+      <svg
+        class="absolute right-8 bottom-10 h-6 w-6 text-brand-line-strong opacity-40 sm:right-14 sm:bottom-14"
+        viewBox="0 0 32 32"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+      >
+        <circle cx="16" cy="16" r="9"></circle>
+        <path d="M16 1v8M16 23v8M1 16h8M23 16h8"></path>
+      </svg>
+    </div>
+
+    <div
+      class="relative z-10 mx-auto max-w-6xl px-4 py-20 text-center sm:py-28"
+    >
       <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
         {SITE.tagline}
       </p>
@@ -94,31 +134,16 @@ const STEPS = [
     <p class="mt-2 text-brand-muted">
       Two presses and a prepress team, matched to the job.
     </p>
-    <div class="mt-10 grid gap-6 md:grid-cols-3">
-      {
-        SERVICES.map((service) => (
-          <a
-            href={service.href}
-            class="group rounded-xl border border-slate-200 p-6 transition-shadow hover:shadow-lg"
-          >
-            <h3 class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
-              {service.name}
-            </h3>
-            <p class="mt-2 text-sm text-brand-muted">{service.blurb}</p>
-            <span class="mt-4 inline-block text-sm font-semibold text-brand-blue">
-              Learn more →
-            </span>
-          </a>
-        ))
-      }
+    <div class="mt-10">
+      <CatalogGrid items={SERVICES} headingLevel={3} />
     </div>
   </section>
 
   <!-- Products: concrete commercial intent, and the internal links that carry it -->
-  <section class="border-y border-slate-200 bg-brand-surface">
+  <section class="border-y border-brand-line bg-brand-surface">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
       <div
-        class="flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-6"
+        class="flex flex-wrap items-end justify-between gap-4 border-b border-brand-line pb-6"
       >
         <div>
           <h2 class="text-3xl font-bold tracking-tight text-brand-ink">
@@ -132,7 +157,7 @@ const STEPS = [
           href="/products/"
           class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
         >
-          All products →
+          All products <span aria-hidden="true">→</span>
         </a>
       </div>
       <ul class="mt-8 grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -141,7 +166,7 @@ const STEPS = [
             <li>
               <a
                 href={product.href}
-                class="group flex items-baseline justify-between gap-4 rounded-md border-b border-slate-200 py-3
+                class="group flex items-baseline justify-between gap-4 rounded-md border-b border-brand-line py-3
                        transition-colors hover:border-brand-blue"
               >
                 <span class="font-semibold text-brand-ink group-hover:text-brand-blue">
@@ -186,7 +211,7 @@ const STEPS = [
   </section>
 
   <!-- Process -->
-  <section class="border-t border-slate-200">
+  <section class="border-t border-brand-line">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
       <h2 class="text-3xl font-bold tracking-tight text-brand-ink">
         How it works
