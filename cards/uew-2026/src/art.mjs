@@ -224,6 +224,7 @@ export function harvestArc({
   height = 190,
   spread = 82,
   stalkLen = 132,
+  strokeOpacity = 0.55,
   ink = '#D9B368',
   inks = null,
   leafInks = null,
@@ -267,7 +268,7 @@ export function harvestArc({
     <path d="M-21 -20Q0 -8 21 -20"/><path d="M-19 -12Q0 0 19 -12"/>
   </g>`;
   return `<svg viewBox="${-width / 2} ${-height} ${width} ${height + 26}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-  ${b.render(1.05, 0.95, 0.55)}
+  ${b.render(1.05, 0.95, strokeOpacity)}
   ${tie}
   <circle cx="0" cy="-16" r="3.2" fill="${accent}"/>
 </svg>`;

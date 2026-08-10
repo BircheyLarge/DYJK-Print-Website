@@ -119,7 +119,7 @@ export function buildCards(logos) {
         headline: 'Thank&nbsp;you.',
         paras: [
           'Thank you for serving our country — for the work you did long before we ever met you.',
-          'And thank you for being part of the UEW family. May your table be full and your home be warm this Thanksgiving.',
+          'And thank you for being part of the United Energy Workers family. May your table be full and your home be warm this Thanksgiving.',
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
         logoSvg: master,
@@ -160,8 +160,12 @@ export function buildCards(logos) {
         <p class="caps t2-thanks">Thanksgiving</p>
         <div class="t2-arc">${harvestArc({
           width: 430, height: 218, spread: 74, stalkLen: 160,
-          inks: [HUSK, CREAM, AMBER], leafInks: [AMBER, HUSK],
-          accent: HUSK, seed: 31,
+          // gold and burnt orange are neighbours in value: amber only reaches
+          // 3.3:1 on this ground even at full strength, and the 0.55 strokes
+          // composite down to 3.0. Husk and cream are the only ramp tones that
+          // hold a sheaf against rust.
+          inks: [HUSK, CREAM], leafInks: [HUSK, CREAM],
+          strokeOpacity: 0.78, accent: HUSK, seed: 31,
         })}</div>
       </div>`,
       back: backPanel(masterWhite),
@@ -171,7 +175,7 @@ export function buildCards(logos) {
         headline: 'With&nbsp;gratitude.',
         paras: [
           'Thank you for serving our country. You spent your working life on something far bigger than yourself, and this country is still living on the strength of it.',
-          'Thank you, too, for being part of the UEW family. Caring for you is the privilege of our year.',
+          'Thank you, too, for being part of the United Energy Workers family. Caring for you is the privilege of our year.',
         ],
         signoff: '— Your team at United Energy Workers Healthcare',
         logoSvg: master,
@@ -209,8 +213,10 @@ export function buildCards(logos) {
         <p class="caps t2-thanks">Thanksgiving</p>
         <div class="t2-arc">${harvestArc({
           width: 430, height: 218, spread: 74, stalkLen: 160,
-          inks: [HUSK, AMBER, GOLDENROD], leafInks: [AMBER, GOLDENROD],
-          accent: PUMPKIN, seed: 31,
+          // same reason as the rust colourway: goldenrod is the dark tone here
+          // and its 0.55 strokes composite down to 2.1:1 against navy
+          inks: [HUSK, AMBER], leafInks: [HUSK, AMBER],
+          strokeOpacity: 0.78, accent: PUMPKIN, seed: 31,
         })}</div>
       </div>`,
       back: backPanel(masterWhite),
@@ -220,7 +226,7 @@ export function buildCards(logos) {
         headline: 'With&nbsp;gratitude.',
         paras: [
           'Thank you for serving our country. You spent your working life on something far bigger than yourself, and this country is still living on the strength of it.',
-          'Thank you, too, for being part of the UEW family. Caring for you is the privilege of our year.',
+          'Thank you, too, for being part of the United Energy Workers family. Caring for you is the privilege of our year.',
         ],
         signoff: '— Your team at United Energy Workers Healthcare',
         logoSvg: master,
@@ -269,7 +275,7 @@ export function buildCards(logos) {
         headline: 'For all of it,<br>thank&nbsp;you.',
         paras: [
           'For serving our country. For hands that built something bigger than themselves. For the families who stood behind them.',
-          'And for being part of the UEW family — thank you. Happy Thanksgiving from all of us.',
+          'And for being part of the United Energy Workers family — thank you. Happy Thanksgiving from all of us.',
         ],
         signoff: '— With gratitude, your care team',
         logoSvg: master,
@@ -324,7 +330,7 @@ export function buildCards(logos) {
         eyebrow: 'Christmas 2026',
         headline: 'Peace to<br>your&nbsp;home.',
         paras: [
-          'Thank you for serving our country, and for being part of the UEW family. Caring for you is a privilege we do not take lightly.',
+          'Thank you for serving our country, and for being part of the United Energy Workers family. Caring for you is a privilege we do not take lightly.',
           'May your Christmas be warm and unhurried, spent with the people you love most, and may the new year be gentle and good to you.',
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
@@ -373,7 +379,7 @@ export function buildCards(logos) {
         eyebrow: 'Christmas 2026',
         headline: 'May your season<br>be&nbsp;bright.',
         paras: [
-          'Thank you for serving our country, and for another year as part of the UEW family.',
+          'Thank you for serving our country, and for another year as part of the United Energy Workers family.',
           'Wishing you a Christmas full of light, a home full of family, and a new year that treats you well.',
         ],
         signoff: '— With warmest wishes, your care team',
@@ -427,7 +433,7 @@ export function buildCards(logos) {
         eyebrow: 'Merry Christmas',
         headline: 'From our family<br>to&nbsp;yours.',
         paras: [
-          'Thank you for serving our country, and for being part of the UEW family this year. It has been the honor of our work.',
+          'Thank you for serving our country, and for being part of the United Energy Workers family this year. It has been the honor of our work.',
           'Wishing you a Christmas of good health and good company, and a new year that is kind to you and yours.',
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
