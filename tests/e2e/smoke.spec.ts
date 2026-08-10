@@ -1,5 +1,30 @@
 import { expect, test } from '@playwright/test';
 
+test.describe('harness', () => {
+  /*
+   * Guards the suite itself. If Playwright is ever pointed at `astro dev`
+   * instead of `astro preview`, every other test still runs — against markup
+   * that isn't what ships, with the dev toolbar injecting extra landmarks and
+   * headings. That surfaced once as "the home page has 5 h1s" and read as an
+   * app bug for two people before anyone suspected the server. Fail here
+   * instead, with a message that names the actual cause.
+   */
+  test('is testing the production build, not the dev server', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const html = (await page.content()).toLowerCase();
+    const devMarkers = ['astro-dev-toolbar', '@vite/client', 'astro:scripts'];
+    const found = devMarkers.filter((marker) => html.includes(marker));
+    expect(
+      found,
+      `Served HTML contains dev-server markers (${found.join(', ')}). ` +
+        'Playwright is talking to `astro dev`, not `astro preview` — check ' +
+        'the port and reuseExistingServer in playwright.config.ts.',
+    ).toEqual([]);
+  });
+});
+
 test.describe('home page', () => {
   test('renders the hero with a single h1 and brand title', async ({
     page,
