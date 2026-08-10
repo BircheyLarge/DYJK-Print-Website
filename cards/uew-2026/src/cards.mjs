@@ -28,6 +28,13 @@ const CORAL_LIGHT = '#f8a484';
 const GOLD = '#cba55f';
 const GOLD_LIGHT = '#e2c68d';
 const CREAM = '#faf5ec';
+const OAT = '#f7eedc';
+const WHEAT = '#e3c892';
+const AMBER = '#c68a2c';
+const OCHRE = '#a9741f';
+const RUST = '#b4491f';
+const SIENNA = '#8a3616';
+const OLIVE = '#6e7248';
 const NAVY_NIGHT = '#0a2340'; // must match --navy-night; the halo blends against it
 
 /** A single wheat stalk, used quietly on the inside-left write-in panel. */
@@ -87,18 +94,22 @@ export function buildCards(logos) {
       name: 'Gathered',
       direction: 'Traditional',
       blurb:
-        'Cream stock, a wheat wreath drawn from the logo’s orbit rings, one script word. The safest, warmest of the three.',
-      outsideBg: CREAM,
-      insideBg: CREAM,
+        'Oat stock, a wheat-and-foliage wreath in amber, rust and olive, one script word. The safest, warmest of the three.',
+      outsideBg: OAT,
+      insideBg: OAT,
       front: `<div class="stack stack--center">
         <div class="t1-wreath">
-          ${wheatWreath({ size: 372, radius: 132, stalks: 22, ink: NAVY, accent: CORAL, seed: 11 })}
+          ${wheatWreath({
+            size: 372, radius: 132, stalks: 22,
+            inks: [AMBER, OCHRE, '#8f6318'], leaves: 7, leafInks: [RUST, OLIVE, SIENNA],
+            accent: RUST, seed: 11,
+          })}
           <p class="script t1-word">grateful</p>
         </div>
         <p class="caps t1-sub">Happy Thanksgiving</p>
       </div>`,
       back: backPanel(master),
-      insideLeft: insideLeftPanel(wheatSprig({ ink: NAVY, accent: CORAL }), 'inside-art--wheat'),
+      insideLeft: insideLeftPanel(wheatSprig({ ink: OCHRE, accent: RUST }), 'inside-art--wheat'),
       insideRight: insideRightPanel({
         eyebrow: 'With gratitude',
         headline: 'Thank&nbsp;you.',
@@ -108,15 +119,17 @@ export function buildCards(logos) {
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
         logoSvg: master,
-        ruleSvg: dottedRule({ width: 150, ink: NAVY, accent: CORAL }),
+        ruleSvg: dottedRule({ width: 150, ink: OCHRE, accent: RUST }),
       }),
       css: `
+        .inside-eyebrow { color: var(--fall-rust); }
+        .inside-head { color: var(--fall-sienna); }
         .t1-wreath { position: relative; width: 3.02in; margin-top: -0.16in; }
         .t1-wreath svg { display: block; width: 100%; height: auto; }
         .t1-word {
           position: absolute; inset: 0; display: flex;
           align-items: center; justify-content: center;
-          font-size: 41pt; color: var(--navy);
+          font-size: 41pt; color: var(--fall-sienna);
           transform: translateY(-0.05in);
         }
         .t1-sub {
@@ -135,16 +148,20 @@ export function buildCards(logos) {
       name: 'Harvest',
       direction: 'Formal',
       blurb:
-        'Deep navy across the whole outside, gold harvest fan, script and letterspaced caps. The premium option — closest in feel to the 2025 card.',
-      outsideBg: 'var(--navy-deep)',
-      insideBg: CREAM,
+        'Deep sienna across the whole outside, wheat-gold harvest sheaf, script and letterspaced caps. The premium option, and the most seasonal.',
+      outsideBg: SIENNA,
+      insideBg: OAT,
       front: `<div class="stack stack--center t2-front">
         <p class="script t2-happy">Happy</p>
         <p class="caps t2-thanks">Thanksgiving</p>
-        <div class="t2-arc">${harvestArc({ ink: GOLD_LIGHT, accent: CORAL_LIGHT, seed: 31 })}</div>
+        <div class="t2-arc">${harvestArc({
+          width: 430, height: 218, spread: 74, stalkLen: 160,
+          inks: [WHEAT, '#f0dcb0', '#d8bc85'], leafInks: ['#e0a86a', '#cbb078'],
+          accent: '#f0dcb0', seed: 31,
+        })}</div>
       </div>`,
       back: backPanel(masterWhite),
-      insideLeft: insideLeftPanel(wheatSprig({ ink: NAVY, accent: CORAL }), 'inside-art--wheat'),
+      insideLeft: insideLeftPanel(wheatSprig({ ink: OCHRE, accent: RUST }), 'inside-art--wheat'),
       insideRight: insideRightPanel({
         eyebrow: 'Thanksgiving 2026',
         headline: 'With&nbsp;gratitude.',
@@ -154,11 +171,13 @@ export function buildCards(logos) {
         ],
         signoff: '— Your team at United Energy Workers Healthcare',
         logoSvg: master,
-        ruleSvg: dottedRule({ width: 150, ink: NAVY, accent: CORAL }),
+        ruleSvg: dottedRule({ width: 150, ink: OCHRE, accent: RUST }),
       }),
       css: `
+        .inside-eyebrow { color: var(--fall-rust); }
+        .inside-head { color: var(--fall-sienna); }
         .t2-front { color: var(--cream); padding-bottom: 0.18in; }
-        .t2-happy { font-size: 44pt; color: ${GOLD_LIGHT}; }
+        .t2-happy { font-size: 44pt; color: ${WHEAT}; }
         .t2-thanks {
           margin-top: 0.16in; font-size: 17pt; color: var(--cream);
           letter-spacing: 0.28em; text-indent: 0.28em;
@@ -177,21 +196,21 @@ export function buildCards(logos) {
       name: 'Give Thanks',
       direction: 'Editorial',
       blurb:
-        'Cream stock, oversized flush-left type, coral accent, one small leaf cluster. The modern option — reads as a brand piece, not a greeting card.',
-      outsideBg: CREAM,
-      insideBg: CREAM,
+        'Oat stock, oversized flush-left type in sienna, amber rule, a rust-and-olive leaf cluster. The modern option — reads as a brand piece, not a greeting card.',
+      outsideBg: OAT,
+      insideBg: OAT,
       front: `<div class="stack t3-front">
         <p class="eyebrow t3-eyebrow">Thanksgiving 2026</p>
         <div class="t3-head">
           <h1 class="display t3-h">Give<br>thanks<span class="t3-dot">.</span></h1>
           <div class="t3-rule"></div>
         </div>
-        <div class="t3-leaf">${leafCluster({ ink: NAVY, accent: CORAL })}</div>
+        <div class="t3-leaf">${leafCluster({ inks: [RUST, AMBER, OLIVE], accent: RUST })}</div>
       </div>`,
       back: `<div class="stack stack--end">
         <div class="logo back-logo back-logo--left">${master}</div>
       </div>`,
-      insideLeft: insideLeftPanel(leafCluster({ ink: NAVY, accent: CORAL }), 'inside-art--leaf'),
+      insideLeft: insideLeftPanel(leafCluster({ inks: [RUST, AMBER, OLIVE], accent: RUST }), 'inside-art--leaf'),
       insideRight: insideRightPanel({
         eyebrow: 'Happy Thanksgiving',
         headline: 'For all of it,<br>thank&nbsp;you.',
@@ -201,17 +220,19 @@ export function buildCards(logos) {
         ],
         signoff: '— With gratitude, your care team',
         logoSvg: master,
-        ruleSvg: dottedRule({ width: 150, ink: NAVY, accent: CORAL }),
+        ruleSvg: dottedRule({ width: 150, ink: OCHRE, accent: RUST }),
       }),
       css: `
-        .t3-front { color: var(--navy); }
-        .t3-eyebrow { color: var(--coral); }
+        .inside-eyebrow { color: var(--fall-rust); }
+        .inside-head { color: var(--fall-sienna); }
+        .t3-front { color: var(--fall-sienna); }
+        .t3-eyebrow { color: var(--fall-rust); }
         .t3-head { margin-top: 0.52in; }
         .t3-h { font-size: 54pt; line-height: 0.9; font-weight: 500; }
-        .t3-dot { color: var(--coral); }
+        .t3-dot { color: var(--fall-rust); }
         .t3-rule {
           margin-top: 0.24in; width: 0.86in; height: 1.6pt;
-          background: var(--coral);
+          background: var(--fall-rust);
         }
         .t3-leaf {
           width: 1.78in; align-self: flex-end;

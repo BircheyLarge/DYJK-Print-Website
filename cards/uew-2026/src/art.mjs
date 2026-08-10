@@ -130,20 +130,59 @@ function atomDots(r, fill, size = 3.2, angles = [-52, 62, 186]) {
  * Harvest wreath — wheat laid tangentially around a ring, with the mark's three
  * electron dots sitting on the ring in their logo positions.
  */
+/**
+ * Collects paths per colour so one drawing can carry several tones without
+ * emitting a separate <g> for every single stalk.
+ */
+function toneBuckets() {
+  const map = new Map();
+  const get = (tone) => {
+    if (!map.has(tone)) map.set(tone, { fills: [], strokes: [] });
+    return map.get(tone);
+  };
+  const render = (strokeWidth = 1, fillOpacity = 0.93, strokeOpacity = 0.6) =>
+    [...map]
+      .map(
+        ([tone, g]) =>
+          `<g fill="${tone}" stroke="none" opacity="${fillOpacity}">${g.fills.join('')}</g>` +
+          `<g fill="none" stroke="${tone}" stroke-width="${strokeWidth}" stroke-linecap="round" opacity="${strokeOpacity}">${g.strokes.join('')}</g>`,
+      )
+      .join('');
+  return { get, render };
+}
+
 export function wheatWreath({
   size = 320,
   radius = 116,
   stalks = 20,
   ink = '#133D64',
+  inks = null, // several wheat tones, cycled — for the autumn palette
+  leaves = 0, // foliage tucked into the ring
+  leafInks = null,
   accent = '#F15933',
   seed = 7,
 } = {}) {
   const r = rng(seed);
-  const fills = [];
-  const strokes = [];
+  const wheatTones = inks && inks.length ? inks : [ink];
+  const leafTones = leafInks && leafInks.length ? leafInks : [ink];
+  const b = toneBuckets();
+
+  // The stalk is drawn growing along -Y, so rotating it by (angle + 180deg)
+  // lays it along the tangent; the extra tilt curls the head back toward the
+  // ring instead of letting the chord bulge outward.
+  const place = (part, a, rr, tilt) => {
+    const deg = (a * 180) / Math.PI + 180 + tilt;
+    const tx = Math.cos(a) * rr;
+    const ty = Math.sin(a) * rr;
+    const open = `<g transform="translate(${n(tx)} ${n(ty)}) rotate(${n(deg)})">`;
+    return {
+      fill: open + part.fills.map((d) => `<path d="${d}"/>`).join('') + '</g>',
+      stroke: open + part.strokes.map((d) => `<path d="${d}"/>`).join('') + '</g>',
+    };
+  };
+
   for (let i = 0; i < stalks; i++) {
     const a = (i / stalks) * TAU - Math.PI / 2;
-    const rr = radius + (r() - 0.5) * 6;
     const s = wheatStalk({
       length: 84 + r() * 10,
       grains: 7,
@@ -153,20 +192,24 @@ export function wheatWreath({
       awnScale: 0.46,
       lean: 0.05,
     });
-    // The stalk is drawn growing along -Y, so rotating it by (angle + 180deg)
-    // lays it along the tangent; the extra tilt curls the head back toward the
-    // ring instead of letting the chord bulge outward.
-    const deg = (a * 180) / Math.PI + 180 + 21 + (r() - 0.5) * 5;
-    const tx = Math.cos(a) * rr;
-    const ty = Math.sin(a) * rr;
-    const wrap = (d) => `<g transform="translate(${n(tx)} ${n(ty)}) rotate(${n(deg)})">${d}</g>`;
-    fills.push(wrap(s.fills.map((d) => `<path d="${d}"/>`).join('')));
-    strokes.push(wrap(s.strokes.map((d) => `<path d="${d}"/>`).join('')));
+    const g = b.get(wheatTones[i % wheatTones.length]);
+    const p = place(s, a, radius + (r() - 0.5) * 6, 21 + (r() - 0.5) * 5);
+    g.fills.push(p.fill);
+    g.strokes.push(p.stroke);
   }
+
+  for (let i = 0; i < leaves; i++) {
+    const a = ((i + 0.5) / leaves) * TAU - Math.PI / 2;
+    const l = leaf({ length: 30 + r() * 8, width: 10.5, veins: 2 });
+    const g = b.get(leafTones[i % leafTones.length]);
+    const p = place(l, a, radius + 5 + (r() - 0.5) * 8, 44 + (r() - 0.5) * 26);
+    g.fills.push(p.fill);
+    g.strokes.push(p.stroke);
+  }
+
   const half = size / 2;
   return `<svg viewBox="${-half} ${-half} ${size} ${size}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-  <g fill="${ink}" stroke="none" opacity="0.93">${fills.join('')}</g>
-  <g fill="none" stroke="${ink}" stroke-width="1" stroke-linecap="round" opacity="0.6">${strokes.join('')}</g>
+  ${b.render(1, 0.93, 0.55)}
   <g fill="${accent}">
     <circle cx="-5.5" cy="${n(radius + 3)}" r="4.6"/>
     <circle cx="4" cy="${n(radius + 6)}" r="3.8"/>
@@ -179,25 +222,30 @@ export function wheatWreath({
 export function harvestArc({
   width = 460,
   height = 190,
+  spread = 82,
+  stalkLen = 132,
   ink = '#D9B368',
+  inks = null,
+  leafInks = null,
   accent = '#F8A484',
   seed = 21,
 } = {}) {
   const r = rng(seed);
-  const fills = [];
-  const strokes = [];
-  const push = (part, deg, tx, ty, scale = 1) => {
-    const open = `<g transform="translate(${n(tx)} ${n(ty)}) rotate(${n(deg)}) scale(${n(scale)})">`;
-    fills.push(open + part.fills.map((d) => `<path d="${d}"/>`).join('') + '</g>');
-    strokes.push(open + part.strokes.map((d) => `<path d="${d}"/>`).join('') + '</g>');
+  const wheatTones = inks && inks.length ? inks : [ink];
+  const leafTones = leafInks && leafInks.length ? leafInks : [ink];
+  const b = toneBuckets();
+  const push = (part, deg, tx, ty, tone) => {
+    const open = `<g transform="translate(${n(tx)} ${n(ty)}) rotate(${n(deg)})">`;
+    const g = b.get(tone);
+    g.fills.push(open + part.fills.map((d) => `<path d="${d}"/>`).join('') + '</g>');
+    g.strokes.push(open + part.strokes.map((d) => `<path d="${d}"/>`).join('') + '</g>');
   };
-  const spread = 82;
   const count = 11;
   for (let i = 0; i < count; i++) {
     const t = count === 1 ? 0.5 : i / (count - 1);
     const deg = -spread + t * spread * 2;
     const s = wheatStalk({
-      length: 132 - Math.abs(deg) * 0.5 + r() * 8,
+      length: stalkLen - Math.abs(deg) * 0.5 + r() * 8,
       grains: 8,
       grainLen: 17.5,
       grainWid: 4,
@@ -209,38 +257,39 @@ export function harvestArc({
       lean: 0.045 + r() * 0.025,
     });
     // fan the origins along a shallow arc rather than one point
-    push(s, deg, Math.sin(rad(deg)) * 9, Math.cos(rad(deg)) * -3, 1);
+    push(s, deg, Math.sin(rad(deg)) * 9, Math.cos(rad(deg)) * -3, wheatTones[i % wheatTones.length]);
   }
-  for (const deg of [-99, -84, 86, 101]) {
-    push(leaf({ length: 56, width: 17, veins: 3 }), deg, 0, -6, 1);
-  }
+  [-104, -86, 88, 106].forEach((deg, i) => {
+    push(leaf({ length: 48, width: 15, veins: 3 }), deg, 0, -6, leafTones[i % leafTones.length]);
+  });
   // binding, so the stems read as a gathered sheaf
   const tie = `<g fill="none" stroke="${ink}" stroke-width="1.5" stroke-linecap="round" opacity="0.85">
     <path d="M-21 -20Q0 -8 21 -20"/><path d="M-19 -12Q0 0 19 -12"/>
   </g>`;
   return `<svg viewBox="${-width / 2} ${-height} ${width} ${height + 26}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-  <g fill="${ink}" stroke="none" opacity="0.95">${fills.join('')}</g>
-  <g fill="none" stroke="${ink}" stroke-width="1.05" stroke-linecap="round" opacity="0.6">${strokes.join('')}</g>
+  ${b.render(1.05, 0.95, 0.55)}
   ${tie}
   <circle cx="0" cy="-16" r="3.2" fill="${accent}"/>
 </svg>`;
 }
 
 /** A tight, precise cluster of three leaves for the editorial card. */
-export function leafCluster({ ink = '#133D64', accent = '#F15933', size = 150 } = {}) {
+export function leafCluster({ ink = '#133D64', inks = null, accent = '#F15933', size = 150 } = {}) {
   const parts = [
     { deg: -26, scale: 1, len: 62, wid: 18 },
     { deg: 10, scale: 0.88, len: 62, wid: 18 },
     { deg: 44, scale: 0.74, len: 62, wid: 18 },
   ];
+  const tones = inks && inks.length ? inks : [ink];
   const fills = [];
   const strokes = [];
-  for (const p of parts) {
+  parts.forEach((p, i) => {
     const l = leaf({ length: p.len, width: p.wid, veins: 3 });
     const open = `<g transform="rotate(${p.deg}) scale(${p.scale})">`;
-    fills.push(open + l.fills.map((d) => `<path d="${d}"/>`).join('') + '</g>');
-    strokes.push(open + l.strokes.map((d) => `<path d="${d}"/>`).join('') + '</g>');
-  }
+    const tone = tones[i % tones.length];
+    fills.push(`<g stroke="${tone}">` + open + l.fills.map((d) => `<path d="${d}"/>`).join('') + '</g></g>');
+    strokes.push(`<g stroke="${tone}">` + open + l.strokes.map((d) => `<path d="${d}"/>`).join('') + '</g></g>');
+  });
   return `<svg viewBox="${-size / 2} ${-size * 0.78} ${size} ${size * 0.92}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
   <g fill="none" stroke="${ink}" stroke-width="1.6" stroke-linejoin="round">${fills.join('')}</g>
   <g fill="none" stroke="${ink}" stroke-width="1" stroke-linecap="round" opacity="0.5">${strokes.join('')}</g>
