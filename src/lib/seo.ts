@@ -5,7 +5,7 @@
 import { SITE } from '../consts';
 
 export interface PageMetaInput {
-  /** Page-specific title. Omit on the home page to use the brand default. */
+  /** Page-specific title. Falls back to the bare brand name when omitted. */
   title?: string;
   /** Meta description. Falls back to the site default. */
   description?: string;

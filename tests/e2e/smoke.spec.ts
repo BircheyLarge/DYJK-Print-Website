@@ -8,7 +8,7 @@ test.describe('home page', () => {
     await expect(page).toHaveTitle(/DYJK Print/);
     const h1 = page.locator('h1');
     await expect(h1).toHaveCount(1);
-    await expect(h1).toContainText('Your Vision, Our Precision');
+    await expect(h1).toContainText('Nationwide Commercial Printing');
   });
 
   test('exposes the primary quote CTA', async ({ page }) => {

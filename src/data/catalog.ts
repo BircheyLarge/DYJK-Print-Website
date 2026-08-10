@@ -17,37 +17,12 @@ export interface ServiceItem {
   blurb: string;
   /** Longer intro copy for the detail page. */
   detail: string;
+  /** Concrete, comparable details — what buyers deciding "offset vs digital" shop on. */
+  specs: ReadonlyArray<Spec>;
+  /** Who needs this service and why. Drives long-tail intent. */
+  useCases: ReadonlyArray<string>;
+  faqs: ReadonlyArray<Faq>;
 }
-
-export const SERVICES: ReadonlyArray<ServiceItem> = [
-  {
-    slug: 'offset-printing',
-    name: 'Offset Printing',
-    href: '/services/offset-printing/',
-    blurb:
-      'High-volume brochures, catalogs and flyers with sharp, consistent color at scale.',
-    detail:
-      'Offset is the right call when volume and color consistency matter. We run high-quantity brochures, catalogs, flyers and booklets with crisp, repeatable color across the entire run — then ship anywhere in the US.',
-  },
-  {
-    slug: 'digital-printing',
-    name: 'Digital Printing',
-    href: '/services/digital-printing/',
-    blurb:
-      'Fast-turnaround short runs — business cards, personalized mailers and proofs.',
-    detail:
-      'Digital printing turns short runs around fast, with no plates and easy personalization. It is ideal for business cards, on-demand reprints, variable-data mailers and proofs when you need quality quickly.',
-  },
-  {
-    slug: 'graphic-design',
-    name: 'Graphic Design & Prepress',
-    href: '/services/graphic-design/',
-    blurb:
-      'Press-ready file prep and design support so your job prints right the first time.',
-    detail:
-      'Our design and prepress team makes sure your files are press-ready — bleeds, color, resolution and imposition — so your job prints right the first time. Need design help from scratch? We do that too.',
-  },
-];
 
 export interface Spec {
   label: string;
@@ -58,6 +33,159 @@ export interface Faq {
   question: string;
   answer: string;
 }
+
+const SHIPPING_FAQ: Faq = {
+  question: 'Do you ship nationwide?',
+  answer:
+    'Yes. DYJK Print produces and ships to all 50 states. Quoting, proofing and approval all happen remotely, and your order is delivered to the address you give us — you never need to be near a print shop.',
+};
+
+const FILES_FAQ: Faq = {
+  question: 'What file format should I send?',
+  answer:
+    'A press-ready PDF with fonts embedded and artwork extended into the bleed is ideal. We also accept native InDesign, Illustrator and Photoshop files, and our prepress team will flag anything that needs fixing before we print.',
+};
+
+export const SERVICES: ReadonlyArray<ServiceItem> = [
+  {
+    slug: 'offset-printing',
+    name: 'Offset Printing',
+    href: '/services/offset-printing/',
+    blurb:
+      'High-volume brochures, catalogs and flyers with sharp, consistent color at scale.',
+    detail:
+      'Offset is the right call when volume and color consistency matter. We run high-quantity brochures, catalogs, flyers and booklets with crisp, repeatable color across the entire run — then ship anywhere in the US.',
+    specs: [
+      { label: 'Best for', value: 'Mid-to-high-volume runs' },
+      { label: 'Color', value: 'Full CMYK, plus spot/PMS color matching' },
+      {
+        label: 'Stocks',
+        value: 'Broad range of text and cover weights, coated or uncoated',
+      },
+      {
+        label: 'Common jobs',
+        value: 'Brochures, catalogs, flyers, booklets, stationery',
+      },
+      {
+        label: 'Run sizes',
+        value: 'Cost-effective as volume climbs — ask about your quantity',
+      },
+    ],
+    useCases: [
+      'High-volume brochure, flyer and catalog runs where per-piece cost matters',
+      'Jobs that need an exact, repeatable spot or PMS color across a large run',
+      'Multi-page booklets and stationery systems printed and finished at scale',
+    ],
+    faqs: [
+      {
+        question: 'How many pieces do I need before offset makes sense?',
+        answer:
+          "It depends on the job, but offset generally overtakes digital on cost somewhere in the low thousands, once plate setup is spread across enough pieces. Below that, digital is usually cheaper. Tell us your quantity and we'll quote whichever is genuinely better for you.",
+      },
+      {
+        question: 'Can you match a specific PMS or brand color?',
+        answer:
+          'Yes — offset uses dedicated spot-color plates, which is the most accurate way to hold an exact brand color across a full run. Send us the PMS number (or the file it needs to match) with your quote request.',
+      },
+      FILES_FAQ,
+      SHIPPING_FAQ,
+    ],
+  },
+  {
+    slug: 'digital-printing',
+    name: 'Digital Printing',
+    href: '/services/digital-printing/',
+    blurb:
+      'Fast-turnaround short runs — business cards, personalized mailers and proofs.',
+    detail:
+      'Digital printing turns short runs around fast, with no plates and easy personalization. It is ideal for business cards, on-demand reprints, variable-data mailers and proofs when you need quality quickly.',
+    specs: [
+      { label: 'Best for', value: 'Short runs and fast turnaround' },
+      {
+        label: 'Color',
+        value: 'Full color, consistent from a single piece up',
+      },
+      {
+        label: 'Personalization',
+        value: 'Variable data — a different name, address or image per piece',
+      },
+      {
+        label: 'Common jobs',
+        value: 'Business cards, flyers, mailers, proofs, on-demand reprints',
+      },
+      {
+        label: 'Run sizes',
+        value:
+          'From a single proof to several thousand — ask about your quantity',
+      },
+    ],
+    useCases: [
+      'Business cards, short-run flyers and proofs on a tight deadline',
+      'Variable-data mailers and cards personalized per recipient',
+      'On-demand reprints of an existing job without keeping plates on file',
+    ],
+    faqs: [
+      {
+        question: "What's the smallest quantity you can print?",
+        answer:
+          'Digital has no plate setup, so even a single piece is practical — useful for a proof or a one-off reprint. Most short-run jobs land somewhere between a few dozen and a few thousand pieces.',
+      },
+      {
+        question: 'Can every piece in the run be different?',
+        answer:
+          'Yes — that’s variable-data digital printing. Send us a spreadsheet of names, addresses or other per-piece details and we’ll print each one from a single template.',
+      },
+      FILES_FAQ,
+      SHIPPING_FAQ,
+    ],
+  },
+  {
+    slug: 'graphic-design',
+    name: 'Graphic Design & Prepress',
+    href: '/services/graphic-design/',
+    blurb:
+      'Press-ready file prep and design support so your job prints right the first time.',
+    detail:
+      'Our design and prepress team makes sure your files are press-ready — bleeds, color, resolution and imposition — so your job prints right the first time. Need design help from scratch? We do that too.',
+    specs: [
+      {
+        label: 'Prepress checks',
+        value: 'Bleeds, resolution, fonts, color and imposition',
+      },
+      {
+        label: 'Design support',
+        value: 'From a rough concept to a print-ready layout',
+      },
+      {
+        label: 'Formats accepted',
+        value:
+          'Press-ready PDF, or native InDesign, Illustrator and Photoshop files',
+      },
+      {
+        label: 'Proofing',
+        value: 'A proof to review before anything goes on press',
+      },
+    ],
+    useCases: [
+      'Turning a rough layout, logo file or brand kit into a press-ready PDF',
+      'Catching bleed, resolution and color problems before a job prints wrong',
+      "Full design support when you don't have a print-ready file yet",
+    ],
+    faqs: [
+      {
+        question: "I don't have a print-ready file — can you still help?",
+        answer:
+          'Yes. Send whatever you have — a rough layout, brand assets, even a sketch — and describe what you need. Our design team can build the piece from there and hand it to prepress once it is ready.',
+      },
+      {
+        question: 'What does prepress actually check?',
+        answer:
+          'Bleed and trim, image resolution, embedded fonts, color mode and page imposition — the details that decide whether a file prints as designed or comes back wrong. We flag anything that needs fixing before the job goes on press, not after.',
+      },
+      FILES_FAQ,
+    ],
+  },
+];
 
 export interface ProductItem {
   slug: string;
@@ -84,18 +212,6 @@ export interface ProductItem {
   /** Slug of the service that usually produces it — internal linking. */
   relatedService: ServiceItem['slug'];
 }
-
-const SHIPPING_FAQ: Faq = {
-  question: 'Do you ship nationwide?',
-  answer:
-    'Yes. DYJK Print produces and ships to all 50 states. Quoting, proofing and approval all happen remotely, and your order is delivered to the address you give us — you never need to be near a print shop.',
-};
-
-const FILES_FAQ: Faq = {
-  question: 'What file format should I send?',
-  answer:
-    'A press-ready PDF with fonts embedded and artwork extended into the bleed is ideal. We also accept native InDesign, Illustrator and Photoshop files, and our prepress team will flag anything that needs fixing before we print.',
-};
 
 export const PRODUCTS: ReadonlyArray<ProductItem> = [
   {
