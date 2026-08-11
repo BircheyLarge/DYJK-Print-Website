@@ -77,8 +77,8 @@ ART_EXCEPTIONS = {
     ("#DE9A3E", "#F6ECDB"): "amber is a highlight tone among chestnut and goldenrod",
     # inside the client's supplied mark. Reported to them rather than altered:
     # redrawing someone's logo to pass a checker is not ours to do.
-    ("#F8A484", "#F6ECDB"): "light coral orbit rings in the supplied logo",
-    ("#F8A484", "#FAF5EC"): "light coral orbit rings in the supplied logo",
+    ("#F8A484", "#F6ECDB"): "light coral orbit rings in the supplied mark",
+    ("#F8A484", "#FAF5EC"): "light coral orbit rings in the supplied mark",
     ("#F15933", "#F6ECDB"): "coral in the supplied logo, on oat stock",
 }
 

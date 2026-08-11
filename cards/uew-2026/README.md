@@ -181,11 +181,13 @@ with Georgia, which the 2025 card used for body copy.
   reported here rather than altered — but on a card read by older recipients it
   is worth knowing that the orbit rings will look faint on warm paper. The
   navy-ground cards do not have this problem.
-- **The only raster content in these files is in the client's own logo.** Each
-  logo instance carries three inline bitmaps — the highlight dots on the three
-  electrons, baked into the supplied artwork — at 90 dpi in the Brightmore
-  lockup and 216 dpi in the master. Each is about 0.05 in across, so it is
-  invisible at print size, but a preflight report may list them. Everything
-  drawn for these cards is vector. (The star's halo is built from concentric
-  opaque rings for exactly this reason: an SVG radial gradient gets flattened
-  to a 72 dpi bitmap on the way into the PDF.)
+- **The files contain no raster content at all.** An earlier note here claimed
+  the supplied logo carried three inline bitmaps. It does not — the three
+  electron orbs are a `ShadingType 3` radial shading, so the client's artwork is
+  fully vector. The bitmaps were real but they were ours: `get_svg_image()`
+  bakes a shading into a 9x9 PNG on export, which is also why recolouring flat
+  fills never reached the orbs and the white lockup shipped with coral ones.
+  They are now flat vector circles in the mark's own coral, so every variant
+  recolours correctly and the output is 100% vector. (The star's halo is built
+  from concentric opaque rings for a related reason: an SVG radial gradient gets
+  flattened to a 72 dpi bitmap on the way into the PDF.)
