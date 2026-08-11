@@ -355,9 +355,10 @@ T3 = Concept(
         "Thanksgiving 2026",
     ),
     logos=[
-        # mono-white, not the knockout: on a rust field the knockout's coral
-        # "UNITED"/"HEALTHCARE" sit almost on top of the background hue.
-        front_logo("uew-logo-brightmore-mono-white"),
+        # solid-white, not the knockout: on a rust field the knockout's coral
+        # "UNITED"/"HEALTHCARE" sit almost on top of the background hue, and the
+        # orb shadings on the electrons stay warm in every other white variant.
+        front_logo("uew-logo-brightmore-solid-white"),
         LogoBox(2, "uew-logo-brightmore", 6.425, 5.06, 1.58),
     ],
 )

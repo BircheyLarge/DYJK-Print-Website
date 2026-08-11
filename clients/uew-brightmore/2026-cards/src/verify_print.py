@@ -34,10 +34,11 @@ EXPECT_W = round(layout.SHEET_W * PT, 2)  # 619.20
 EXPECT_H = round(layout.SHEET_H * PT, 2)  # 439.20
 TOL = 0.01
 
-# The client's own logo artwork contains three inline bitmaps per instance (the
-# highlight dots on the electrons), ~0.05-0.13in across. We place their file
-# unmodified rather than silently redrawing their mark, so those are expected.
-# Anything larger than this is our own artwork having been flattened.
+# The client's logo carries three radial shadings — the highlight dots on the
+# electrons, ~0.05-0.13in across. They are VECTOR in the file; get_image_info()
+# lists them because MuPDF rasterises shadings when inventorying a page. So this
+# threshold tolerates a reporting artefact, not real raster art. Anything larger
+# is our own artwork having genuinely been flattened.
 MAX_RASTER_IN = 0.2
 
 GREEN, RED, DIM, OFF = "\033[32m", "\033[31m", "\033[2m", "\033[0m"
@@ -96,15 +97,15 @@ def verify(pdf: Path, rep: Report) -> None:
         big = [r for r in rasters if r[2] > MAX_RASTER_IN]
         rep.check(
             not big,
-            f"{tag} no raster art (only the logo's own inline dots allowed)",
+            f"{tag} no raster art (only the logo's own shading dots allowed)",
             "; ".join(f"{w}x{h}px over {w_in:.2f}in = {w / w_in:.0f} DPI"
                       for w, h, w_in in big),
         )
         small = len(rasters) - len(big)
         if small:
             print(f"{DIM}           {small} inline bitmap(s) <= {MAX_RASTER_IN}in — "
-                  f"the electron highlights inside the client's supplied logo, "
-                  f"left as-is{OFF}")
+                  f"the electron highlights in the client's logo (vector, "
+                  f"listed only because MuPDF rasterises shadings){OFF}")
 
         # xref 0 in the font tuple means a non-embedded (base-14 / substituted) font
         fonts = page.get_fonts(full=True)

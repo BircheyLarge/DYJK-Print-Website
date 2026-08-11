@@ -108,10 +108,17 @@ Illustrator PDF** — we never rasterise it.
 
 > **Two things worth knowing about the raster check.**
 >
-> 1. The supplied logo artwork itself contains **three inline bitmaps per instance** —
->    the highlight dots on the electrons, about 0.05–0.13in across. They are in the
->    client's own file. We place their mark unmodified rather than silently redrawing
->    it, so the verifier allows rasters up to 0.2in and flags anything larger.
+> 1. The supplied logo reports **three small images per instance** — the highlight
+>    dots on the electrons, about 0.05–0.13in across. They are **not** bitmaps: they
+>    are `ShadingType 3` radial shadings, and `get_image_info()` lists them only
+>    because MuPDF rasterises shadings when it inventories a page. Nothing in the
+>    client's artwork is raster. The verifier tolerates sub-0.2in entries for this
+>    reporting artefact and flags anything larger.
+>
+>    Because they're shadings, re-colouring the CMYK fill operators never touches
+>    them — they survive every knockout as warm specks on an otherwise white mark.
+>    `uew-logo-*-solid-white.pdf` zeroes the shading functions so the whole lockup
+>    is genuinely one colour. Use it on dark grounds.
 > 2. `page.get_images()` does **not** report inline (`BI`/`ID`/`EI`) images, which is
 >    exactly what Skia emits when Chromium flattens a gradient. An earlier build of
 >    these cards carried a 311x440px **72 dpi bitmap under the whole front cover** — an
