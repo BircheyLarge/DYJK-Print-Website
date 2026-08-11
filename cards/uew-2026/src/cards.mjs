@@ -219,7 +219,7 @@ export function buildCards(logos) {
           // same reason as the rust colourway: goldenrod is the dark tone here
           // and its 0.55 strokes composite down to 2.1:1 against navy
           inks: [HUSK, AMBER], leafInks: [HUSK, AMBER],
-          strokeOpacity: 0.78, accent: PUMPKIN, seed: 31,
+          strokeOpacity: 0.78, accent: '#ffffff', seed: 31,
         })}</div>
       </div>`,
       back: backPanel(masterWhite),
@@ -310,21 +310,21 @@ export function buildCards(logos) {
 
     /* ------------------------------------------------------------------ */
     {
-      id: 'christmas-01-ornament',
+      id: 'holiday-01-ornament',
       frontMark: master,
-      holiday: 'Christmas',
+      holiday: 'Holiday season',
       number: '01',
       name: 'Ornament',
       direction: 'Traditional',
       blurb:
-        'Cream stock. The ornament is the client’s own atom — three crossed ellipses and three electrons — hung on a thread. Script and letterspaced caps.',
+        'Cream stock, non-denominational wording throughout. The ornament is the client’s own atom — three crossed ellipses and three electrons — hung on a thread.',
       outsideBg: CREAM,
       insideBg: CREAM,
       front: `<div class="stack c1-front">
         <div class="c1-orn">${atomOrnament({ r: 100, ink: NAVY, accent: CORAL, hang: 232, width: 300 })}</div>
         <div class="c1-type">
-          <p class="script c1-merry">Merry</p>
-          <p class="caps c1-christmas">Christmas</p>
+          <p class="script c1-merry">Enjoy</p>
+          <p class="caps c1-season">The Holiday Season</p>
         </div>
       </div>`,
       back: backPanel(master),
@@ -333,11 +333,11 @@ export function buildCards(logos) {
         'inside-art--orn',
       ),
       insideRight: insideRightPanel({
-        eyebrow: 'Christmas 2026',
+        eyebrow: 'Holiday Season 2026',
         headline: 'Peace to<br>your&nbsp;home.',
         paras: [
           'Thank you for serving our country, and for being part of the United Energy Workers family. Caring for you is a privilege we do not take lightly.',
-          'May your Christmas be warm and unhurried, spent with the people you love most, and may the new year be gentle and good to you.',
+          'May your holiday season be warm and unhurried, spent with the people you love most, and may the new year be gentle and good to you.',
         ],
         signoff: '— Everyone at United Energy Workers Healthcare',
         logoSvg: master,
@@ -352,9 +352,9 @@ export function buildCards(logos) {
         .c1-orn svg { display: block; width: 100%; height: auto; }
         .c1-type { margin-top: auto; text-align: center; width: 100%; padding-bottom: 0.34in; }
         .c1-merry { font-size: 42pt; color: var(--navy); }
-        .c1-christmas {
-          margin-top: 0.1in; font-size: 15pt; color: var(--navy);
-          letter-spacing: 0.3em; text-indent: 0.3em;
+        .c1-season {
+          margin-top: 0.1in; font-size: 12pt; color: var(--navy);
+          letter-spacing: 0.14em; text-indent: 0.14em;
         }
         .inside-art--orn { width: 0.72in; }
       `,

@@ -222,6 +222,27 @@ def main() -> int:
 
     index = json.loads((OUT / "index.json").read_text())
 
+    # Renaming a card leaves its old PDF behind, and a stale file here is the
+    # one that reaches a printer by mistake. Drop anything not in this build.
+    live = {f"UEW-2026-{c['id']}" for c in index}
+    for folder, suffixes in (
+        (final, ("",)),
+        (OUT / "proof", ("-proof",)),
+        (OUT / "print", ("",)),
+        (OUT / "print-final-split", ("-outside", "-inside")),
+    ):
+        if not folder.exists():
+            continue
+        for f in folder.glob("*.pdf"):
+            stem = f.stem
+            for suf in suffixes:
+                if suf and stem.endswith(suf):
+                    stem = stem[: -len(suf)]
+                    break
+            if stem not in live:
+                print(f"removing stale {folder.name}/{f.name}")
+                f.unlink()
+
     for card in index:
         src = raw / f"UEW-2026-{card['id']}.pdf"
         finalize(src, final / src.name)
