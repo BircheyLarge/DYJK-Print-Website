@@ -1,0 +1,5 @@
+# generated intermediates — the reviewable/uploadable output is committed
+out/html/
+out/print/
+out/proof-png/
+out/index.json
