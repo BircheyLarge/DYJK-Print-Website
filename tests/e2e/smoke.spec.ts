@@ -38,6 +38,40 @@ test.describe('home page', () => {
     expect(body).not.toContain('po box');
     expect(body).not.toContain('draper');
   });
+
+  test('links the Recent work strip to the portfolio', async ({ page }) => {
+    await page.goto('/');
+    await expect(
+      page.getByRole('link', { name: 'View our portfolio' }),
+    ).toHaveAttribute('href', '/portfolio/');
+  });
+
+  test('keeps a space between the year and name in the footer', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await expect(page.locator('footer')).toContainText(/© \d{4} DYJK Print\./);
+  });
+});
+
+test.describe('portfolio', () => {
+  test('renders every piece as a responsive AVIF/WebP picture', async ({
+    page,
+  }) => {
+    await page.goto('/portfolio/');
+    const figures = await page.locator('main figure').all();
+    expect(figures.length).toBeGreaterThan(0);
+    for (const figure of figures) {
+      await expect(figure.locator('source[type="image/avif"]')).toHaveCount(1);
+      await expect(figure.locator('source[type="image/webp"]')).toHaveCount(1);
+      const img = figure.locator('img');
+      // Intrinsic size reserves the box before load (no layout shift).
+      await expect(img).toHaveAttribute('width', /^\d+$/);
+      await expect(img).toHaveAttribute('height', /^\d+$/);
+      await expect(img).toHaveAttribute('sizes', /\S/);
+      await expect(img).toHaveAttribute('alt', /\S/);
+    }
+  });
 });
 
 test.describe('navigation', () => {

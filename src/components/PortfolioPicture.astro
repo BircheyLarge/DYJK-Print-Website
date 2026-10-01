@@ -1,0 +1,30 @@
+---
+import { Picture } from 'astro:assets';
+import type { PortfolioItem } from '../data/portfolio';
+
+interface Props {
+  item: PortfolioItem;
+  /** Rendered width of the image slot; must match the grid that holds it. */
+  sizes: string;
+  /** Default lazy; pass "eager" only for images above the fold. */
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high';
+}
+
+const { item, sizes, loading = 'lazy', fetchpriority } = Astro.props;
+
+// Shared by the gallery and the homepage strip so both reuse the same
+// generated files. Astro caps the set at each original's own width.
+const widths = [400, 600, 800, 1000, 1200, 1600];
+---
+
+<Picture
+  src={item.image}
+  alt={item.alt}
+  formats={['avif', 'webp']}
+  widths={widths}
+  sizes={sizes}
+  loading={loading}
+  fetchpriority={fetchpriority}
+  class="w-full rounded-xl bg-brand-surface"
+/>
