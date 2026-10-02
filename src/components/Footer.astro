@@ -56,15 +56,19 @@ const year = new Date().getFullYear();
       <h2 class="text-sm font-semibold text-brand-ink">Contact</h2>
       <ul class="mt-3 space-y-2 text-sm text-brand-muted">
         <li>
-          <a href={`tel:${SITE.phone}`} class="hover:text-brand-blue"
-            >{SITE.phoneDisplay}</a
-          >
-        </li>
-        <li>
           <a href={`mailto:${SITE.email}`} class="hover:text-brand-blue"
             >{SITE.email}</a
           >
         </li>
+        {
+          SITE.phone && (
+            <li>
+              <a href={`tel:${SITE.phone.e164}`} class="hover:text-brand-blue">
+                {SITE.phone.display}
+              </a>
+            </li>
+          )
+        }
       </ul>
     </div>
   </div>

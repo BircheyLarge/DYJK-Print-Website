@@ -8,32 +8,24 @@ const schema = breadcrumbSchema([
   { name: 'Home', path: '/' },
   { name: 'Contact', path: '/contact/' },
 ]);
+
+// Email-first; mentions phone only once SITE.phone is set.
+const channels = SITE.phone ? 'email or phone' : 'email';
 ---
 
 <BaseLayout
   title="Contact"
-  description="Get in touch with DYJK Print by phone or email, or request a quote for your nationwide print project."
+  description={`Reach DYJK Print by ${channels}, or request a quote for your nationwide print project.`}
   schema={schema}
 >
   <PageHeader
     eyebrow="Contact"
     title="Let's talk about your print project"
-    subtitle="We work with clients across the country — reach us by phone or email, or send your project details for a quote."
+    subtitle={`We work with clients across the country — reach us by ${channels}, or send your project details for a quote.`}
   />
 
   <section class="mx-auto max-w-3xl px-4 py-16">
     <dl class="grid gap-8 sm:grid-cols-2">
-      <div>
-        <dt class="text-sm font-semibold text-brand-ink">Phone</dt>
-        <dd class="mt-1">
-          <a
-            href={`tel:${SITE.phone}`}
-            class="text-lg text-brand-blue hover:text-brand-blue-dark"
-          >
-            {SITE.phoneDisplay}
-          </a>
-        </dd>
-      </div>
       <div>
         <dt class="text-sm font-semibold text-brand-ink">Email</dt>
         <dd class="mt-1">
@@ -45,6 +37,21 @@ const schema = breadcrumbSchema([
           </a>
         </dd>
       </div>
+      {
+        SITE.phone && (
+          <div>
+            <dt class="text-sm font-semibold text-brand-ink">Phone</dt>
+            <dd class="mt-1">
+              <a
+                href={`tel:${SITE.phone.e164}`}
+                class="text-lg text-brand-blue hover:text-brand-blue-dark"
+              >
+                {SITE.phone.display}
+              </a>
+            </dd>
+          </div>
+        )
+      }
     </dl>
 
     <div class="mt-10">

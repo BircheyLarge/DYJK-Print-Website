@@ -23,11 +23,21 @@ const {
         Request a Quote
       </a>
       <a
-        href={`tel:${SITE.phone}`}
+        href={`mailto:${SITE.email}`}
         class="inline-block rounded-md border border-slate-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:border-white"
       >
-        Call {SITE.phoneDisplay}
+        Email {SITE.email}
       </a>
+      {
+        SITE.phone && (
+          <a
+            href={`tel:${SITE.phone.e164}`}
+            class="inline-block rounded-md border border-slate-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:border-white"
+          >
+            Call {SITE.phone.display}
+          </a>
+        )
+      }
     </div>
   </div>
 </section>

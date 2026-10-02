@@ -3,8 +3,15 @@
  *
  * Contact policy (locked with @you): DYJK is a nationwide print partner, NOT a
  * walk-in/local shop. We intentionally expose NO physical address, map or hours.
- * Public contact = phone + email + quote form only.
+ * Public contact = email + quote form, plus a phone number once DYJK has one.
  */
+
+/** A public phone number: E.164 for tel: links and schema, plus display text. */
+export interface PhoneNumber {
+  e164: string;
+  display: string;
+}
+
 export const SITE = {
   name: 'DYJK Print',
   tagline: 'Your Vision, Our Precision',
@@ -13,10 +20,13 @@ export const SITE = {
   description:
     'DYJK Print is a nationwide commercial printing partner — offset and digital printing, ' +
     'graphic design and prepress. Quality print, shipped to your door anywhere in the US.',
-  /** E.164 for tel: links and schema. */
-  phone: '+18019603396',
-  /** Human-readable phone. */
-  phoneDisplay: '(801) 960-3396',
+  /**
+   * ACTION ITEM #np3as5: DYJK has no phone number yet, so the site shows no
+   * phone UI, tel: links or schema telephone, and leads with email. When the
+   * real number arrives, set it here and every page picks it up:
+   *   phone: { e164: '+1XXXXXXXXXX', display: '(XXX) XXX-XXXX' },
+   */
+  phone: null as PhoneNumber | null,
   email: 'sales@dyjkprint.com',
   /** Nationwide service area — drives Organization.areaServed, no local framing. */
   areaServed: 'US',

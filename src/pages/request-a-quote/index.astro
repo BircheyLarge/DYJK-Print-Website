@@ -49,12 +49,16 @@ const mailto = `mailto:${SITE.email}?subject=${mailtoSubject}&body=${mailtoBody}
       >
         Email your project details
       </a>
-      <a
-        href={`tel:${SITE.phone}`}
-        class="inline-block rounded-md border border-slate-300 px-6 py-3 text-base font-semibold text-brand-slate transition-colors hover:border-brand-blue hover:text-brand-blue"
-      >
-        Call {SITE.phoneDisplay}
-      </a>
+      {
+        SITE.phone && (
+          <a
+            href={`tel:${SITE.phone.e164}`}
+            class="inline-block rounded-md border border-slate-300 px-6 py-3 text-base font-semibold text-brand-slate transition-colors hover:border-brand-blue hover:text-brand-blue"
+          >
+            Call {SITE.phone.display}
+          </a>
+        )
+      }
     </div>
 
     <p class="mt-6 text-sm text-brand-muted">

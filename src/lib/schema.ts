@@ -30,7 +30,7 @@ export function organizationSchema(logoPath = '/brand/logo.png'): Json {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',
-      telephone: SITE.phone,
+      ...(SITE.phone ? { telephone: SITE.phone.e164 } : {}),
       email: SITE.email,
       areaServed: SITE.areaServed,
       availableLanguage: ['English'],

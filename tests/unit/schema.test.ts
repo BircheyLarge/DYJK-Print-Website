@@ -22,12 +22,16 @@ describe('organizationSchema', () => {
     });
   });
 
-  it('exposes a sales contact point with phone and email', () => {
+  it('exposes a sales contact point with email, and a phone only once set', () => {
     expect(org.contactPoint).toMatchObject({
       '@type': 'ContactPoint',
-      telephone: SITE.phone,
       email: SITE.email,
     });
+    if (SITE.phone) {
+      expect(org.contactPoint).toMatchObject({ telephone: SITE.phone.e164 });
+    } else {
+      expect(org.contactPoint).not.toHaveProperty('telephone');
+    }
   });
 
   it('NEVER emits a physical address or local-business signals', () => {
