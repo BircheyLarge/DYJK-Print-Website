@@ -109,8 +109,8 @@ test.describe('product pages', () => {
         expect(text, `${href} mentions "${term}"`).not.toContain(term);
       }
 
-      // Product-page images share one 3:2 frame, cropped at build time.
-      for (const img of await page.locator('main figure img').all()) {
+      // Example thumbnails share one 3:2 frame, cropped at build time.
+      for (const img of await page.locator('main a[data-lightbox] img').all()) {
         const width = Number(await img.getAttribute('width'));
         const height = Number(await img.getAttribute('height'));
         expect(width / height, `${href} image ratio`).toBeCloseTo(1.5, 2);

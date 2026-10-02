@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
-import PortfolioPicture from '../../components/PortfolioPicture.astro';
+import ProductExamples from '../../components/ProductExamples.astro';
 import Prose from '../../components/Prose.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
 import { SERVICES } from '../../data/catalog';
@@ -31,18 +31,9 @@ const services = data.services.flatMap((slug) =>
   SERVICES.filter((service) => service.slug === slug),
 );
 
-// Layout: source order is images, copy, services, so phones see the work
-// first. From lg, dense packing moves images and services into the right
-// column; with no images the services card rises to the top.
-// Image slot: that right column (341px at full width), two-up from sm, and
-// two-up on phones too once there's more than one image.
-const imageSizes = [
-  '(min-width: 1152px) 341px',
-  '(min-width: 1024px) calc(33.3vw - 43px)',
-  '(min-width: 640px) calc(50vw - 28px)',
-  images.length > 1 ? 'calc(50vw - 24px)' : 'calc(100vw - 32px)',
-].join(', ');
-
+// Layout: source order is examples, copy, services, so phones see the work
+// first. From lg, dense packing moves examples and services into the right
+// column; with no examples the services card rises to the top.
 const schema = [
   breadcrumbSchema([
     { name: 'Home', path: '/' },
@@ -73,28 +64,7 @@ const schema = [
       {
         images.length > 0 && (
           <div class="lg:col-start-3">
-            <h2 class="text-sm font-semibold text-brand-ink">Examples</h2>
-            <div
-              class:list={[
-                'mt-3 grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-1',
-                images.length > 1 && 'grid-cols-2',
-              ]}
-            >
-              {images.map((item, index) => (
-                <figure>
-                  <PortfolioPicture
-                    item={item}
-                    sizes={imageSizes}
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    fetchpriority={index === 0 ? 'high' : undefined}
-                    crop
-                  />
-                  <figcaption class="mt-3 text-sm text-brand-muted">
-                    {item.title}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
+            <ProductExamples items={images} />
           </div>
         )
       }

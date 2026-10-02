@@ -27,7 +27,12 @@ const WIDTHS = [400, 600, 800, 1000, 1200, 1600];
 const RATIO = 3 / 2;
 const MAX_CROP_WIDTH = 1200;
 
-let frame: { width?: number; height?: number; fit?: 'cover' } = {};
+let frame: {
+  width?: number;
+  height?: number;
+  fit?: 'cover';
+  position?: PortfolioItem['cropPosition'];
+} = {};
 let widths = WIDTHS;
 if (crop) {
   // getImage() reports the original's size. Reading item.image.width directly
@@ -43,6 +48,7 @@ if (crop) {
     width: frameWidth,
     height: Math.round(frameWidth / RATIO),
     fit: 'cover',
+    ...(item.cropPosition && { position: item.cropPosition }),
   };
   widths = [...WIDTHS.filter((w) => w < frameWidth), frameWidth];
 }

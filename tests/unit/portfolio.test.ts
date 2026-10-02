@@ -48,6 +48,16 @@ describe('imagesForProduct', () => {
     }
     expect(imagesForProduct('no-such-product')).toEqual([]);
   });
+
+  it('puts real artwork before AI mockups', () => {
+    for (const slug of new Set(PORTFOLIO.map((item) => item.product))) {
+      const isAi = imagesForProduct(slug).map(
+        (item) => item.kind === 'ai-mockup',
+      );
+      // false (real) sorts before true (AI).
+      expect(isAi, slug).toEqual([...isAi].sort());
+    }
+  });
 });
 
 describe('PORTFOLIO_GALLERY', () => {
