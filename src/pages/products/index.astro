@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import ProductCard from '../../components/ProductCard.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
 import { breadcrumbSchema } from '../../lib/schema';
 
@@ -11,6 +12,11 @@ const products = (
   (a, b) =>
     a.data.order - b.data.order || a.data.title.localeCompare(b.data.title),
 );
+
+// Card width in the grid below: three columns from lg (357px at full width),
+// two from sm, one on phones.
+const cardSizes =
+  '(min-width: 1152px) 357px, (min-width: 1024px) calc(33.3vw - 27px), (min-width: 640px) calc(50vw - 28px), calc(100vw - 32px)';
 
 const schema = breadcrumbSchema([
   { name: 'Home', path: '/' },
@@ -32,21 +38,15 @@ const schema = breadcrumbSchema([
   <section class="mx-auto max-w-6xl px-4 py-16">
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
-        products.map((product) => (
-          <a
-            href={`/products/${product.id}/`}
-            class="group flex flex-col rounded-xl border border-slate-200 p-6 transition-shadow hover:shadow-lg"
-          >
-            <h2 class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
-              {product.data.title}
-            </h2>
-            <p class="mt-2 text-sm text-brand-muted">
-              {product.data.description}
-            </p>
-            <span class="mt-auto pt-4 text-sm font-semibold text-brand-blue">
-              Learn more&nbsp;<span aria-hidden="true">→</span>
-            </span>
-          </a>
+        products.map((product, index) => (
+          <ProductCard
+            slug={product.id}
+            title={product.data.title}
+            description={product.data.description}
+            sizes={cardSizes}
+            loading={index < 3 ? 'eager' : 'lazy'}
+            fetchpriority={index === 0 ? 'high' : undefined}
+          />
         ))
       }
     </div>

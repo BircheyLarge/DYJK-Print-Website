@@ -74,6 +74,31 @@ test.describe('portfolio', () => {
   });
 });
 
+test.describe('products hub', () => {
+  test('every card shows a 3:2 thumbnail or the drawn placeholder', async ({
+    page,
+  }) => {
+    await page.goto('/products/');
+    const cards = await page.locator('main a[href^="/products/"]').all();
+    expect(cards.length).toBeGreaterThan(0);
+
+    for (const card of cards) {
+      const href = await card.getAttribute('href');
+      const img = card.locator('img');
+      const placeholder = card.locator('[data-placeholder]');
+      expect((await img.count()) + (await placeholder.count()), href!).toBe(1);
+
+      if ((await img.count()) === 1) {
+        // The card's own text names the product.
+        await expect(img, href!).toHaveAttribute('alt', '');
+        const width = Number(await img.getAttribute('width'));
+        const height = Number(await img.getAttribute('height'));
+        expect(width / height, href!).toBeCloseTo(1.5, 2);
+      }
+    }
+  });
+});
+
 test.describe('product pages', () => {
   const LOCAL_TERMS = ['utah', 'salt lake', 'near you', 'draper', 'po box'];
 

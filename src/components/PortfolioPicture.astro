@@ -11,9 +11,21 @@ interface Props {
   fetchpriority?: 'high';
   /** Crop to the shared 3:2 frame (product pages); default keeps the shape. */
   crop?: boolean;
+  /** Empty alt, for cards whose own text already names the product. */
+  decorative?: boolean;
+  /** Square corners, for an image that sits flush inside a rounded card. */
+  flush?: boolean;
 }
 
-const { item, sizes, loading = 'lazy', fetchpriority, crop } = Astro.props;
+const {
+  item,
+  sizes,
+  loading = 'lazy',
+  fetchpriority,
+  crop,
+  decorative,
+  flush,
+} = Astro.props;
 
 // Shared by every portfolio image so pages reuse the same generated files.
 // Astro caps the set at each original's own width.
@@ -56,7 +68,7 @@ if (crop) {
 
 <Picture
   src={item.image}
-  alt={item.alt}
+  alt={decorative ? '' : item.alt}
   formats={['avif', 'webp']}
   widths={widths}
   sizes={sizes}
@@ -64,7 +76,8 @@ if (crop) {
   fetchpriority={fetchpriority}
   {...frame}
   class:list={[
-    'w-full rounded-xl bg-brand-surface',
+    'w-full bg-brand-surface',
+    !flush && 'rounded-xl',
     crop && 'aspect-3/2 object-cover',
   ]}
 />
