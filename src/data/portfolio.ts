@@ -5,10 +5,13 @@
  * homepage "Recent work" strip show PORTFOLIO_GALLERY.
  *
  * To add a piece: save the original image in src/assets/portfolio/, import it
- * below and add one entry with its product slug and kind. Newest first — the
- * homepage shows the first two gallery pieces. Astro generates the responsive
- * AVIF/WebP sizes at build time. Product pages crop every thumbnail to 3:2
- * (set cropPosition if the subject isn't central) and link to the full image.
+ * below and add one entry with its product slug and kind. Entries are in
+ * display order: a product page lists its real artwork in the order below,
+ * then its AI mockups, and its first image is the thumbnail on the /products/
+ * hub card. Gallery photos go newest first; the homepage shows the first two.
+ * Astro generates the responsive AVIF/WebP sizes at build time. Product pages
+ * crop every thumbnail to 3:2 (set cropPosition if the subject isn't central)
+ * and link to the full image.
  *
  * Captions name the product, never the client. Alt text describes what's
  * visible; don't claim finishes or processes Stanley hasn't confirmed.
@@ -23,22 +26,31 @@ import cardsCanyonMedical from '../assets/portfolio/business-cards-canyon-medica
 import cardsCarvit from '../assets/portfolio/business-cards-carvit-rounded-corners.jpg';
 import cardsCarvitSurf from '../assets/portfolio/business-cards-carvit-surf.jpg';
 import cardsDespain from '../assets/portfolio/business-cards-despain-subaru.jpg';
-import cardsMillcreek from '../assets/portfolio/business-cards-millcreek-tile-stone.jpg';
+import cardsMillcreek from '../assets/portfolio/business-cards-millcreek.jpg';
 import cardsMotoSkiveez from '../assets/portfolio/business-cards-moto-skiveez-carbon-pattern.jpg';
 import cardsPrestigeBlack from '../assets/portfolio/business-cards-prestige-performance-black.jpg';
 import cardsPrestigeWhite from '../assets/portfolio/business-cards-prestige-performance-white.jpg';
 import doorHangerCleanItUp from '../assets/portfolio/door-hangers-clean-it-up.jpg';
 import doorHangerMikeGreen from '../assets/portfolio/door-hangers-mike-green-campaign.jpg';
+import envelopesApexAdvance from '../assets/portfolio/envelopes-letterhead-apex-advance-envelopes.jpg';
+import envelopesAspire from '../assets/portfolio/envelopes-letterhead-aspire-envelopes.jpg';
+import letterheadAdvancedOral from '../assets/portfolio/envelopes-letterhead-advanced-oral-surgery.jpg';
+import letterheadBbc from '../assets/portfolio/envelopes-letterhead-better-body-compositions.jpg';
+import stationeryAps from '../assets/portfolio/envelopes-letterhead-aps-set.jpg';
 import flyerAspire from '../assets/portfolio/flyers-aspire-surgical.jpg';
 import flyerAutoShow from '../assets/portfolio/flyers-atomic-auto-show.jpg';
 import flyerUew from '../assets/portfolio/flyers-united-energy-workers.jpg';
-import labelsCuttingEdge from '../assets/portfolio/labels-cutting-edge-roll-bags-boxes.jpg';
+import labelsCuttingEdge from '../assets/portfolio/labels-cutting-edge-box.jpg';
 import labelsRust from '../assets/portfolio/labels-rust-automation-roll-desk.jpg';
 import menuBagelShop from '../assets/portfolio/menus-bagel-shop.jpg';
+import postcardAspire from '../assets/portfolio/postcards-aspire-invitation.jpg';
+import postcardWaterSensations from '../assets/portfolio/postcards-water-sensations.jpg';
 import foldersOakridge from '../assets/portfolio/presentation-folders-oakridge-dental.jpg';
 import foldersOakridgeFanned from '../assets/portfolio/presentation-folders-oakridge-dental-fanned.jpg';
 import presentationFolder from '../assets/portfolio/presentation-folder-and-insert.jpg';
 import promotionalCards from '../assets/portfolio/promotional-cards.jpg';
+import stickersAssorted from '../assets/portfolio/stickers-assorted-logos.jpg';
+import stickerGlobeCandy from '../assets/portfolio/stickers-globe-candy.jpg';
 import stickerRust from '../assets/portfolio/stickers-rust-automation-oval-bottle.jpg';
 
 export interface PortfolioItem {
@@ -94,6 +106,95 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     serviceSlug: 'digital-printing',
     kind: 'mockup',
     alt: 'Two Carvit promo cards with an edge-to-edge photo of a surfer in a breaking wave, reading "A lifestyle, shop now" and the web address, on white paper by a cream envelope.',
+  },
+  {
+    image: cardsMillcreek,
+    title: 'White business cards with a copper-colored logo',
+    product: 'business-cards',
+    serviceSlug: 'digital-printing',
+    kind: 'mockup',
+    alt: 'Two white Millcreek Tile & Stone business cards on a gray stone surface: one with the logo and contact details, the other with the copper-colored tile logo and web address.',
+  },
+  {
+    image: postcardWaterSensations,
+    title: 'Product postcard with a retro stripe design',
+    product: 'postcards-mailers',
+    serviceSlug: 'digital-printing',
+    kind: 'mockup',
+    cropPosition: 'right',
+    alt: 'Water Sensations postcard with retro yellow and blue stripes, a water-drop logo and Citrus flavor details, on a wooden desk under a cup of coffee, beside a keyboard and notebook.',
+  },
+  {
+    image: postcardAspire,
+    title: 'Event invitation postcard',
+    product: 'postcards-mailers',
+    serviceSlug: 'digital-printing',
+    kind: 'mockup',
+    alt: 'Aspire Surgical movie-night invitation postcard with a black-and-white photo of a suit and tie, "No Time To Die" lettering and the event details, lying on a gold envelope.',
+  },
+  {
+    image: stationeryAps,
+    title: 'Matching letterhead and envelope',
+    product: 'envelopes-letterhead',
+    serviceSlug: 'offset-printing',
+    kind: 'mockup',
+    alt: 'Applied Product Solutions letterhead and matching envelope on a light wood table, each with the gold and teal APS logo and a pale gray curve along the bottom.',
+  },
+  {
+    image: letterheadAdvancedOral,
+    title: 'Letterhead with a blue gradient rule',
+    product: 'envelopes-letterhead',
+    serviceSlug: 'offset-printing',
+    kind: 'mockup',
+    alt: 'Advanced Oral Surgery of San Antonio letterhead with a blue line-art logo at the top and a blue gradient rule over the contact details at the bottom, beside an espresso cup.',
+  },
+  {
+    image: letterheadBbc,
+    title: 'Letterhead with an orange header band',
+    product: 'envelopes-letterhead',
+    serviceSlug: 'offset-printing',
+    kind: 'mockup',
+    alt: 'Better Body Compositions letterhead with an orange header band holding the white BBC logo and a one-line contact footer, on a white wooden desk beside a keyboard and camera lens.',
+  },
+  {
+    image: envelopesAspire,
+    title: 'Business envelopes with a logo on the flap',
+    product: 'envelopes-letterhead',
+    serviceSlug: 'offset-printing',
+    kind: 'mockup',
+    alt: 'Two white Aspire Surgical business envelopes on a gray surface, one showing the logo and return address on the front, the other the logo and web address on the back flap, beside a fountain pen.',
+  },
+  {
+    image: envelopesApexAdvance,
+    title: 'Branded business envelopes',
+    product: 'envelopes-letterhead',
+    serviceSlug: 'offset-printing',
+    kind: 'mockup',
+    alt: 'Two business envelopes on a wooden desk below a laptop and coffee: one for Apex Insurance with a red and gray mountain logo, one for Advance Insurance with a red and gray curve along the bottom.',
+  },
+  {
+    image: labelsCuttingEdge,
+    title: 'Round label on a shipping box',
+    product: 'labels',
+    serviceSlug: 'digital-printing',
+    kind: 'mockup',
+    alt: 'Round white Cutting Edge Physical Therapy label with blue and gray lettering and contact details, applied to the lid of a brown shipping box.',
+  },
+  {
+    image: stickersAssorted,
+    title: 'Logo stickers in assorted shapes',
+    product: 'stickers',
+    serviceSlug: 'digital-printing',
+    kind: 'mockup',
+    alt: 'Five logo stickers on a white desk: rounded rectangles for Gonzalez Group and Wright Dental Group, and on a spiral notepad a round Globe Candy sticker, a Wee Care pediatric dentistry rectangle and a square blue "Thank You!" sticker for MikesAutoShack.com.',
+  },
+  {
+    image: stickerGlobeCandy,
+    title: 'Round logo sticker',
+    product: 'stickers',
+    serviceSlug: 'digital-printing',
+    kind: 'mockup',
+    alt: 'Round dark teal Globe Candy logo sticker with white lettering, on a pale gray surface below a mint-green pen.',
   },
   {
     image: doorHangerCleanItUp,
@@ -193,14 +294,6 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     alt: 'Carvit promo card with rounded corners and an action-sports photo collage, reading "Shop now" with a promo code, propped on a stack of matching cards.',
   },
   {
-    image: cardsMillcreek,
-    title: 'Two-sided business cards with a copper-colored back',
-    product: 'business-cards',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'Millcreek Tile & Stone business cards: a stack with a copper-colored, tile-patterned back and white cards with the logo and contact details.',
-  },
-  {
     image: cardsPrestigeWhite,
     title: 'White business cards with a black logo',
     product: 'business-cards',
@@ -223,14 +316,6 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     serviceSlug: 'offset-printing',
     kind: 'ai-mockup',
     alt: 'White Oakridge Dental presentation folder with the logo centered on the cover, on a dark wooden desk.',
-  },
-  {
-    image: labelsCuttingEdge,
-    title: 'Round labels on a roll, applied to bags and boxes',
-    product: 'labels',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'Roll of round Cutting Edge Physical Therapy labels beside white paper bags and brown boxes with the same label applied.',
   },
   {
     image: labelsRust,
