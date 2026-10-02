@@ -7,8 +7,9 @@ import {
   serviceSchema,
 } from './lib/content-schemas';
 
-// Content Layer API (Astro 5+). Empty collections are valid — pages are added
-// incrementally in P1–P2. Schemas live in ./lib so they're unit-testable.
+// Content Layer API (Astro 5+). Empty collections are valid (blog and
+// industries have no entries yet). Schemas live in ./lib so they're
+// unit-testable.
 //
 // Astro keys its content cache to this file's text, so after changing a
 // schema in ./lib, edit this file too (a comment will do); otherwise cached

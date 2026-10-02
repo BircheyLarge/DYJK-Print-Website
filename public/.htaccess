@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# Apache config for GoDaddy hosting. Astro copies this file into dist/; upload
+# it to public_html with the rest of the build (hidden files included).
+#
+# - Needs GoDaddy cPanel/Linux hosting (Apache 2.4). GoDaddy Website Builder
+#   plans ignore this file. Bircheylarge still has to confirm the plan type.
+# - SSL must work for dyjkprint.com and www.dyjkprint.com BEFORE the DNS
+#   cutover. The old Duda site sent an HSTS header, so browsers that visited
+#   it insist on https and show a hard error if the certificate isn't ready.
+# - If the site returns 500 after upload, the plan doesn't allow one of these
+#   directives in .htaccess; `Options` and the <If> block are the usual ones.
+#
+# Based on the-voyeur's SEO audit draft. Changes: redirects stay on the
+# current host unless it's dyjkprint.com, so GoDaddy's temporary URL can be
+# tested before cutover; compression is guarded by mod_filter and also
+# covers JavaScript.
+# ---------------------------------------------------------------------------
+
+Options -Indexes
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+
+# Redirect origin: on the real domain every redirect goes straight to
+# https://www.dyjkprint.com, so visitors and Google get one hop. On any other
+# host it stays empty and redirects stay on that host.
+RewriteCond %{HTTP_HOST} ^(www\.)?dyjkprint\.com$ [NC]
+RewriteRule ^ - [E=ORIGIN:https://www.dyjkprint.com]
+
+# Old Duda URLs and the old sitemap.
+RewriteRule ^about$ %{ENV:ORIGIN}/about/ [R=301,L]
+RewriteRule ^contact$ %{ENV:ORIGIN}/contact/ [R=301,L]
+RewriteRule ^sitemap\.xml$ %{ENV:ORIGIN}/sitemap-index.xml [R=301,L]
+
+# /x/index.html -> /x/, only when the visitor asked for index.html itself.
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?]
+RewriteRule ^(.*/)?index\.html$ %{ENV:ORIGIN}/$1 [R=301,L]
+
+# Add the trailing slash to folders, in the same hop as https + www.
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.+[^/])$ %{ENV:ORIGIN}/$1/ [R=301,L]
+
+# Force https + www on the real domain.
+RewriteCond %{HTTP_HOST} ^(www\.)?dyjkprint\.com$ [NC]
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^dyjkprint\.com$ [NC]
+RewriteRule ^(.*)$ https://www.dyjkprint.com/$1 [R=301,L]
+
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Build assets have content hashes in their names, so they never change.
+  <If "%{REQUEST_URI} =~ m#^/_astro/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  # Pages revalidate every time, so updates show up at once.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  <IfModule mod_filter.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml image/svg+xml text/javascript application/javascript application/json
+  </IfModule>
+</IfModule>

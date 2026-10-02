@@ -17,9 +17,10 @@ export const SITE = {
   tagline: 'Your Vision, Our Precision',
   /** Canonical production origin (no trailing slash). */
   url: 'https://www.dyjkprint.com',
+  /** Homepage meta description and the fallback; 155 chars max for snippets. */
   description:
-    'DYJK Print is a nationwide commercial printing partner — offset and digital printing, ' +
-    'graphic design and prepress. Quality print, shipped to your door anywhere in the US.',
+    'Nationwide commercial printing from DYJK Print: offset and digital printing, ' +
+    'graphic design and prepress, proofed and shipped anywhere in the US.',
   /**
    * ACTION ITEM #np3as5: DYJK has no phone number yet, so the site shows no
    * phone UI, tel: links or schema telephone, and leads with email. When the

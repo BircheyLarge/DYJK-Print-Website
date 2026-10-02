@@ -28,6 +28,39 @@ test('ships no image that no page references', () => {
   expect(images.filter((file) => !html.includes(file))).toEqual([]);
 });
 
+test('ships the Apache config from public/', () => {
+  const built = new URL('.htaccess', dist);
+  expect(fs.existsSync(built)).toBe(true);
+  expect(fs.readFileSync(built, 'utf8')).toBe(
+    fs.readFileSync(new URL('../../public/.htaccess', import.meta.url), 'utf8'),
+  );
+});
+
+test('lists exactly the indexable pages in the sitemap', () => {
+  const sitemapPaths = fs
+    .readdirSync(dist)
+    .filter((file) => /^sitemap-\d+\.xml$/.test(file))
+    .flatMap((file) =>
+      [
+        ...fs
+          .readFileSync(new URL(file, dist), 'utf8')
+          .matchAll(/<loc>([^<]+)<\/loc>/g),
+      ].map(([, loc]) => new URL(loc!).pathname),
+    )
+    .sort();
+  const pages = builtPages().map(([file, html]) => ({
+    path: `/${file.replace(/index\.html$/, '')}`,
+    noindex: /<meta name="robots" content="[^"]*noindex/.test(html),
+    canonical: /<link rel="canonical"/.test(html),
+  }));
+
+  const indexable = pages.filter((page) => !page.noindex);
+  expect(sitemapPaths).toEqual(indexable.map((page) => page.path).sort());
+  // A page kept out of search names no canonical URL either.
+  expect(pages.filter((page) => page.noindex && page.canonical)).toEqual([]);
+  expect(pages.filter((page) => !page.noindex && !page.canonical)).toEqual([]);
+});
+
 test('ships no tel: links while DYJK has no phone number', () => {
   test.skip(SITE.phone !== null, 'SITE.phone is set');
   const withTel = builtPages()

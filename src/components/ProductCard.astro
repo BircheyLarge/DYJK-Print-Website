@@ -10,6 +10,8 @@ interface Props {
   sizes: string;
   /** h2 on the /products/ hub; h3 under a section heading. */
   headingLevel?: 2 | 3;
+  /** Image and title only, for denser grids such as the homepage. */
+  compact?: boolean;
   loading?: 'eager' | 'lazy';
   fetchpriority?: 'high';
 }
@@ -20,6 +22,7 @@ const {
   description,
   sizes,
   headingLevel = 2,
+  compact = false,
   loading = 'lazy',
   fetchpriority,
 } = Astro.props;
@@ -76,15 +79,23 @@ const Heading = headingLevel === 3 ? 'h3' : 'h2';
       </div>
     )
   }
-  <div class="flex flex-1 flex-col p-6">
-    <Heading
-      class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue"
-    >
-      {title}
-    </Heading>
-    <p class="mt-2 text-sm text-brand-muted">{description}</p>
-    <span class="mt-auto pt-4 text-sm font-semibold text-brand-blue">
-      Learn more&nbsp;<span aria-hidden="true">→</span>
-    </span>
-  </div>
+  {
+    compact ? (
+      <div class="p-4">
+        <Heading class="text-sm font-semibold text-brand-ink group-hover:text-brand-blue sm:text-base">
+          {title}
+        </Heading>
+      </div>
+    ) : (
+      <div class="flex flex-1 flex-col p-6">
+        <Heading class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
+          {title}
+        </Heading>
+        <p class="mt-2 text-sm text-brand-muted">{description}</p>
+        <span class="mt-auto pt-4 text-sm font-semibold text-brand-blue">
+          Learn more&nbsp;<span aria-hidden="true">→</span>
+        </span>
+      </div>
+    )
+  }
 </a>

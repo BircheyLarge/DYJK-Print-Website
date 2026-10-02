@@ -24,7 +24,8 @@ export interface PageMetaInput {
 export interface PageMeta {
   title: string;
   description: string;
-  canonical: string;
+  /** Absent on noindex pages: a page kept out of search names no canonical. */
+  canonical?: string;
   image?: string;
   noindex: boolean;
 }
@@ -75,6 +76,7 @@ export function absoluteUrl(
 
 /** Build the resolved meta object consumed by <BaseHead>. */
 export function buildPageMeta(input: PageMetaInput = {}): PageMeta {
+  const noindex = input.noindex ?? false;
   return {
     title: input.seoTitle?.trim() || pageTitle(input.title),
     description: (
@@ -82,8 +84,8 @@ export function buildPageMeta(input: PageMetaInput = {}): PageMeta {
       input.description?.trim() ||
       SITE.description
     ).trim(),
-    canonical: canonicalUrl(input.path ?? '/'),
+    canonical: noindex ? undefined : canonicalUrl(input.path ?? '/'),
     image: input.image ? absoluteUrl(input.image) : undefined,
-    noindex: input.noindex ?? false,
+    noindex,
   };
 }

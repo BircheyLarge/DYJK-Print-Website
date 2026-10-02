@@ -8,12 +8,18 @@ const schema = breadcrumbSchema([
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about/' },
 ]);
+
+// TODO(about-content): this page is a placeholder, so it's kept out of search.
+// When Stanley sends the About copy, delete `noindex` below and '/about/'
+// from NOINDEX_PATHS in astro.config.mjs.
+const noindex = true;
 ---
 
 <BaseLayout
   title="About"
   description="DYJK Print is a nationwide commercial printing partner combining production capability with hands-on design and prepress support."
   schema={schema}
+  noindex={noindex}
 >
   <PageHeader
     eyebrow="About"

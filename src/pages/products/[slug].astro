@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import FaqList from '../../components/FaqList.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import ProductExamples from '../../components/ProductExamples.astro';
 import Prose from '../../components/Prose.astro';
@@ -72,27 +73,7 @@ const schema = [
       <div class="lg:col-span-2 lg:col-start-1 lg:row-span-2">
         <Prose><Content /></Prose>
 
-        {
-          data.faqs.length > 0 && (
-            <div class="mt-16">
-              <h2 class="text-2xl font-bold tracking-tight text-brand-ink">
-                Frequently asked questions
-              </h2>
-              <dl class="mt-6 space-y-6">
-                {data.faqs.map((faq) => (
-                  <div>
-                    <dt class="text-lg font-semibold text-brand-ink">
-                      {faq.question}
-                    </dt>
-                    <dd class="mt-2 text-lg leading-relaxed text-brand-slate">
-                      {faq.answer}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          )
-        }
+        <FaqList faqs={data.faqs} />
 
         <p class="mt-12">
           <a

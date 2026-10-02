@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { SERVICES } from '../../src/data/catalog';
 
 test.describe('home page', () => {
   test('renders the hero with a single h1 and brand title', async ({
@@ -52,6 +53,56 @@ test.describe('home page', () => {
     await page.goto('/');
     await expect(page.locator('footer')).toContainText(/© \d{4} DYJK Print\./);
   });
+
+  test('footer labels are not headings', async ({ page }) => {
+    await page.goto('/');
+    await expect(
+      page.locator('footer :is(h1, h2, h3, h4, h5, h6)'),
+    ).toHaveCount(0);
+  });
+
+  test('keeps the meta description within a search snippet', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const description = await page
+      .locator('meta[name="description"]')
+      .getAttribute('content');
+    expect(description!.length).toBeLessThanOrEqual(155);
+  });
+
+  test('links to every product page', async ({ page }) => {
+    await page.goto('/products/');
+    const products = await page
+      .locator('main a[href^="/products/"]')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+    await page.goto('/');
+    const linked = await page
+      .locator('main a[href^="/products/"]')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+    expect(products.length).toBeGreaterThan(0);
+    expect(new Set(linked)).toEqual(new Set(products));
+  });
+});
+
+test.describe('service pages', () => {
+  for (const service of SERVICES) {
+    test(`${service.href} has breadcrumbs and FAQ markup matching the page`, async ({
+      page,
+    }) => {
+      await page.goto(service.href);
+      await expect(page.locator('h1')).toHaveCount(1);
+      const ld = (
+        await page
+          .locator('script[type="application/ld+json"]')
+          .allTextContents()
+      ).join('\n');
+      expect(ld).toContain('"@type":"BreadcrumbList"');
+      expect(ld).toContain('"@type":"Service"');
+      const shownFaqs = await page.locator('main dt').count();
+      expect((ld.match(/"@type":"Question"/g) ?? []).length).toBe(shownFaqs);
+    });
+  }
 });
 
 test.describe('portfolio', () => {

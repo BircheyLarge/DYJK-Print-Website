@@ -1,17 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
+import { getProducts } from '../../data/products';
 import { breadcrumbSchema } from '../../lib/schema';
 
-const products = (
-  await getCollection('products', ({ data }) => !data.draft)
-).sort(
-  (a, b) =>
-    a.data.order - b.data.order || a.data.title.localeCompare(b.data.title),
-);
+const products = await getProducts();
 
 // Card width in the grid below: three columns from lg (357px at full width),
 // two from sm, one on phones.

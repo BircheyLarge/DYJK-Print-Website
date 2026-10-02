@@ -84,13 +84,23 @@ describe('buildPageMeta', () => {
       description: 'Reach DYJK Print',
       path: '/contact',
       image: '/og/contact.png',
-      noindex: true,
     });
     expect(meta.title).toBe('Contact | DYJK Print');
     expect(meta.description).toBe('Reach DYJK Print');
     expect(meta.canonical).toBe('https://www.dyjkprint.com/contact/');
     expect(meta.image).toBe('https://www.dyjkprint.com/og/contact.png');
+    expect(meta.noindex).toBe(false);
+  });
+
+  it('keeps the homepage description within a search snippet', () => {
+    // The homepage uses the site default; Google cuts off around 155.
+    expect(SITE.description.length).toBeLessThanOrEqual(155);
+  });
+
+  it('gives a noindex page no canonical URL', () => {
+    const meta = buildPageMeta({ path: '/404', noindex: true });
     expect(meta.noindex).toBe(true);
+    expect(meta.canonical).toBeUndefined();
   });
 
   it('uses a content seoTitle verbatim and prefers seoDescription', () => {
