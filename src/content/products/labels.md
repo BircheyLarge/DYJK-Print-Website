@@ -1,8 +1,8 @@
 ---
 title: Labels
 description: >-
-  Product and packaging labels, on rolls or sheets, cut to your dieline and
-  shipped anywhere in the US after you approve a proof.
+  Labels that fit the container — a flat panel or a wrap — on rolls or sheets,
+  with the adhesive confirmed on the quote.
 order: 50
 keywords:
   - label printing

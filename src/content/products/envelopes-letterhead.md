@@ -1,8 +1,8 @@
 ---
 title: Envelopes & Letterhead
 description: >-
-  Letterhead and envelopes in the size and ink you specify, including matched
-  sets, proofed and shipped anywhere in the US.
+  Letterhead and envelopes as a matched set: the size, a window or a closed
+  face, and the ink plan you specify.
 order: 90
 keywords:
   - letterhead printing

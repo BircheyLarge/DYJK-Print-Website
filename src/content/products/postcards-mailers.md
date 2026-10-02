@@ -1,8 +1,8 @@
 ---
 title: Postcards & Mailers
 description: >-
-  Postcards and mailers in the size and finish you choose, including variable
-  versions, proofed and shipped anywhere in the US.
+  Short-offer postcards, including a different name or deal on every card.
+  We print them and ship the pieces nationwide.
 order: 30
 keywords:
   - postcard printing

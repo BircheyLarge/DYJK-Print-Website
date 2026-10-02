@@ -1,8 +1,8 @@
 ---
 title: Catalogs & Booklets
 description: >-
-  Multi-page catalogs and booklets in the binding and page count you choose,
-  proofed before press and shipped anywhere in the US.
+  Bound catalogs and booklets — saddle-stitch or perfect bind — in the page
+  count and cover you set. Cartons ship nationwide.
 order: 80
 keywords:
   - catalog printing

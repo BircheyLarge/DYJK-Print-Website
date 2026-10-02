@@ -1,8 +1,8 @@
 ---
 title: Business Cards
 description: >-
-  Custom business cards in the size, stock, and finish you choose. We proof
-  your file, print the run, and ship it anywhere in the US.
+  Custom business cards in the size, stock, and finish you choose — one shared
+  design, or a different name on every card.
 order: 10
 keywords:
   - business card printing

@@ -1,8 +1,8 @@
 ---
 title: Brochures
 description: >-
-  Brochures in the fold you choose — bi-fold, tri-fold, and others on request
-  — proofed flat and shipped anywhere in the US.
+  Brochures opened by fold — bi-fold, tri-fold, z-fold, or another fold you
+  ask us to confirm — proofed as a flat sheet.
 order: 70
 keywords:
   - brochure printing

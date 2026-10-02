@@ -1,8 +1,8 @@
 ---
 title: Presentation Folders
 description: >-
-  Presentation folders with the pockets, slits, and cover finish you specify,
-  proofed from a dieline and shipped anywhere in the US.
+  Presentation folders with the pockets, card slits, and cover finish you
+  specify, proofed from a dieline before they print.
 order: 20
 keywords:
   - presentation folder printing

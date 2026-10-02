@@ -1,8 +1,8 @@
 ---
 title: Stickers
 description: >-
-  Custom stickers in the shape, cut, and pack you specify — sheets, rolls, or
-  singles — proofed from your art and shipped anywhere in the US.
+  Stickers cut to your shape: kiss-cut sheets, die-cut singles, or rolls, in
+  the pack you ask for.
 order: 40
 keywords:
   - sticker printing

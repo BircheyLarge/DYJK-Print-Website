@@ -1,8 +1,8 @@
 ---
 title: Flyers
 description: >-
-  Full-color flyers in the size and stock you choose, one side or two, proofed
-  from your file and shipped anywhere in the US.
+  One-sheet flyers for a promotion or an event, one side or two, flat or
+  folded once, in the size you set.
 order: 60
 keywords:
   - flyer printing
