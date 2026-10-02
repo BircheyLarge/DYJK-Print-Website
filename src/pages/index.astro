@@ -5,10 +5,10 @@ import QuoteCta from '../components/QuoteCta.astro';
 import { QUOTE_PATH, SITE } from '../consts';
 import { organizationSchema, websiteSchema } from '../lib/schema';
 import { SERVICES } from '../data/catalog';
-import { PORTFOLIO } from '../data/portfolio';
+import { PORTFOLIO_GALLERY } from '../data/portfolio';
 
 const services = SERVICES;
-const recentWork = PORTFOLIO.slice(0, 2);
+const recentWork = PORTFOLIO_GALLERY.slice(0, 2);
 
 // Slot width in the Recent work grid: two columns across the same max-w-6xl
 // container as the service cards, so the outer edges line up (548px at full

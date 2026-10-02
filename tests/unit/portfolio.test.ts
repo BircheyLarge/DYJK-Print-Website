@@ -3,8 +3,9 @@ import { describe, expect, it } from 'vitest';
 import { SERVICES } from '../../src/data/catalog';
 import {
   assertKnownProducts,
+  imagesForProduct,
   PORTFOLIO,
-  photosForProduct,
+  PORTFOLIO_GALLERY,
   relatedService,
 } from '../../src/data/portfolio';
 
@@ -40,11 +41,23 @@ describe('relatedService', () => {
   });
 });
 
-describe('photosForProduct', () => {
-  it("returns that product's pieces and nothing for others", () => {
-    const first = PORTFOLIO[0]!;
-    expect(photosForProduct(first.product)).toContain(first);
-    expect(photosForProduct('no-such-product')).toEqual([]);
+describe('imagesForProduct', () => {
+  it("returns that product's pieces of every kind, and none for others", () => {
+    for (const item of PORTFOLIO) {
+      expect(imagesForProduct(item.product)).toContain(item);
+    }
+    expect(imagesForProduct('no-such-product')).toEqual([]);
+  });
+});
+
+describe('PORTFOLIO_GALLERY', () => {
+  it('keeps every photo, in portfolio order', () => {
+    const photos = PORTFOLIO.filter((item) => item.kind === 'photo');
+    expect(photos.length).toBeGreaterThan(0);
+    for (const photo of photos) expect(PORTFOLIO_GALLERY).toContain(photo);
+    expect(PORTFOLIO_GALLERY).toEqual(
+      PORTFOLIO.filter((item) => PORTFOLIO_GALLERY.includes(item)),
+    );
   });
 });
 
