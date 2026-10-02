@@ -1,0 +1,153 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PortfolioPicture from '../../components/PortfolioPicture.astro';
+import Prose from '../../components/Prose.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import { SERVICES } from '../../data/catalog';
+import { assertKnownProducts, photosForProduct } from '../../data/portfolio';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+export const getStaticPaths = (async () => {
+  // Check portfolio.ts against every entry, drafts included, so a mistyped
+  // product slug fails the build.
+  const entries = await getCollection('products');
+  assertKnownProducts(entries.map((entry) => entry.id));
+  return entries
+    .filter(({ data }) => !data.draft)
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+const path = `/products/${entry.id}/`;
+
+const photos = photosForProduct(entry.id);
+// Content order, so the most relevant service can come first.
+const services = data.services.flatMap((slug) =>
+  SERVICES.filter((service) => service.slug === slug),
+);
+
+// Layout: source order is photos, copy, services, so phones see the work
+// first. From lg, dense packing moves photos and services into the right
+// column; with no photos the services card rises to the top.
+// Photo slot: that right column (341px at full width), two-up from sm, full
+// width below.
+const photoSizes =
+  '(min-width: 1152px) 341px, (min-width: 1024px) calc(33.3vw - 43px), (min-width: 640px) calc(50vw - 28px), calc(100vw - 32px)';
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products/' },
+    { name: data.title, path },
+  ]),
+  ...(data.faqs.length > 0 ? [faqSchema(data.faqs)] : []),
+];
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  seoTitle={data.seoTitle}
+  seoDescription={data.seoDescription}
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Products"
+    title={data.title}
+    subtitle={data.description}
+  />
+
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <div
+      class="grid gap-y-12 lg:grid-flow-dense lg:grid-cols-3 lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-8"
+    >
+      {
+        photos.length > 0 && (
+          <div class="lg:col-start-3">
+            <h2 class="text-sm font-semibold text-brand-ink">Recent work</h2>
+            <div class="mt-3 grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
+              {photos.map((item, index) => (
+                <figure>
+                  <PortfolioPicture
+                    item={item}
+                    sizes={photoSizes}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchpriority={index === 0 ? 'high' : undefined}
+                  />
+                  <figcaption class="mt-3 text-sm text-brand-muted">
+                    {item.title}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      <div class="lg:col-span-2 lg:col-start-1 lg:row-span-2">
+        <Prose><Content /></Prose>
+
+        {
+          data.faqs.length > 0 && (
+            <div class="mt-16">
+              <h2 class="text-2xl font-bold tracking-tight text-brand-ink">
+                Frequently asked questions
+              </h2>
+              <dl class="mt-6 space-y-6">
+                {data.faqs.map((faq) => (
+                  <div>
+                    <dt class="text-lg font-semibold text-brand-ink">
+                      {faq.question}
+                    </dt>
+                    <dd class="mt-2 text-lg leading-relaxed text-brand-slate">
+                      {faq.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )
+        }
+
+        <p class="mt-12">
+          <a
+            href="/products/"
+            class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+          >
+            <span aria-hidden="true">←</span>&nbsp;All products
+          </a>
+        </p>
+      </div>
+
+      {
+        services.length > 0 && (
+          <div class="self-start rounded-xl border border-slate-200 p-6 lg:col-start-3">
+            <h2 class="text-sm font-semibold text-brand-ink">
+              Related services
+            </h2>
+            <ul class="mt-3 space-y-4">
+              {services.map((service) => (
+                <li>
+                  <a
+                    href={service.href}
+                    class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+                  >
+                    {service.name}&nbsp;<span aria-hidden="true">→</span>
+                  </a>
+                  <p class="mt-1 text-sm text-brand-muted">{service.blurb}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <QuoteCta heading={`Need ${data.title.toLowerCase()}?`} />
+</BaseLayout>

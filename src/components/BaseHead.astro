@@ -4,10 +4,13 @@ import { buildPageMeta, type PageMetaInput } from '../lib/seo';
 
 type Props = PageMetaInput;
 
-const { title, description, image, noindex } = Astro.props;
+const { title, description, seoTitle, seoDescription, image, noindex } =
+  Astro.props;
 const meta = buildPageMeta({
   title,
   description,
+  seoTitle,
+  seoDescription,
   image,
   noindex,
   path: Astro.url.pathname,

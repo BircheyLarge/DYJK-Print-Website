@@ -1,8 +1,9 @@
 /**
- * Lightweight catalog data driving the home page and section hubs in P0.
- * Service detail pages exist; product/industry detail pages arrive in P1/P2,
- * so those entries intentionally have no `href` yet (hubs render them as
- * non-linked cards to avoid dead links).
+ * Lightweight catalog data driving the home page and section hubs.
+ * Service detail pages exist; products live in the src/content/products
+ * collection. Industry detail pages arrive in P2, so those entries
+ * intentionally have no `href` yet (the hub renders them as non-linked cards
+ * to avoid dead links).
  */
 
 export interface ServiceItem {
@@ -49,33 +50,6 @@ export interface CatalogItem {
   name: string;
   blurb: string;
 }
-
-export const PRODUCTS: ReadonlyArray<CatalogItem> = [
-  {
-    name: 'Business Cards',
-    blurb: 'Premium stocks, finishes and quick reorders.',
-  },
-  {
-    name: 'Brochures',
-    blurb: 'Bi-fold, tri-fold and custom folds in any quantity.',
-  },
-  {
-    name: 'Flyers',
-    blurb: 'Bold, full-color flyers for promotions and events.',
-  },
-  {
-    name: 'Catalogs & Booklets',
-    blurb: 'Saddle-stitched and perfect-bound multi-page pieces.',
-  },
-  {
-    name: 'Postcards & Mailers',
-    blurb: 'Direct-mail-ready postcards shipped wherever you need them.',
-  },
-  {
-    name: 'Envelopes & Letterhead',
-    blurb: 'Cohesive branded stationery and business systems.',
-  },
-];
 
 export const INDUSTRIES: ReadonlyArray<CatalogItem> = [
   {

@@ -9,6 +9,10 @@ export interface PageMetaInput {
   title?: string;
   /** Meta description. Falls back to the site default. */
   description?: string;
+  /** Full <title> override from content, used verbatim (no brand suffix). */
+  seoTitle?: string;
+  /** Meta description override from content; wins over `description`. */
+  seoDescription?: string;
   /** Request path, e.g. "/services/offset-printing/". Defaults to "/". */
   path?: string;
   /** Absolute or root-relative OG image URL. */
@@ -72,8 +76,12 @@ export function absoluteUrl(
 /** Build the resolved meta object consumed by <BaseHead>. */
 export function buildPageMeta(input: PageMetaInput = {}): PageMeta {
   return {
-    title: pageTitle(input.title),
-    description: (input.description?.trim() || SITE.description).trim(),
+    title: input.seoTitle?.trim() || pageTitle(input.title),
+    description: (
+      input.seoDescription?.trim() ||
+      input.description?.trim() ||
+      SITE.description
+    ).trim(),
     canonical: canonicalUrl(input.path ?? '/'),
     image: input.image ? absoluteUrl(input.image) : undefined,
     noindex: input.noindex ?? false,

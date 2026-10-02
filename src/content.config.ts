@@ -9,6 +9,12 @@ import {
 
 // Content Layer API (Astro 5+). Empty collections are valid — pages are added
 // incrementally in P1–P2. Schemas live in ./lib so they're unit-testable.
+//
+// Astro keys its content cache to this file's text, so after changing a
+// schema in ./lib, edit this file too (a comment will do); otherwise cached
+// entries keep their old shape. Editing it also makes a running `astro dev`
+// re-sync, which it needs once the first entry lands in a collection that was
+// empty at startup (the glob loader doesn't watch those).
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: blogSchema,

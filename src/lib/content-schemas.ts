@@ -6,10 +6,11 @@
  * Structured for a clean future drop-in of a git-based CMS (Decap/Tina).
  */
 import { z } from 'zod';
+import { SERVICES } from '../data/catalog';
 
 /** Shared SEO overrides available on every content entry. */
 const seoFields = {
-  /** Optional <title> override; falls back to the entry title. */
+  /** Optional <title> override, used verbatim; falls back to the entry title. */
   seoTitle: z.string().max(70).optional(),
   /** Optional meta description override. */
   seoDescription: z.string().max(180).optional(),
@@ -46,6 +47,10 @@ export const productSchema = z.object({
   order: z.number().int().default(100),
   /** Searchable, concrete use cases, e.g. "business cards". */
   keywords: z.array(z.string()).default([]),
+  /** Related service slugs; the product page links to each one. */
+  services: z
+    .array(z.enum(SERVICES.map((service) => service.slug)))
+    .default([]),
   image: z.string().optional(),
   faqs: z
     .array(z.object({ question: z.string(), answer: z.string() }))

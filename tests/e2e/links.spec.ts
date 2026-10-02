@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
  * and assert none of them 404. Guards against linking to routes that don't
  * exist yet.
  */
-const SEED_PAGES = ['/', '/services/'];
+const SEED_PAGES = ['/', '/services/', '/products/'];
 
 async function internalLinks(
   page: import('@playwright/test').Page,

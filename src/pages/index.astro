@@ -10,9 +10,11 @@ import { PORTFOLIO } from '../data/portfolio';
 const services = SERVICES;
 const recentWork = PORTFOLIO.slice(0, 2);
 
-// Slot width in the Recent work grid: two columns inside max-w-4xl (436px
-// once the viewport clears 928px), otherwise half the padded viewport.
-const recentWorkSizes = '(min-width: 928px) 436px, calc(50vw - 24px)';
+// Slot width in the Recent work grid: two columns across the same max-w-6xl
+// container as the service cards, so the outer edges line up (548px at full
+// width; gap-4 under sm, gap-6 from sm).
+const recentWorkSizes =
+  '(min-width: 1152px) 548px, (min-width: 640px) calc(50vw - 28px), calc(50vw - 24px)';
 
 const schema = [organizationSchema(), websiteSchema()];
 ---
@@ -80,7 +82,7 @@ const schema = [organizationSchema(), websiteSchema()];
     <h2 class="text-center text-3xl font-bold tracking-tight text-brand-ink">
       Recent work
     </h2>
-    <div class="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:gap-6">
+    <div class="mt-10 grid grid-cols-2 gap-4 sm:gap-6">
       {
         recentWork.map((item) => (
           <figure>

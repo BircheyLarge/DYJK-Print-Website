@@ -92,4 +92,18 @@ describe('buildPageMeta', () => {
     expect(meta.image).toBe('https://www.dyjkprint.com/og/contact.png');
     expect(meta.noindex).toBe(true);
   });
+
+  it('uses a content seoTitle verbatim and prefers seoDescription', () => {
+    const meta = buildPageMeta({
+      title: 'Business Cards',
+      description: 'Hub card blurb.',
+      seoTitle: 'Business Card Printing, Shipped Nationwide | DYJK Print',
+      seoDescription: 'Search snippet.',
+    });
+    // No second brand suffix appended to the override.
+    expect(meta.title).toBe(
+      'Business Card Printing, Shipped Nationwide | DYJK Print',
+    );
+    expect(meta.description).toBe('Search snippet.');
+  });
 });

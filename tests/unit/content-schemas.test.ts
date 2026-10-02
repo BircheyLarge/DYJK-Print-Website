@@ -55,6 +55,27 @@ describe('productSchema', () => {
     });
     expect(parsed.keywords).toEqual([]);
   });
+
+  it('defaults services to an empty array and keeps known slugs in order', () => {
+    const base = { title: 'Flyers', description: 'Full-color flyers.' };
+    expect(productSchema.parse(base).services).toEqual([]);
+    expect(
+      productSchema.parse({
+        ...base,
+        services: ['offset-printing', 'graphic-design'],
+      }).services,
+    ).toEqual(['offset-printing', 'graphic-design']);
+  });
+
+  it('rejects a service slug that has no service page', () => {
+    expect(() =>
+      productSchema.parse({
+        title: 'Labels',
+        description: 'Product labels.',
+        services: ['letterpress'],
+      }),
+    ).toThrow();
+  });
 });
 
 describe('industrySchema', () => {

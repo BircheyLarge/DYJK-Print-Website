@@ -1,10 +1,16 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
-import CatalogGrid from '../../components/CatalogGrid.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
-import { PRODUCTS } from '../../data/catalog';
 import { breadcrumbSchema } from '../../lib/schema';
+
+const products = (
+  await getCollection('products', ({ data }) => !data.draft)
+).sort(
+  (a, b) =>
+    a.data.order - b.data.order || a.data.title.localeCompare(b.data.title),
+);
 
 const schema = breadcrumbSchema([
   { name: 'Home', path: '/' },
@@ -14,7 +20,7 @@ const schema = breadcrumbSchema([
 
 <BaseLayout
   title="Print Products"
-  description="Business cards, brochures, flyers, catalogs, postcards, stationery and more — printed to spec and shipped anywhere in the US."
+  description="Business cards, presentation folders, postcards, stickers, labels, flyers, brochures, catalogs and stationery — printed to spec and shipped anywhere in the US."
   schema={schema}
 >
   <PageHeader
@@ -24,7 +30,26 @@ const schema = breadcrumbSchema([
   />
 
   <section class="mx-auto max-w-6xl px-4 py-16">
-    <CatalogGrid items={PRODUCTS} />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        products.map((product) => (
+          <a
+            href={`/products/${product.id}/`}
+            class="group flex flex-col rounded-xl border border-slate-200 p-6 transition-shadow hover:shadow-lg"
+          >
+            <h2 class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
+              {product.data.title}
+            </h2>
+            <p class="mt-2 text-sm text-brand-muted">
+              {product.data.description}
+            </p>
+            <span class="mt-auto pt-4 text-sm font-semibold text-brand-blue">
+              Learn more&nbsp;<span aria-hidden="true">→</span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
   </section>
 
   <QuoteCta />

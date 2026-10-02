@@ -74,6 +74,44 @@ test.describe('portfolio', () => {
   });
 });
 
+test.describe('product pages', () => {
+  const LOCAL_TERMS = ['utah', 'salt lake', 'near you', 'draper', 'po box'];
+
+  test('every hub card leads to a well-formed, nationwide product page', async ({
+    page,
+  }) => {
+    await page.goto('/products/');
+    const hrefs = await page
+      .locator('main a[href^="/products/"]')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
+    expect(hrefs.length).toBeGreaterThan(0);
+
+    for (const href of hrefs) {
+      await page.goto(href);
+      await expect(page.locator('h1'), href).toHaveCount(1);
+
+      const ld = (
+        await page
+          .locator('script[type="application/ld+json"]')
+          .allTextContents()
+      ).join('\n');
+      expect(ld, href).toContain('"@type":"BreadcrumbList"');
+      // No prices, so no Product/Offer markup.
+      expect(ld, href).not.toMatch(/"@type":"(Product|Offer)"/);
+      // FAQ markup must match the questions shown on the page.
+      const shownFaqs = await page.locator('main dt').count();
+      expect((ld.match(/"@type":"Question"/g) ?? []).length, href).toBe(
+        shownFaqs,
+      );
+
+      const text = (await page.locator('main').innerText()).toLowerCase();
+      for (const term of LOCAL_TERMS) {
+        expect(text, `${href} mentions "${term}"`).not.toContain(term);
+      }
+    }
+  });
+});
+
 test.describe('navigation', () => {
   test('mobile menu toggles open', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 });
