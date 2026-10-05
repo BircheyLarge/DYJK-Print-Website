@@ -17,7 +17,10 @@ test.describe('home page', () => {
 
   test('exposes the primary quote CTA', async ({ page }) => {
     await page.goto('/');
-    const cta = page.getByRole('link', { name: 'Request a Quote' }).first();
+    const cta = page
+      .getByRole('main')
+      .getByRole('link', { name: 'Get a free quote' })
+      .first();
     await expect(cta).toHaveAttribute('href', '/request-a-quote/');
   });
 

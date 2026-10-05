@@ -8,10 +8,13 @@ interface Props {
    */
   heading?: string;
   text?: string;
+  /** Solid button label. The homepage uses "Get a free quote". */
+  label?: string;
 }
 const {
   heading = 'Ready to start your print project?',
   text = "Send us your specs and artwork. We'll get you a fast quote and a clear production timeline.",
+  label = 'Request a Quote',
 } = Astro.props;
 ---
 
@@ -27,7 +30,7 @@ const {
     {text}
   </p>
   <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
-    <a href={QUOTE_PATH} class="btn btn-solid">Request a Quote</a>
+    <a href={QUOTE_PATH} class="btn btn-solid">{label}</a>
     <a href={`mailto:${SITE.email}`} class="btn btn-ghost">
       Email {SITE.email}
     </a>
