@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactCta from '../../components/ContactCta.astro';
 import FaqList from '../../components/FaqList.astro';
 import PageHeader from '../../components/PageHeader.astro';
-import { QUOTE_PATH, SITE } from '../../consts';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
 // Copy: Content Strategist's contact-copy.md, hook option 2. The hook sells
@@ -56,9 +56,6 @@ const FAQS = [
 
 const sectionHeading =
   'font-display text-h2-sm font-semibold text-brand-ink md:text-h2';
-// Call and Email: whole-card links on the blue-dark band.
-const contactCard =
-  'block rounded-card border border-on-dark-soft/35 p-5 text-left transition-colors hover:bg-white/8';
 
 const schema = [
   breadcrumbSchema([
@@ -147,46 +144,12 @@ const schema = [
     </div>
   </section>
 
-  <section
-    class="on-dark bg-brand-blue-dark px-4 py-12 text-center md:py-18"
-    aria-labelledby="get-noticed"
-  >
-    <h2
-      id="get-noticed"
-      class="font-display text-cta-sm font-bold text-on-dark md:text-cta"
-    >
-      Let's get you noticed.
-    </h2>
-    <a href={QUOTE_PATH} class="btn btn-solid btn-lg mt-7">Get a free quote</a>
-    <div class="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
-      {
-        SITE.phone && (
-          <a href={`tel:${SITE.phone.e164}`} class={contactCard}>
-            <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
-              Call
-            </span>
-            <span class="mt-2 block text-card font-semibold text-on-dark">
-              {SITE.phone.display}
-            </span>
-            <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
-              Talk through the piece before you send a file.
-            </span>
-          </a>
-        )
-      }
-      <a href={`mailto:${SITE.email}`} class={contactCard}>
-        <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
-          Email
-        </span>
-        <span class="mt-2 block text-card font-semibold text-on-dark">
-          {SITE.email}
-        </span>
-        <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
-          Send the piece, the specs, or just a logo.
-        </span>
-      </a>
-    </div>
-  </section>
+  <ContactCta
+    id="get-noticed"
+    heading="Let's get you noticed."
+    callLine="Talk through the piece before you send a file."
+    emailLine="Send the piece, the specs, or just a logo."
+  />
 
   <section class="mx-auto max-w-6xl px-4 pb-14 md:pb-18">
     <div class="max-w-3xl">

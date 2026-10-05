@@ -56,6 +56,8 @@ test('lists exactly the indexable pages in the sitemap', () => {
 
   const indexable = pages.filter((page) => !page.noindex);
   expect(sitemapPaths).toEqual(indexable.map((page) => page.path).sort());
+  // About has its real copy now, so it's indexed and listed.
+  expect(sitemapPaths).toContain('/about/');
   // A page kept out of search names no canonical URL either.
   expect(pages.filter((page) => page.noindex && page.canonical)).toEqual([]);
   expect(pages.filter((page) => !page.noindex && !page.canonical)).toEqual([]);

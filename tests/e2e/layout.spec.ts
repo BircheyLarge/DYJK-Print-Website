@@ -29,9 +29,9 @@ for (const width of [390, 1440]) {
   });
 }
 
-// Product and service pages ask for themselves, the portfolio and the
-// contact page close on their own heading, and every other page with the
-// band keeps the default.
+// Product and service pages ask for themselves; the portfolio, contact and
+// about pages close on their own heading; every other page with the band
+// keeps the default.
 test('the CTA band heading fits each page', async ({ page }) => {
   test.slow();
   const wrong: string[] = [];
@@ -46,7 +46,9 @@ test('the CTA band heading fits each page', async ({ page }) => {
         ? 'Want to see examples like yours?'
         : path === '/contact/'
           ? "Let's get you noticed."
-          : 'Ready to start your print project?';
+          : path === '/about/'
+            ? "Let's print it together."
+            : 'Ready to start your print project?';
     if (heading !== expected) wrong.push(`${path}: "${heading}"`);
   }
   expect(wrong).toEqual([]);

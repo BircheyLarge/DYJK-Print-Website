@@ -9,8 +9,8 @@ const SITE_URL = 'https://www.dyjkprint.com';
 // Pages that set `noindex` stay out of the sitemap too (404 is left out by
 // the sitemap integration itself). tests/e2e/build-output.spec.ts checks the
 // two agree.
-// TODO(about-content): remove '/about/' once Stanley sends the About copy.
-const NOINDEX_PATHS = ['/about/'];
+/** @type {string[]} */
+const NOINDEX_PATHS = [];
 
 // https://astro.build/config
 export default defineConfig({
