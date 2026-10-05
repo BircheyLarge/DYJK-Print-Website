@@ -58,8 +58,8 @@ logo lands. Nothing else hard-codes brand colors.
 ## Conventions
 
 - **No physical address / map / "local business" framing** anywhere — DYJK is
-  positioned as a nationwide partner. Contact is email + quote form; the phone
-  number is optional (`SITE.phone`, unset until DYJK has one).
+  positioned as a nationwide partner. Contact is email, phone and the quote
+  form; the number lives in `SITE.phone` (setting it to null hides it).
   This is enforced by tests in `tests/unit/schema.test.ts` and
   `tests/e2e/smoke.spec.ts`.
 - One `<h1>` per page; canonical URLs; trailing-slash policy `always`.

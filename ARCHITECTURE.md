@@ -5,7 +5,7 @@
 
 ## 1. Business context
 
-- **Company:** DYJK Print — commercial printing. **Serves clients nationwide (all 50 states).** Positioned as a nationwide print partner you work with from anywhere — **the site intentionally does NOT foreground a physical address or "local shop" framing** (per @you: customers should never feel they need to be in a location to order). Contact is email + quote form, plus phone once DYJK has a number (action item #np3as5).
+- **Company:** DYJK Print — commercial printing. **Serves clients nationwide (all 50 states).** Positioned as a nationwide print partner you work with from anywhere — **the site intentionally does NOT foreground a physical address or "local shop" framing** (per @you: customers should never feel they need to be in a location to order). Contact is email, phone `(385) 257-9040` and the quote form.
 - **Services:** Offset printing (high-volume: brochures, flyers, catalogs), digital printing (short-run: business cards, personalized brochures), graphic design / prepress.
 - **Tagline:** "Your Vision, Our Precision."
 - **Current contact:** sales@dyjkprint.com.
@@ -64,7 +64,7 @@ A **nationwide lead-generation marketing site**, not a SaaS app. Decisions optim
 /portfolio/                Work samples / case studies (visual proof = critical)
   /portfolio/<slug>/
 /about/                    Story, equipment, capabilities, why-us
-/contact/                  Email, quote form (phone once DYJK has one) — NO address/map (nationwide, not walk-in)
+/contact/                  Email, phone, quote form — NO address/map (nationwide, not walk-in)
 /request-a-quote/          High-intent conversion page (the money page)
 /blog/                     Topical-authority content hub → internal links to product/service/quote
   /blog/<slug>/
@@ -84,7 +84,7 @@ A **nationwide lead-generation marketing site**, not a SaaS app. Decisions optim
 - Fast by default; Core Web Vitals tracked (see §9 for the CI policy).
 
 **Structured data (JSON-LD)** — reusable component:
-- `Organization` with **`areaServed: United States`**, `contactPoint` (email; telephone only once DYJK has a number), `sameAs`. **No `LocalBusiness`, no `postalAddress`, no geo/hours** — nationwide, not a walk-in location.
+- `Organization` with **`areaServed: United States`**, `telephone` and `contactPoint` (email and telephone), `sameAs`. **No `LocalBusiness`, no `postalAddress`, no geo/hours** — nationwide, not a walk-in location.
 - `Service` on each service page; `Product`/`Offer` patterns on product pages where honest.
 - `BreadcrumbList` on nested pages; `FAQPage` on service/product/quote pages; `Article` on blog; `ImageObject` on portfolio.
 - **`Review`/`AggregateRating` only for real, first-party reviews shown on the page** — no invented aggregate ratings.
@@ -144,7 +144,7 @@ A **nationwide lead-generation marketing site**, not a SaaS app. Decisions optim
 - **Content editing:** dev-managed now, CMS-ready structure.
 - **Hosting:** Cloudflare Pages.
 
-**Contact policy (locked):** **No physical address, no map, no hours, no LocalBusiness/GBP.** Public contact = email `sales@dyjkprint.com` + quote form. DYJK has no phone number yet; the old (801) number was never theirs. Set `SITE.phone` in `src/consts.ts` when a real one exists (action item #np3as5).
+**Contact policy (locked):** **No physical address, no map, no hours, no LocalBusiness/GBP.** Public contact = email `sales@dyjkprint.com`, phone `(385) 257-9040` (`SITE.phone` in `src/consts.ts`) + quote form. The old (801) 960-3396 number was never theirs, and Stan's cell stays off the site; a build test guards both.
 
 **Still needed for implementation**
 - **Brand assets:** high-res logo file (we have a low-res `299x78` extraction as a placeholder) + confirmed brand colors. Fonts are settled (§6).

@@ -23,6 +23,7 @@ export function organizationSchema(logoPath = '/brand/logo.png'): Json {
     slogan: SITE.tagline,
     description: SITE.description,
     logo: absoluteUrl(logoPath),
+    ...(SITE.phone ? { telephone: SITE.phone.e164 } : {}),
     areaServed: {
       '@type': 'Country',
       name: 'United States',

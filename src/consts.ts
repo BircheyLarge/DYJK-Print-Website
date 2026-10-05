@@ -22,12 +22,14 @@ export const SITE = {
     'Nationwide commercial printing from DYJK Print: offset and digital printing, ' +
     'graphic design and prepress, proofed and shipped anywhere in the US.',
   /**
-   * ACTION ITEM #np3as5: DYJK has no phone number yet, so the site shows no
-   * phone UI, tel: links or schema telephone, and leads with email. When the
-   * real number arrives, set it here and every page picks it up:
-   *   phone: { e164: '+1XXXXXXXXXX', display: '(XXX) XXX-XXXX' },
+   * DYJK's business line. tel: links, the Call buttons, the footer, the
+   * contact page and the schema telephone all read it; null hides them all.
+   * Stan's cell stays on his card and flyer, never here.
    */
-  phone: null as PhoneNumber | null,
+  phone: {
+    e164: '+13852579040',
+    display: '(385) 257-9040',
+  } as PhoneNumber | null,
   email: 'sales@dyjkprint.com',
   /** Nationwide service area — drives Organization.areaServed, no local framing. */
   areaServed: 'US',

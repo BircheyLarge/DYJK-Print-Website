@@ -28,6 +28,7 @@ describe('organizationSchema', () => {
       email: SITE.email,
     });
     if (SITE.phone) {
+      expect(org.telephone).toBe(SITE.phone.e164);
       expect(org.contactPoint).toMatchObject({ telephone: SITE.phone.e164 });
     } else {
       expect(org.contactPoint).not.toHaveProperty('telephone');

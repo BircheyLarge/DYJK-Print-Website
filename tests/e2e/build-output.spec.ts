@@ -61,17 +61,25 @@ test('lists exactly the indexable pages in the sitemap', () => {
   expect(pages.filter((page) => !page.noindex && !page.canonical)).toEqual([]);
 });
 
-test('ships no tel: links while DYJK has no phone number', () => {
-  test.skip(SITE.phone !== null, 'SITE.phone is set');
-  const withTel = builtPages()
-    .filter(([, html]) => /href=["']?tel:/i.test(html))
-    .map(([file]) => file);
-  expect(withTel).toEqual([]);
+test('every tel: link dials SITE.phone, and none exist while it is unset', () => {
+  const telLinks = builtPages().flatMap(([file, html]) =>
+    [...html.matchAll(/href=["']?(tel:[^"' >]*)/gi)].map(
+      ([, href]) => [file, href] as const,
+    ),
+  );
+  if (SITE.phone === null) {
+    expect(telLinks).toEqual([]);
+  } else {
+    expect(telLinks.length).toBeGreaterThan(0);
+    const expected = `tel:${SITE.phone.e164}`;
+    expect(telLinks.filter(([, href]) => href !== expected)).toEqual([]);
+  }
 });
 
-test('never shows the old number, which was never DYJK’s', () => {
-  const withOldNumber = builtPages()
-    .filter(([, html]) => /960\W?3396/.test(html))
+test('never shows the old number, which was never DYJK’s, or Stan’s cell', () => {
+  // The cell stays on his business card and door flyer only.
+  const withWrongNumber = builtPages()
+    .filter(([, html]) => /960\W?3396|573\W?6774/.test(html))
     .map(([file]) => file);
-  expect(withOldNumber).toEqual([]);
+  expect(withWrongNumber).toEqual([]);
 });
