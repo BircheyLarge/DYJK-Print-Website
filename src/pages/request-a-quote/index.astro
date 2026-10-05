@@ -36,25 +36,27 @@ const mailto = `mailto:${SITE.email}?subject=${mailtoSubject}&body=${mailtoBody}
     subtitle="Share your project details and we'll come back with pricing and a production timeline. We print and ship nationwide."
   />
 
-  <section class="mx-auto max-w-3xl px-4 pt-9 pb-14 md:pb-18">
-    <p class="text-prose-sm text-brand-slate md:text-prose">
-      To quote your job quickly, include the product, quantity, size/specs,
-      deadline, and where it ships. Send it over and we'll take it from there.
-    </p>
+  <section class="mx-auto max-w-6xl px-4 pt-9 pb-14 md:pb-18">
+    <div class="max-w-3xl">
+      <p class="text-prose-sm text-brand-slate md:text-prose">
+        To quote your job quickly, include the product, quantity, size/specs,
+        deadline, and where it ships. Send it over and we'll take it from there.
+      </p>
 
-    <div class="mt-8 flex flex-wrap gap-3">
-      <a href={mailto} class="btn btn-solid">Email your project details</a>
-      {
-        SITE.phone && (
-          <a href={`tel:${SITE.phone.e164}`} class="btn btn-ghost">
-            Call {SITE.phone.display}
-          </a>
-        )
-      }
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={mailto} class="btn btn-solid">Email your project details</a>
+        {
+          SITE.phone && (
+            <a href={`tel:${SITE.phone.e164}`} class="btn btn-ghost">
+              Call {SITE.phone.display}
+            </a>
+          )
+        }
+      </div>
+
+      <p class="mt-6 text-sm text-brand-slate">
+        An online quote form with secure artwork upload is on the way.
+      </p>
     </div>
-
-    <p class="mt-6 text-sm text-brand-slate">
-      An online quote form with secure artwork upload is on the way.
-    </p>
   </section>
 </BaseLayout>
