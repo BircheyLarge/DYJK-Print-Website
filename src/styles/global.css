@@ -27,6 +27,17 @@
   /* Type and icons on blue-dark fields (header, CTA band, footer). */
   --color-on-dark: #ffffff;
   --color-on-dark-soft: #d5e3ec;
+  /*
+   * The press palette from homepage direction C, which Stanley picked: the
+   * CMYK inks (key is brand-ink) for dots, bars, plates and step numbers,
+   * and magenta for the primary button. Contrast pairs are in color.test.ts.
+   */
+  --color-press-cyan: #00a0e4;
+  --color-press-magenta: #c4006a;
+  --color-press-magenta-dark: #a30058;
+  --color-press-yellow: #ffe600;
+  /* Cyan light enough to read as text on ink (eyebrows, kickers). */
+  --color-press-cyan-soft: #7fd4f5;
 
   --radius-control: 6px;
   --radius-card: 16px;
@@ -178,9 +189,9 @@ body {
 }
 
 /*
- * Buttons. Solid is a brand-blue fill on light grounds; inside .on-dark it
- * inverts to white with a brand-blue label (5.40:1), because brand-blue on
- * blue-dark disappears. Ghost is a stroke in the label color.
+ * Buttons. Solid is the press magenta with a white label on every ground, the
+ * one primary action. Ghost is an outline: brand-blue on light grounds, white
+ * inside .on-dark.
  */
 @layer components {
   .btn {
@@ -205,24 +216,17 @@ body {
     font-size: var(--text-card);
   }
   .btn-solid {
-    background-color: var(--color-brand-blue);
+    background-color: var(--color-press-magenta);
     color: var(--color-on-dark);
   }
   .btn-solid:hover {
-    background-color: var(--color-brand-blue-dark);
+    background-color: var(--color-press-magenta-dark);
   }
   .btn-ghost {
     border-color: var(--color-brand-blue);
     color: var(--color-brand-blue);
   }
   .btn-ghost:hover {
-    background-color: var(--color-brand-surface);
-  }
-  .on-dark .btn-solid {
-    background-color: var(--color-on-dark);
-    color: var(--color-brand-blue);
-  }
-  .on-dark .btn-solid:hover {
     background-color: var(--color-brand-surface);
   }
   .on-dark .btn-ghost {

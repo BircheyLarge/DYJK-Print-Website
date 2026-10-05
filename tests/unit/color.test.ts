@@ -101,3 +101,34 @@ describe('the spine reads as a graphic (WCAG 1.4.11, 3:1)', () => {
     });
   }
 });
+
+describe('the press palette (direction C) meets AA where it carries text', () => {
+  // [text, ground]
+  const pairs: Array<[string, string]> = [
+    // The primary button: white on magenta, and its hover.
+    ['on-dark', 'press-magenta'],
+    ['on-dark', 'press-magenta-dark'],
+    // Ink fields: headings, subheads and the cyan eyebrow.
+    ['on-dark', 'brand-ink'],
+    ['on-dark-soft', 'brand-ink'],
+    ['press-cyan-soft', 'brand-ink'],
+    // Step numbers set in the inks.
+    ['press-cyan', 'brand-ink'],
+    ['press-yellow', 'brand-ink'],
+    ['press-magenta', 'on-dark'],
+  ];
+  for (const [text, ground] of pairs) {
+    it(`${text} on ${ground}`, () => {
+      expect(contrastRatio(token(text), token(ground))).toBeGreaterThanOrEqual(
+        AA_NORMAL,
+      );
+    });
+  }
+
+  // WCAG 1.4.11: the magenta button stands out from an ink field.
+  it('press-magenta reads as a control on brand-ink (3:1)', () => {
+    expect(
+      contrastRatio(token('press-magenta'), token('brand-ink')),
+    ).toBeGreaterThanOrEqual(3);
+  });
+});
