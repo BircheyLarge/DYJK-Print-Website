@@ -1,4 +1,5 @@
 ---
+import { Font } from 'astro:assets';
 import { SITE } from '../consts';
 import { buildPageMeta, type PageMetaInput } from '../lib/seo';
 
@@ -20,6 +21,10 @@ const meta = buildPageMeta({
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
+
+<!-- Preload only the first screen's faces: body text and the H1's weight. -->
+<Font cssVariable="--font-outfit" preload={[{ weight: 400 }]} />
+<Font cssVariable="--font-syne" preload={[{ weight: 700 }]} />
 
 <title>{meta.title}</title>
 <meta name="description" content={meta.description} />

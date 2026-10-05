@@ -99,6 +99,7 @@ A **nationwide lead-generation marketing site**, not a SaaS app. Decisions optim
 ## 6. Design direction
 
 - Keep the **logo** (the one keeper) — build palette/type around it. Need the asset + brand colors from @you.
+- **Type:** Outfit for body and UI, Syne for display, from Stan's Card B; self-hosted (see `src/assets/fonts/README.md`).
 - Clean, modern, high-trust: strong hero, real work photography, social proof, obvious CTAs, sticky "Request a Quote."
 - Accessible (WCAG 2.2 AA), mobile-first, high contrast.
 
@@ -146,7 +147,7 @@ A **nationwide lead-generation marketing site**, not a SaaS app. Decisions optim
 **Contact policy (locked):** **No physical address, no map, no hours, no LocalBusiness/GBP.** Public contact = email `sales@dyjkprint.com` + quote form. DYJK has no phone number yet; the old (801) number was never theirs. Set `SITE.phone` in `src/consts.ts` when a real one exists (action item #np3as5).
 
 **Still needed for implementation**
-- **Brand assets:** high-res logo file (we have a low-res `299x78` extraction as a placeholder) + confirmed brand colors/fonts.
+- **Brand assets:** high-res logo file (we have a low-res `299x78` extraction as a placeholder) + confirmed brand colors. Fonts are settled (§6).
 - **Service/product scope:** beyond offset/digital/design: large format, signage, mailing/EDDM, bindery, packaging, promo? Which products to feature?
 - Existing content/photos/testimonials/portfolio to carry over.
 - Old URLs worth redirecting.

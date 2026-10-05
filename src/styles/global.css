@@ -23,9 +23,51 @@
   --color-brand-muted: #5b6b73;
   --color-brand-surface: #f5f8fa;
 
-  --font-sans:
-    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
+  /*
+   * Type from Card B: Outfit for body and UI, Syne for display. Astro's fonts
+   * API (astro.config.mjs, <Font> in BaseHead) defines --font-outfit and
+   * --font-syne with their fallback stacks. The web-refresh spec decides
+   * which headings use font-display; nothing does yet.
+   */
+  --font-sans: var(--font-outfit, sans-serif);
+  --font-display: var(--font-syne, sans-serif);
+}
+
+/*
+ * Syne's metric-matched fallbacks, one per weight because Syne widens with
+ * weight (see astro.config.mjs). Arial Bold sized to each cut's average width
+ * with Capsize's formula, as Astro does for Outfit, so lines wrap the same
+ * before and after the swap. tests/unit/fonts.test.ts checks these against
+ * the font files.
+ */
+@font-face {
+  font-family: 'Syne Fallback';
+  src: local('Arial Bold');
+  font-weight: 600;
+  size-adjust: 105.8376%;
+  ascent-override: 87.398%;
+  descent-override: 25.9832%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Syne Fallback';
+  src: local('Arial Bold');
+  font-weight: 700;
+  size-adjust: 114.1713%;
+  ascent-override: 81.0186%;
+  descent-override: 24.0866%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Syne Fallback';
+  src: local('Arial Bold');
+  font-weight: 800;
+  size-adjust: 164.3817%;
+  ascent-override: 56.2715%;
+  descent-override: 16.7294%;
+  line-gap-override: 0%;
 }
 
 /* Base element defaults. */
