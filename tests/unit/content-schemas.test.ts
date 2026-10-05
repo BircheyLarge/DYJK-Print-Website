@@ -3,6 +3,7 @@ import {
   blogSchema,
   industrySchema,
   productSchema,
+  projectSchema,
   serviceSchema,
 } from '../../src/lib/content-schemas';
 
@@ -86,5 +87,29 @@ describe('industrySchema', () => {
     });
     expect(parsed.order).toBe(100);
     expect(parsed.draft).toBe(false);
+  });
+});
+
+describe('projectSchema', () => {
+  const story = {
+    heading: 'A welcome folder for Jeppson Dental',
+    image: 'presentation-folder-and-insert.jpg',
+    order: 1,
+  };
+
+  it('parses a story and defaults draft to false', () => {
+    expect(projectSchema.parse(story).draft).toBe(false);
+  });
+
+  it('rejects a heading over 60 characters', () => {
+    expect(() =>
+      projectSchema.parse({ ...story, heading: 'a'.repeat(61) }),
+    ).toThrow();
+  });
+
+  it('takes the image as a bare file name, not a path', () => {
+    expect(() =>
+      projectSchema.parse({ ...story, image: '../assets/portfolio/x.jpg' }),
+    ).toThrow();
   });
 });

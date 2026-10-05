@@ -46,8 +46,17 @@ import stickerGlobeCandy from '../assets/portfolio/stickers-globe-candy.jpg';
 
 export interface PortfolioItem {
   image: ImageMetadata;
-  /** Caption: the printed product, e.g. "Presentation folder & insert". */
+  /**
+   * The printed product, e.g. "Presentation folder & insert": the caption in
+   * a product page's lightbox.
+   */
   title: string;
+  /**
+   * The caption in /portfolio/'s "More of our work" gallery. It names the
+   * business (Stanley approved), never a person. Featured pieces don't need
+   * one; their story in src/content/projects/ tells them.
+   */
+  galleryCaption?: string;
   /** Slug of the src/content/products entry whose page shows this image. */
   product: string;
   /** Slug of the related entry in SERVICES; the gallery caption links to it. */
@@ -69,6 +78,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Two-sided business cards in orange and navy',
     product: 'business-cards',
     serviceSlug: 'digital-printing',
+    galleryCaption:
+      'Averon Group cards: an orange logo side and a navy wordmark.',
     kind: 'mockup',
     alt: 'Averon Group business cards beside a palm leaf: an orange front with the AG logo, a name, title and contact details, and a navy back with the Averon Group logo.',
   },
@@ -85,6 +96,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'White business card with a blue logo',
     product: 'business-cards',
     serviceSlug: 'digital-printing',
+    galleryCaption: 'Canyon Medical Home card, white, with a blue cross logo.',
     kind: 'mockup',
     cropPosition: 'bottom',
     alt: 'Two Canyon Medical Home business cards on a pale gray-green surface beside two green leaves: one shows a blue square with a white cross; the other shows the logo, Jason Rees, Clinic Director, and phone, fax and email details.',
@@ -94,6 +106,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Promo cards with an edge-to-edge photo',
     product: 'business-cards',
     serviceSlug: 'digital-printing',
+    galleryCaption: 'Carvit promo cards, with a surfer photo edge to edge.',
     kind: 'mockup',
     alt: "Two Carvit promo cards on a plain gray surface, each with an edge-to-edge photo of a surfer in a breaking wave, the Carvit logo, and 'A lifestyle, shop now' with the web address.",
   },
@@ -102,6 +115,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'White business cards with a copper-colored logo',
     product: 'business-cards',
     serviceSlug: 'digital-printing',
+    galleryCaption:
+      'Millcreek Tile & Stone cards, with a copper geometric logo.',
     kind: 'mockup',
     alt: 'Two white Millcreek Tile & Stone business cards on gray marble: one with the logo, street address, phone numbers and email, partly covered by the other, which shows the copper-colored tile logo and web address.',
   },
@@ -110,6 +125,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Product postcard with a retro stripe design',
     product: 'postcards-mailers',
     serviceSlug: 'digital-printing',
+    galleryCaption:
+      'Water Sensations postcard: a drop logo, stripes, and citrus.',
     kind: 'mockup',
     cropPosition: 'right',
     alt: 'Water Sensations postcard with retro yellow and blue stripes, a water-drop logo and Citrus flavor details, on a wooden desk under a cup of coffee, beside a keyboard and notebook.',
@@ -119,6 +136,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Event invitation postcard',
     product: 'postcards-mailers',
     serviceSlug: 'digital-printing',
+    galleryCaption: 'Aspire Surgical movie-night invitation.',
     kind: 'mockup',
     alt: 'Aspire Surgical movie-night invitation postcard with a black-and-white photo of a suit and tie, "No Time To Die" lettering and the event details, lying on a gold envelope.',
   },
@@ -135,6 +153,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Letterhead with a blue gradient rule',
     product: 'envelopes-letterhead',
     serviceSlug: 'offset-printing',
+    galleryCaption:
+      'Advanced Oral Surgery of San Antonio letterhead, blue logo and rule.',
     kind: 'mockup',
     alt: 'Advanced Oral Surgery of San Antonio letterhead with a blue line-art logo at the top and a blue gradient rule over the contact details at the bottom, beside an espresso cup.',
   },
@@ -143,6 +163,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Letterhead with an orange header band',
     product: 'envelopes-letterhead',
     serviceSlug: 'offset-printing',
+    galleryCaption:
+      'Better Body Compositions letterhead with an orange header band.',
     kind: 'mockup',
     alt: 'Better Body Compositions letterhead with an orange header band holding the white BBC logo and a one-line contact footer, on a white wooden desk beside a keyboard and camera lens.',
   },
@@ -151,6 +173,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Business envelopes with a logo on the flap',
     product: 'envelopes-letterhead',
     serviceSlug: 'offset-printing',
+    galleryCaption: 'Aspire Surgical envelopes, logo on the face and the flap.',
     kind: 'mockup',
     alt: 'Two white Aspire Surgical business envelopes on a gray surface, one showing the logo and return address on the front, the other the logo and web address on the back flap, beside a fountain pen.',
   },
@@ -159,6 +182,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Branded business envelopes',
     product: 'envelopes-letterhead',
     serviceSlug: 'offset-printing',
+    galleryCaption:
+      'Apex Insurance and Advance Insurance envelopes, each with a logo.',
     kind: 'mockup',
     alt: 'Two business envelopes on a wooden desk below a laptop and coffee: one for Apex Insurance with a red and gray mountain logo, one for Advance Insurance with a red and gray curve along the bottom.',
   },
@@ -167,6 +192,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Round label on a shipping box',
     product: 'labels',
     serviceSlug: 'digital-printing',
+    galleryCaption: 'Cutting Edge Physical Therapy label on a shipping box.',
     kind: 'mockup',
     alt: 'Round white Cutting Edge Physical Therapy label with blue and gray lettering and contact details, applied to the lid of a brown shipping box.',
   },
@@ -175,6 +201,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Logo stickers in assorted shapes',
     product: 'stickers',
     serviceSlug: 'digital-printing',
+    galleryCaption:
+      'Gonzalez Group, Wright Dental Group, Globe Candy, Wee Care, MikesAutoShack.com',
     kind: 'mockup',
     alt: 'Five logo stickers on a white desk: rounded rectangles for Gonzalez Group and Wright Dental Group, and on a spiral notepad a round Globe Candy sticker, a Wee Care pediatric dentistry rectangle and a square blue "Thank You!" sticker for MikesAutoShack.com.',
   },
@@ -183,6 +211,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Round logo sticker',
     product: 'stickers',
     serviceSlug: 'digital-printing',
+    galleryCaption: 'Round Globe Candy sticker, teal with white type.',
     kind: 'mockup',
     alt: 'Round dark teal Globe Candy logo sticker with white lettering, on a pale gray surface below a mint-green pen.',
   },
@@ -200,6 +229,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Two-sided campaign door hangers',
     product: 'door-hangers',
     serviceSlug: 'offset-printing',
+    galleryCaption:
+      'Two-sided campaign hangers with a doorknob hole and a photo.',
     kind: 'mockup',
     alt: 'Front and back of a green Mike Green city council campaign door hanger, each with a round die-cut hole and slit at the top, beside red carnations.',
   },
@@ -216,6 +247,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Event flyer with a photo header',
     product: 'flyers',
     serviceSlug: 'offset-printing',
+    galleryCaption:
+      'United Energy Workers Healthcare flyer for a benefits fair.',
     kind: 'mockup',
     alt: 'United Energy Workers Healthcare flyer for a free lunch-and-learn resource fair, with a photo of four smiling older adults, event details and an RSVP number, on a desk beside coffee and a pen.',
   },
@@ -224,6 +257,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Informational flyer with diagrams',
     product: 'flyers',
     serviceSlug: 'offset-printing',
+    galleryCaption: 'Aspire Surgical flyer on dental implants, with diagrams.',
     kind: 'mockup',
     alt: 'Aspire Surgical flyer titled "Dental Implant Treatment", with implant diagrams and a section recommending Straumann implants, propped on a counter in a waiting room.',
   },
@@ -248,6 +282,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Tri-fold brochure with photo panels',
     product: 'brochures',
     serviceSlug: 'offset-printing',
+    galleryCaption:
+      'Aspire Surgical tri-fold: portraits, products, and a cover.',
     kind: 'mockup',
     alt: 'Aspire Surgical tri-fold brochure open on a gray surface: doctor portraits, a skincare product photo with the logo panel, and a portrait of a woman, beside a matching single panel.',
   },
@@ -256,6 +292,8 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     title: 'Tri-fold menu brochure',
     product: 'brochures',
     serviceSlug: 'offset-printing',
+    galleryCaption:
+      'The Bagel Shop tri-fold menu, with dishes and food photos.',
     kind: 'mockup',
     alt: 'The Bagel Shop tri-fold brochure open to three panels of menu items and prices with food photos, partly covered by its chalkboard-style front panel, on a light wooden surface.',
   },
@@ -277,10 +315,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
   },
 ];
 
-/**
- * What /portfolio/ and the homepage show: photos only until Stanley decides
- * on mockups. To include them, use PORTFOLIO here.
- */
+/** The homepage "Recent work" strip: photos of finished jobs only. */
 export const PORTFOLIO_GALLERY = PORTFOLIO.filter(
   (item) => item.kind === 'photo',
 );
@@ -337,6 +372,43 @@ export function relatedService(item: PortfolioItem): ServiceItem {
     );
   }
   return service;
+}
+
+// Every image in src/assets/portfolio/, by path. These are the same objects
+// the imports above produce, so pieces match by identity: reading an image's
+// src at build time would make Astro ship the full-size original.
+const IMAGE_FILES = import.meta.glob<ImageMetadata>(
+  '../assets/portfolio/*.{jpg,jpeg}',
+  { eager: true, import: 'default' },
+);
+
+/** The portfolio entry for a file in src/assets/portfolio/. */
+export function pieceByFile(file: string): PortfolioItem {
+  const image = IMAGE_FILES[`../assets/portfolio/${file}`];
+  const item = image && PORTFOLIO.find((entry) => entry.image === image);
+  if (!item) {
+    throw new Error(`No portfolio entry uses src/assets/portfolio/${file}.`);
+  }
+  return item;
+}
+
+/**
+ * /portfolio/'s "More of our work": every piece the featured stories don't
+ * show, grouped by product in the given order (the /products/ hub's).
+ * Products with nothing left are skipped.
+ */
+export function moreWork(
+  productOrder: readonly string[],
+  featured: ReadonlySet<PortfolioItem>,
+): Array<{ product: string; items: PortfolioItem[] }> {
+  return productOrder
+    .map((product) => ({
+      product,
+      items: PORTFOLIO.filter(
+        (item) => item.product === product && !featured.has(item),
+      ),
+    }))
+    .filter(({ items }) => items.length > 0);
 }
 
 /** Images for one product page, in portfolio order. */

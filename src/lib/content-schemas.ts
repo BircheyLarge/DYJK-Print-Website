@@ -65,7 +65,21 @@ export const industrySchema = z.object({
   ...seoFields,
 });
 
+/**
+ * A featured project story on /portfolio/: one piece of DYJK's work, told in
+ * a short markdown body that links to its product page.
+ */
+export const projectSchema = z.object({
+  heading: z.string().min(1).max(60),
+  /** The piece's file in src/assets/portfolio/; it must be a portfolio entry. */
+  image: z.string().regex(/^[\w-]+\.jpe?g$/),
+  /** Position on the page, from 1. */
+  order: z.number().int().positive(),
+  draft: z.boolean().default(false),
+});
+
 export type BlogEntry = z.infer<typeof blogSchema>;
 export type ServiceEntry = z.infer<typeof serviceSchema>;
 export type ProductEntry = z.infer<typeof productSchema>;
 export type IndustryEntry = z.infer<typeof industrySchema>;
+export type ProjectEntry = z.infer<typeof projectSchema>;

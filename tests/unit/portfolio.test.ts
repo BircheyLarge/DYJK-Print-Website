@@ -5,6 +5,8 @@ import {
   assertKnownProducts,
   HERO_TILES,
   imagesForProduct,
+  moreWork,
+  pieceByFile,
   PORTFOLIO,
   PORTFOLIO_GALLERY,
   relatedService,
@@ -81,5 +83,59 @@ describe('HERO_TILES', () => {
   it('shows five different pieces', () => {
     expect(HERO_TILES).toHaveLength(5);
     expect(new Set(HERO_TILES.map(({ item }) => item)).size).toBe(5);
+  });
+});
+
+// The featured stories on /portfolio/ name their piece by file name.
+const PROJECTS = new URL('../../src/content/projects/', import.meta.url);
+const featured = fs
+  .readdirSync(PROJECTS)
+  .filter((file) => file.endsWith('.md'))
+  .map((file) => {
+    const image = /^image:\s*(\S+)\s*$/m.exec(
+      fs.readFileSync(new URL(file, PROJECTS), 'utf8'),
+    )?.[1];
+    if (!image) throw new Error(`${file} names no image`);
+    return pieceByFile(image);
+  });
+
+describe('pieceByFile', () => {
+  it('finds the entry for a file in src/assets/portfolio/', () => {
+    expect(pieceByFile('menus-bagel-shop.jpg').product).toBe('menus');
+  });
+
+  it('throws for a file no entry uses', () => {
+    expect(() => pieceByFile('no-such-piece.jpg')).toThrow();
+  });
+});
+
+describe('the /portfolio/ page', () => {
+  it('features eight different pieces', () => {
+    expect(featured).toHaveLength(8);
+    expect(new Set(featured).size).toBe(8);
+  });
+
+  it('gives every piece it does not feature a gallery caption', () => {
+    const told = new Set(featured);
+    for (const item of PORTFOLIO.filter((piece) => !told.has(piece))) {
+      expect(item.galleryCaption, item.title).toMatch(/\S/);
+    }
+  });
+});
+
+describe('moreWork', () => {
+  it('groups the unfeatured pieces by product, in order, skipping empty ones', () => {
+    const told = new Set([pieceByFile('menus-bagel-shop.jpg')]);
+    const groups = moreWork(['menus', 'flyers', 'business-cards'], told);
+    // The menu is the only menus piece, so that product drops out.
+    expect(groups.map(({ product }) => product)).toEqual([
+      'flyers',
+      'business-cards',
+    ]);
+    for (const { product, items } of groups) {
+      expect(items).toEqual(
+        PORTFOLIO.filter((item) => item.product === product),
+      );
+    }
   });
 });

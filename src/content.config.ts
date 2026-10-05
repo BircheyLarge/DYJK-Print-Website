@@ -4,6 +4,7 @@ import {
   blogSchema,
   industrySchema,
   productSchema,
+  projectSchema,
   serviceSchema,
 } from './lib/content-schemas';
 
@@ -36,4 +37,10 @@ const industries = defineCollection({
   schema: industrySchema,
 });
 
-export const collections = { blog, services, products, industries };
+// Featured project stories on /portfolio/.
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
+  schema: projectSchema,
+});
+
+export const collections = { blog, services, products, industries, projects };
