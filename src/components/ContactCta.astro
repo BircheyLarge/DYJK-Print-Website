@@ -1,4 +1,5 @@
 ---
+import RegistrationMark from './RegistrationMark.astro';
 import { QUOTE_PATH, SITE } from '../consts';
 
 interface Props {
@@ -13,50 +14,55 @@ interface Props {
 
 const { id, heading, callLine, emailLine } = Astro.props;
 
-// A page's closing call to action on the blue-dark field: a large "Get a
-// free quote" button, then Call and Email as whole-card links. The Call card
-// shows only while SITE.phone is set.
+// A page's closing call to action, in direction C's ink close: the
+// registration mark, a large "Get a free quote" button, then Call and Email
+// as whole-card links. The Call card shows only while SITE.phone is set.
 const card =
   'block rounded-card border border-on-dark-soft/35 p-5 text-left transition-colors hover:bg-white/8';
 ---
 
 <section
-  class="on-dark bg-brand-blue-dark px-4 py-12 text-center md:py-18"
+  class="on-dark relative overflow-hidden bg-brand-ink px-4 py-14 text-on-dark md:py-24"
   aria-labelledby={id}
 >
-  <h2
-    id={id}
-    class="font-display text-cta-sm font-bold text-on-dark md:text-cta"
-  >
-    {heading}
-  </h2>
-  <a href={QUOTE_PATH} class="btn btn-solid btn-lg mt-7">Get a free quote</a>
-  <div class="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
-    {
-      SITE.phone && (
-        <a href={`tel:${SITE.phone.e164}`} class={card}>
-          <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
-            Call
-          </span>
-          <span class="mt-2 block text-card font-semibold text-on-dark">
-            {SITE.phone.display}
-          </span>
-          <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
-            {callLine}
-          </span>
-        </a>
-      )
-    }
-    <a href={`mailto:${SITE.email}`} class={card}>
-      <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
-        Email
-      </span>
-      <span class="mt-2 block text-card font-semibold text-on-dark">
-        {SITE.email}
-      </span>
-      <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
-        {emailLine}
-      </span>
-    </a>
+  <RegistrationMark
+    class="pointer-events-none absolute -right-6 -bottom-7 w-34 md:top-1/2 md:right-[max(1rem,calc((100vw-76rem)/2))] md:bottom-auto md:w-44 md:-translate-y-1/2"
+  />
+  <div class="relative mx-auto max-w-6xl">
+    <h2
+      id={id}
+      class="max-w-[18ch] font-display text-cta-sm font-bold text-on-dark md:text-cta"
+    >
+      {heading}
+    </h2>
+    <a href={QUOTE_PATH} class="btn btn-solid btn-lg mt-7">Get a free quote</a>
+    <div class="mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
+      {
+        SITE.phone && (
+          <a href={`tel:${SITE.phone.e164}`} class={card}>
+            <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
+              Call
+            </span>
+            <span class="mt-2 block text-card font-semibold text-on-dark">
+              {SITE.phone.display}
+            </span>
+            <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
+              {callLine}
+            </span>
+          </a>
+        )
+      }
+      <a href={`mailto:${SITE.email}`} class={card}>
+        <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
+          Email
+        </span>
+        <span class="mt-2 block text-card font-semibold text-on-dark">
+          {SITE.email}
+        </span>
+        <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
+          {emailLine}
+        </span>
+      </a>
+    </div>
   </div>
 </section>

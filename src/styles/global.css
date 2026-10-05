@@ -38,6 +38,8 @@
   --color-press-yellow: #ffe600;
   /* Cyan light enough to read as text on ink (eyebrows, kickers). */
   --color-press-cyan-soft: #7fd4f5;
+  /* Hairline rules and frame borders on light grounds. Never text. */
+  --color-rule: #d5e3ec;
 
   --radius-control: 6px;
   --radius-card: 16px;
@@ -186,6 +188,22 @@ body {
 @utility spine {
   border-inline-start: 4px solid var(--color-brand-mark);
   padding-inline-start: var(--spine-gap, 1rem);
+}
+
+/*
+ * Direction C's crop mark: a small corner above a section heading, like the
+ * marks at the edge of a press sheet.
+ */
+@utility crop-mark {
+  &::before {
+    content: '';
+    display: block;
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-bottom: 0.85rem;
+    border-block-start: 2px solid currentColor;
+    border-inline-start: 2px solid currentColor;
+  }
 }
 
 /*

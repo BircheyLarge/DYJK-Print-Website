@@ -1,4 +1,5 @@
 ---
+import RegistrationMark from './RegistrationMark.astro';
 import { QUOTE_PATH, SITE } from '../consts';
 
 interface Props {
@@ -8,38 +9,44 @@ interface Props {
    */
   heading?: string;
   text?: string;
-  /** Solid button label. The homepage uses "Get a free quote". */
-  label?: string;
 }
 const {
   heading = 'Ready to start your print project?',
   text = "Send us your specs and artwork. We'll get you a fast quote and a clear production timeline.",
-  label = 'Get a free quote',
 } = Astro.props;
 ---
 
-<section class="on-dark bg-brand-blue-dark px-4 py-14 text-center md:py-18">
-  <h2
-    class="mx-auto max-w-4xl font-display text-cta-sm font-bold text-on-dark md:text-cta"
-  >
-    {heading}
-  </h2>
-  <p
-    class="mx-auto mt-4 max-w-xl text-base leading-normal text-on-dark-soft md:text-lg"
-  >
-    {text}
-  </p>
-  <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
-    <a href={QUOTE_PATH} class="btn btn-solid">{label}</a>
-    <a href={`mailto:${SITE.email}`} class="btn btn-ghost">
-      Email {SITE.email}
-    </a>
-    {
-      SITE.phone && (
-        <a href={`tel:${SITE.phone.e164}`} class="btn btn-ghost">
-          Call {SITE.phone.display}
-        </a>
-      )
-    }
+<!-- Direction C's ink close: the registration mark, the magenta button and
+     a quieter "or call" link. -->
+<section
+  class="on-dark relative overflow-hidden bg-brand-ink px-4 py-14 text-on-dark md:py-24"
+>
+  <RegistrationMark
+    class="pointer-events-none absolute -right-6 -bottom-7 w-34 md:top-1/2 md:right-[max(1rem,calc((100vw-76rem)/2))] md:bottom-auto md:w-44 md:-translate-y-1/2"
+  />
+  <div class="relative mx-auto max-w-6xl">
+    <h2
+      class="max-w-[18ch] font-display text-cta-sm font-bold text-on-dark md:text-cta"
+    >
+      {heading}
+    </h2>
+    <p
+      class="mt-4 max-w-xl text-base leading-normal text-on-dark-soft md:text-lg"
+    >
+      {text}
+    </p>
+    <div class="mt-7 flex flex-col items-start gap-3">
+      <a href={QUOTE_PATH} class="btn btn-solid btn-lg">Get a free quote</a>
+      {
+        SITE.phone && (
+          <a
+            href={`tel:${SITE.phone.e164}`}
+            class="text-sm font-medium text-on-dark-soft underline underline-offset-[0.18em] hover:text-on-dark"
+          >
+            or call {SITE.phone.display}
+          </a>
+        )
+      }
+    </div>
   </div>
 </section>

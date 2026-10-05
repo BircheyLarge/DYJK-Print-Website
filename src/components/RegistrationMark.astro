@@ -1,0 +1,34 @@
+---
+interface Props {
+  class?: string;
+}
+
+// The printer's registration target, in the three color inks over a white
+// crosshair. Decoration only; it sits on ink fields.
+const { class: className } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 200 200"
+  class={className}
+  aria-hidden="true"
+  focusable="false"
+>
+  <circle
+    cx="100"
+    cy="100"
+    r="78"
+    fill="none"
+    stroke-width="3"
+    class="stroke-press-cyan"></circle>
+  <circle
+    cx="100"
+    cy="100"
+    r="48"
+    fill="none"
+    stroke-width="3"
+    class="stroke-press-magenta"></circle>
+  <circle cx="100" cy="100" r="14" class="fill-press-yellow"></circle>
+  <path d="M100 8 V192 M8 100 H192" stroke-width="1.5" class="stroke-on-dark"
+  ></path>
+</svg>
