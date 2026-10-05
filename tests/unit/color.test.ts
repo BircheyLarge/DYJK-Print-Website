@@ -63,3 +63,41 @@ describe('brand tokens meet WCAG AA (4.5:1) for normal text', () => {
     ).toBeGreaterThanOrEqual(AA_NORMAL);
   });
 });
+
+describe('Card B pairings meet WCAG AA (4.5:1) for normal text', () => {
+  // [text, ground], from the token table in the web-refresh SPEC.md.
+  const pairs: Array<[string, string]> = [
+    // Links, eyebrows and headings on the alternating surface sections.
+    ['brand-blue', 'brand-surface'],
+    ['brand-slate', 'brand-surface'],
+    ['brand-ink', 'brand-surface'],
+    // Headings, labels, the current nav item and mosaic captions on the
+    // blue-dark header, CTA band and footer; also the solid button's hover.
+    ['on-dark', 'brand-blue-dark'],
+    // Nav links, CTA copy and footer links on blue-dark.
+    ['on-dark-soft', 'brand-blue-dark'],
+    // The inverted button on blue-dark: brand-blue label on a white fill.
+    ['brand-blue', 'on-dark'],
+  ];
+  for (const [text, ground] of pairs) {
+    it(`${text} on ${ground}`, () => {
+      expect(contrastRatio(token(text), token(ground))).toBeGreaterThanOrEqual(
+        AA_NORMAL,
+      );
+    });
+  }
+});
+
+describe('the spine reads as a graphic (WCAG 1.4.11, 3:1)', () => {
+  // brand-mark is never text; it only has to stand out from its ground.
+  for (const [name, ground] of [
+    ['white', WHITE],
+    ['brand-surface', token('brand-surface')],
+  ] as const) {
+    it(`brand-mark on ${name}`, () => {
+      expect(contrastRatio(token('brand-mark'), ground)).toBeGreaterThanOrEqual(
+        3,
+      );
+    });
+  }
+});
