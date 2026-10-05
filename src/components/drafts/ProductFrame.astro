@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import type { FramedPiece } from './content';
+
+interface Props {
+  piece: FramedPiece;
+  sizes: string;
+  /** Label color. The mat, padding, and ratio stay the same either way. */
+  tone?: 'ink' | 'light';
+}
+
+const { piece, sizes, tone = 'ink' } = Astro.props;
+---
+
+<a href={piece.href} class="d-frame">
+  <span class="d-frame-mat">
+    <span class="d-frame-crop">
+      <Image
+        src={piece.image}
+        alt=""
+        widths={[320, 480, 720]}
+        sizes={sizes}
+        class="d-frame-img"
+        style={`object-position: ${piece.position}; --crop-origin: ${piece.position}; --crop-scale: ${piece.scale ?? 1}`}
+      />
+    </span>
+  </span>
+  <span class:list={['d-frame-label', tone === 'light' && 'is-light']}>
+    {piece.label}
+  </span>
+</a>

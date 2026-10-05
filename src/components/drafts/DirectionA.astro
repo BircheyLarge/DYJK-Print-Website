@@ -1,0 +1,156 @@
+---
+import { Image } from 'astro:assets';
+import ProductFrame from './ProductFrame.astro';
+import {
+  audiences,
+  benefits,
+  heroShot,
+  products,
+  proofs,
+  quoteHref,
+  recentWork,
+  steps,
+  workHref,
+} from './content';
+
+const productSizes =
+  '(min-width: 50.0625rem) 240px, (min-width: 40rem) 42vw, 46vw';
+const recentSizes = '(min-width: 50.0625rem) 520px, 92vw';
+---
+
+<div class="draft">
+  <section class="da-hero">
+    <div class="da-copy">
+      <p class="d-kicker da-kicker">
+        <span class="d-dots" aria-hidden="true">
+          <i class="d-dot-c"></i>
+          <i class="d-dot-m"></i>
+          <i class="d-dot-y"></i>
+          <i class="d-dot-k"></i>
+        </span>
+        Commercial printing
+      </p>
+      <h1 class="da-title">Hand them something worth keeping.</h1>
+      <p class="d-sub da-sub">Designed, proofed, and shipped nationwide.</p>
+      <div class="d-actions">
+        <a href={quoteHref} class="btn btn-solid">Get a free quote</a>
+        <a href={workHref} class="btn btn-ghost">See our work</a>
+      </div>
+      <ul class="da-proofs">
+        {proofs.map((proof) => <li>{proof}</li>)}
+      </ul>
+    </div>
+    <div class="da-media">
+      <div class="da-shot">
+        <Image
+          src={heroShot.image}
+          alt={heroShot.alt}
+          widths={[720, 1100, 1400]}
+          sizes="(min-width: 68.8125rem) 50vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="da-crops" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="d-section da-why">
+    <div class="d-wrap">
+      <h2 class="d-h2">Why businesses choose DYJK</h2>
+      <ul class="da-benefits">
+        {
+          benefits.map((benefit) => (
+            <li>
+              <h3>{benefit.title}</h3>
+              <p>{benefit.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="d-section">
+    <div class="d-wrap">
+      <h2 class="d-h2">How it works</h2>
+      <ol class="da-steps">
+        {
+          steps.map((step, index) => (
+            <li>
+              <p class="num" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </p>
+              <h3>{step.name}</h3>
+              <p>{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="d-section da-products">
+    <div class="d-wrap">
+      <div class="da-headrow">
+        <h2 class="d-h2">The products</h2>
+        <a class="da-textlink" href="/products/">All products</a>
+      </div>
+      <ul class="d-product-grid">
+        {
+          products.map((piece) => (
+            <li>
+              <ProductFrame piece={piece} sizes={productSizes} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="d-section">
+    <div class="d-wrap">
+      <h2 class="d-h2">Who we print for</h2>
+      <ul class="da-audiences">
+        {
+          audiences.map((audience) => (
+            <li>
+              <h3>{audience.name}</h3>
+              <p>{audience.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="d-section da-recent">
+    <div class="d-wrap">
+      <h2 class="d-h2">Recent work</h2>
+      <ul class="da-recent-grid">
+        {
+          recentWork.map((piece) => (
+            <li>
+              <ProductFrame piece={piece} sizes={recentSizes} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="d-section da-close">
+    <div class="d-wrap da-close-row">
+      <div>
+        <h2 class="d-h2">Tell us what you need printed.</h2>
+        <p>
+          Share the piece and where it ships. You get a quote, then a proof,
+          before anything prints.
+        </p>
+      </div>
+      <a href={quoteHref} class="btn btn-solid">Get a free quote</a>
+    </div>
+  </section>
+</div>

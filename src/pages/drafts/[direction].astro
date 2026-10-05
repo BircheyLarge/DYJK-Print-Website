@@ -1,0 +1,22 @@
+---
+import '../../components/drafts/drafts.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DirectionA from '../../components/drafts/DirectionA.astro';
+import DirectionB from '../../components/drafts/DirectionB.astro';
+
+export function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  return [{ params: { direction: 'a' } }, { params: { direction: 'b' } }];
+}
+
+const { direction } = Astro.params;
+---
+
+<BaseLayout
+  title={direction === 'a' ? 'Homepage direction A' : 'Homepage direction B'}
+  description="Draft homepage for review. Not for publication."
+  noindex
+  fonts={{ outfit: [400, 500, 600], syne: [800] }}
+>
+  {direction === 'a' ? <DirectionA /> : <DirectionB />}
+</BaseLayout>
