@@ -14,7 +14,7 @@ const schema = breadcrumbSchema([
 // Slot width in the grid below: max-w-6xl minus px-4, two columns from md
 // with a gap-x-6 gutter, one full-width column under md.
 const sizes =
-  '(min-width: 1152px) 548px, (min-width: 768px) calc(50vw - 28px), calc(100vw - 32px)';
+  '(min-width: 1152px) 548px, (min-width: 50.0625rem) calc(50vw - 28px), calc(100vw - 32px)';
 ---
 
 <BaseLayout
@@ -28,7 +28,7 @@ const sizes =
     subtitle="A growing selection of recent print jobs."
   />
 
-  <section class="mx-auto max-w-6xl px-4 py-16">
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-12 md:pb-18">
     <div class="grid gap-x-6 gap-y-12 md:grid-cols-2">
       {
         PORTFOLIO_GALLERY.map((item, index) => {
@@ -42,11 +42,12 @@ const sizes =
                 <PortfolioPicture
                   item={item}
                   sizes={sizes}
+                  elevated
                   loading={index < 2 ? 'eager' : 'lazy'}
                   fetchpriority={index === 0 ? 'high' : undefined}
                 />
                 <figcaption class="mt-4">
-                  <h2 class="text-lg font-semibold text-brand-ink">
+                  <h2 class="text-card font-semibold text-brand-ink">
                     {item.title}
                   </h2>
                 </figcaption>
@@ -64,8 +65,5 @@ const sizes =
     </div>
   </section>
 
-  <QuoteCta
-    heading="Want to see examples like yours?"
-    text="Tell us what you're printing and we'll send relevant samples and specs."
-  />
+  <QuoteCta />
 </BaseLayout>

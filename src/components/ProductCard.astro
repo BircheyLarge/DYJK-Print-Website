@@ -34,7 +34,7 @@ const Heading = headingLevel === 3 ? 'h3' : 'h2';
 
 <a
   href={`/products/${slug}/`}
-  class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 transition-shadow hover:shadow-lg"
+  class="group flex h-full flex-col overflow-hidden rounded-card bg-white shadow-card transition-shadow hover:shadow-card-hover"
 >
   {
     lead ? (
@@ -82,19 +82,24 @@ const Heading = headingLevel === 3 ? 'h3' : 'h2';
   {
     compact ? (
       <div class="p-4">
-        <Heading class="text-sm font-semibold text-brand-ink group-hover:text-brand-blue sm:text-base">
+        <Heading class="text-card-sm font-semibold text-brand-ink group-hover:text-brand-blue">
           {title}
         </Heading>
       </div>
     ) : (
-      <div class="flex flex-1 flex-col p-6">
-        <Heading class="text-lg font-semibold text-brand-ink group-hover:text-brand-blue">
-          {title}
-        </Heading>
-        <p class="mt-2 text-sm text-brand-muted">{description}</p>
-        <span class="mt-auto pt-4 text-sm font-semibold text-brand-blue">
-          Learn more&nbsp;<span aria-hidden="true">→</span>
-        </span>
+      <div class="flex flex-1 pt-4 pr-4 pb-4.5 pl-3.5">
+        {/* The spine runs beside the text, never along the photo. */}
+        <div class="spine flex flex-1 flex-col [--spine-gap:0.75rem]">
+          <Heading class="text-card font-semibold text-brand-ink group-hover:text-brand-blue">
+            {title}
+          </Heading>
+          <p class="mt-2 text-ui leading-normal text-brand-slate">
+            {description}
+          </p>
+          <span class="mt-auto pt-4 text-sm font-semibold text-brand-blue">
+            Learn more&nbsp;<span aria-hidden="true">→</span>
+          </span>
+        </div>
       </div>
     )
   }

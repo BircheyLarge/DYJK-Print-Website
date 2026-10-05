@@ -7,23 +7,25 @@ interface Props {
 const { title, subtitle, eyebrow } = Astro.props;
 ---
 
-<section class="bg-brand-surface">
-  <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+<section class="mx-auto max-w-6xl px-4 pt-10 pb-2 md:pt-16">
+  <div class="spine max-w-3xl">
     {
       eyebrow && (
-        <p class="text-sm font-semibold uppercase tracking-wider text-brand-blue">
+        <p class="text-eyebrow font-semibold uppercase text-brand-blue">
           {eyebrow}
         </p>
       )
     }
     <h1
-      class="mt-3 max-w-3xl text-4xl font-bold tracking-tight text-brand-ink sm:text-5xl"
+      class="mt-3.5 font-display text-h1-sm font-bold text-brand-ink md:text-h1"
     >
       {title}
     </h1>
     {
       subtitle && (
-        <p class="mt-4 max-w-2xl text-lg text-brand-muted">{subtitle}</p>
+        <p class="mt-4 text-deck-sm font-medium text-brand-slate md:text-deck">
+          {subtitle}
+        </p>
       )
     }
   </div>

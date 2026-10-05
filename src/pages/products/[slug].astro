@@ -58,7 +58,7 @@ const schema = [
     subtitle={data.description}
   />
 
-  <section class="mx-auto max-w-6xl px-4 py-16">
+  <section class="mx-auto max-w-6xl px-4 pt-9 pb-14 md:pb-18">
     <div
       class="grid gap-y-12 lg:grid-flow-dense lg:grid-cols-3 lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-8"
     >
@@ -87,7 +87,7 @@ const schema = [
 
       {
         services.length > 0 && (
-          <div class="self-start rounded-xl border border-slate-200 p-6 lg:col-start-3">
+          <div class="self-start rounded-card bg-white p-6 shadow-card lg:col-start-3">
             <h2 class="text-sm font-semibold text-brand-ink">
               Related services
             </h2>
@@ -100,7 +100,9 @@ const schema = [
                   >
                     {service.name}&nbsp;<span aria-hidden="true">→</span>
                   </a>
-                  <p class="mt-1 text-sm text-brand-muted">{service.blurb}</p>
+                  <p class="mt-1 text-sm leading-normal text-brand-slate">
+                    {service.blurb}
+                  </p>
                 </li>
               ))}
             </ul>

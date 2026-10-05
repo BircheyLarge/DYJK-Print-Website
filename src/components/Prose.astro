@@ -1,8 +1,8 @@
 ---
 // Typography for rendered markdown. Tailwind's preflight resets element
 // styles and the typography plugin isn't installed, so this restores a small
-// rhythm from the site's own utilities. Body copy matches the detail pages
-// (text-lg, leading-relaxed, brand-slate).
+// rhythm from the site's own type scale: Syne 600 section heads, Outfit body
+// in slate (SPEC.md).
 ---
 
 <div class="prose"><slot /></div>
@@ -14,13 +14,13 @@
     @apply mt-0;
   }
   .prose :global(h2) {
-    @apply mt-12 text-2xl font-bold tracking-tight text-brand-ink;
+    @apply mt-12 font-display text-h2-sm font-semibold text-brand-ink md:text-h2;
   }
   .prose :global(h3) {
     @apply mt-8 text-lg font-semibold text-brand-ink;
   }
   .prose :global(:is(p, ul, ol)) {
-    @apply mt-4 text-lg leading-relaxed text-brand-slate;
+    @apply mt-4 text-prose-sm text-brand-slate md:text-prose;
   }
   .prose :global(ul) {
     @apply list-disc pl-6;

@@ -1,0 +1,29 @@
+---
+import type { ServiceItem } from '../data/catalog';
+
+interface Props {
+  service: ServiceItem;
+  /** h2 on the /services/ hub; h3 under a section heading. */
+  headingLevel?: 2 | 3;
+}
+
+const { service, headingLevel = 3 } = Astro.props;
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+---
+
+<a
+  href={service.href}
+  class="group flex rounded-card bg-white py-7 pr-7 pl-5.5 shadow-card transition-shadow hover:shadow-card-hover"
+>
+  <div class="spine flex flex-1 flex-col">
+    <Heading
+      class="text-card font-semibold text-brand-ink group-hover:text-brand-blue"
+    >
+      {service.name}
+    </Heading>
+    <p class="mt-2 text-ui leading-normal text-brand-slate">{service.blurb}</p>
+    <span class="mt-auto pt-4 text-sm font-semibold text-brand-blue">
+      Learn more&nbsp;<span aria-hidden="true">→</span>
+    </span>
+  </div>
+</a>

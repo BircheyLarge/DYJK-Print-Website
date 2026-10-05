@@ -63,7 +63,7 @@ const examples = await Promise.all(
         <a
           href={example.href}
           data-lightbox={example.id}
-          class="block rounded-xl transition-opacity hover:opacity-85"
+          class="block rounded-card transition-opacity hover:opacity-85"
         >
           <PortfolioPicture
             item={example.item}
@@ -113,7 +113,7 @@ const examples = await Promise.all(
   @reference '../styles/global.css';
 
   .lightbox {
-    @apply m-auto max-h-none max-w-none rounded-xl bg-brand-ink p-3;
+    @apply m-auto max-h-none max-w-none rounded-card bg-brand-ink p-3;
   }
   .lightbox::backdrop {
     @apply bg-brand-ink/80;

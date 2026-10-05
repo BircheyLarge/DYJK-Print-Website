@@ -60,14 +60,16 @@ const schema = [
 >
   <PageHeader eyebrow="Services" title={title} subtitle={description} />
 
-  <section class="mx-auto max-w-3xl px-4 py-16">
+  <section class="mx-auto max-w-3xl px-4 pt-9 pb-14 md:pb-18">
     {
       Content ? (
         <Prose>
           <Content />
         </Prose>
       ) : (
-        <p class="text-lg leading-relaxed text-brand-slate">{service.detail}</p>
+        <p class="text-prose-sm text-brand-slate md:text-prose">
+          {service.detail}
+        </p>
       )
     }
 
@@ -83,5 +85,5 @@ const schema = [
     </p>
   </section>
 
-  <QuoteCta heading={`Need ${title.toLowerCase()}?`} />
+  <QuoteCta />
 </BaseLayout>

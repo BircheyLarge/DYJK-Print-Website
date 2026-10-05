@@ -2,42 +2,35 @@
 import { QUOTE_PATH, SITE } from '../consts';
 
 interface Props {
+  /** Product pages ask "Need <product>?"; everywhere else keeps the default. */
   heading?: string;
-  text?: string;
 }
-const {
-  heading = 'Ready to start your print project?',
-  text = "Send us your specs and artwork. We'll get you a fast quote and a clear production timeline.",
-} = Astro.props;
+const { heading = 'Ready to start your print project?' } = Astro.props;
 ---
 
-<section class="bg-brand-ink">
-  <div class="mx-auto max-w-6xl px-4 py-16 text-center">
-    <h2 class="text-3xl font-bold tracking-tight text-white">{heading}</h2>
-    <p class="mx-auto mt-4 max-w-xl text-slate-300">{text}</p>
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-      <a
-        href={QUOTE_PATH}
-        class="inline-block rounded-md bg-brand-blue px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-blue-dark"
-      >
-        Request a Quote
-      </a>
-      <a
-        href={`mailto:${SITE.email}`}
-        class="inline-block rounded-md border border-slate-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:border-white"
-      >
-        Email {SITE.email}
-      </a>
-      {
-        SITE.phone && (
-          <a
-            href={`tel:${SITE.phone.e164}`}
-            class="inline-block rounded-md border border-slate-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:border-white"
-          >
-            Call {SITE.phone.display}
-          </a>
-        )
-      }
-    </div>
+<section class="on-dark bg-brand-blue-dark px-4 py-14 text-center md:py-18">
+  <h2
+    class="mx-auto max-w-4xl font-display text-cta-sm font-bold text-on-dark md:text-cta"
+  >
+    {heading}
+  </h2>
+  <p
+    class="mx-auto mt-4 max-w-xl text-base leading-normal text-on-dark-soft md:text-lg"
+  >
+    Send us your specs and artwork. We'll get you a fast quote and a clear
+    production timeline.
+  </p>
+  <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
+    <a href={QUOTE_PATH} class="btn btn-solid">Request a Quote</a>
+    <a href={`mailto:${SITE.email}`} class="btn btn-ghost">
+      Email {SITE.email}
+    </a>
+    {
+      SITE.phone && (
+        <a href={`tel:${SITE.phone.e164}`} class="btn btn-ghost">
+          Call {SITE.phone.display}
+        </a>
+      )
+    }
   </div>
 </section>
