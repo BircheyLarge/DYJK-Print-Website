@@ -1,8 +1,7 @@
 /**
- * Shared facts for the two homepage drafts. Headlines live in each direction
- * so the pages don't read as one layout. Product crops are a stand-in until
- * the matched backdrop set arrives: same mat, padding, and ratio in
- * ProductFrame.astro.
+ * Shared words for both homepage drafts, from home-copy.md v2, so Stanley
+ * compares the layouts. Product crops are a stand-in until the matched
+ * backdrop set arrives: same mat, padding, and ratio in ProductFrame.astro.
  */
 import type { ImageMetadata } from 'astro';
 import { QUOTE_PATH } from '../../consts';
@@ -19,12 +18,23 @@ import stickerGlobe from '../../assets/portfolio/stickers-globe-candy.jpg';
 export const quoteHref = QUOTE_PATH;
 export const workHref = '/portfolio/';
 
+// Option 1 is live. Swap a later option by replacing these two lines.
+export const heroHeadline = 'Impossible to walk past.';
+export const heroSubhead =
+  'On the counter, on the door, in their hand. Your name, with enough presence to stop someone.';
+// 2. 'Print that gets noticed.' / 'The piece in their hand says who you are before you do.'
+// 3. 'Look established on sight.' / 'Folders, cards, and envelopes that make a new company look settled.'
+// 4. 'Own the counter.' / 'Menus, cards, and mailers with enough presence to hold a glance.'
+// 5. 'Your vision. Their full attention.' / 'Cards, folders, and flyers that turn a clear idea into a reason to stop.'
+export const closeHeading = 'Ready to get noticed?';
+export const closeLine = 'Tell us what should get noticed. The quote is free.';
+
 export const proofs = [
   'Free quotes',
+  'Proof before print',
   'Design help',
-  'A proof before anything prints',
-  'Offset and digital',
-  'Shipped nationwide',
+  'Offset + digital',
+  'Ships nationwide',
 ] as const;
 
 export interface Benefit {
@@ -34,20 +44,20 @@ export interface Benefit {
 
 export const benefits: readonly Benefit[] = [
   {
-    title: 'Design help',
-    body: 'Bring a finished file, or a logo and a sentence. Prepress builds or repairs it so the piece is ready to print.',
+    title: 'Get noticed',
+    body: 'A card, a flyer, or a hanger puts your name where people are already looking.',
   },
   {
-    title: 'A proof before anything prints',
-    body: 'You see the piece and approve it. The run does not start until you say so.',
+    title: 'Look established',
+    body: 'Matching cards, letterhead, and envelopes make the company look settled the moment someone sees them.',
   },
   {
-    title: 'Offset and digital',
-    body: 'Offset when the run is long and the color has to hold. Digital for short runs and versions. The quote names which.',
+    title: 'Hold the glance',
+    body: 'Menus, brochures, and mailers give people a reason to stop and look.',
   },
   {
-    title: 'Shipped nationwide',
-    body: 'When the job is done, it ships anywhere in the United States.',
+    title: 'Walk in ready',
+    body: 'The folder, the invite, the hanger. You arrive with a piece that already speaks for the business.',
   },
 ];
 
@@ -57,22 +67,10 @@ export interface Step {
 }
 
 export const steps: readonly Step[] = [
-  {
-    name: 'Quote',
-    body: 'Tell us the product and where it ships.',
-  },
-  {
-    name: 'Proof',
-    body: 'Nothing prints until you approve the proof.',
-  },
-  {
-    name: 'Print',
-    body: 'Offset or digital, the process named in the quote.',
-  },
-  {
-    name: 'Delivered',
-    body: 'Packed and shipped anywhere in the US.',
-  },
+  { name: 'Quote', body: 'Tell us the piece and where it goes.' },
+  { name: 'Proof', body: 'You approve it before we print.' },
+  { name: 'Print', body: 'We run it offset or digital.' },
+  { name: 'Ship', body: 'Anywhere in the United States.' },
 ];
 
 export interface Audience {
@@ -83,23 +81,23 @@ export interface Audience {
 export const audiences: readonly Audience[] = [
   {
     name: 'Dental and medical',
-    body: 'Folders, cards, and mailers.',
+    body: 'Folders and cards that make a practice feel calm and clear.',
   },
   {
     name: 'Auto',
-    body: 'Flyers, cards, and event pieces.',
+    body: 'Cards that make a shop look like the specialist it is.',
   },
   {
     name: 'Restaurants',
-    body: 'Menus and the pieces around them.',
+    body: 'Menus that make the specials look as good as they taste.',
   },
   {
     name: 'Real estate and insurance',
-    body: 'Cards, postcards, and letterhead.',
+    body: 'Envelopes and cards that make the firm look established.',
   },
   {
     name: 'Events and campaigns',
-    body: 'Door hangers, flyers, and handouts.',
+    body: 'Flyers and hangers that pull people toward the event.',
   },
 ];
 
@@ -112,12 +110,14 @@ export interface FramedPiece {
   position: string;
   /** Zoom that drops the table and props around the piece. */
   scale?: number;
+  /** Show the whole photograph inside the frame, instead of a tight crop. */
+  whole?: boolean;
 }
 
 function altFor(image: ImageMetadata): string {
-  const item = PORTFOLIO.find((entry) => entry.image.src === image.src);
+  const item = PORTFOLIO.find((entry) => entry.image === image);
   if (!item) {
-    throw new Error(`Draft image is not in the portfolio: ${image.src}`);
+    throw new Error('Draft image is not in the portfolio');
   }
   return item.alt;
 }
@@ -162,12 +162,25 @@ export const products: readonly FramedPiece[] = [
   piece(stickerGlobe, 'Stickers', '/products/stickers/', '50% 70%', 1.25),
 ];
 
-export const heroShot: FramedPiece = piece(
-  flyerAutoShow,
-  'Flyers',
-  '/products/flyers/',
-  '80% 40%',
-);
+const flyerWhole: FramedPiece = {
+  ...piece(flyerAutoShow, 'Flyers', '/products/flyers/', '50% 50%', 1),
+  whole: true,
+};
+
+/** A's hero: three pieces, the flyer shown whole inside its frame. */
+export const heroLight: readonly FramedPiece[] = [
+  products[0]!,
+  flyerWhole,
+  products[1]!,
+];
+
+/** B's hero: four pieces fanned on the ink field. The flyer stays whole. */
+export const heroInk: readonly FramedPiece[] = [
+  products[0]!,
+  flyerWhole,
+  products[1]!,
+  products[3]!,
+];
 
 /** The two photos the live homepage already treats as recent work. */
 export const recentWork: readonly FramedPiece[] = PORTFOLIO_GALLERY.slice(

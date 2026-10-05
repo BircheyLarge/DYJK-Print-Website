@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import type { FramedPiece } from './content';
+
+interface Props {
+  piece: FramedPiece;
+  sizes: string;
+  /** Visible name under the frame. Off for the overlapping fan. */
+  labeled?: boolean;
+}
+
+const { piece, sizes, labeled = false } = Astro.props;
+---
+
+<a
+  class="d-frame"
+  href={piece.href}
+  aria-label={labeled ? undefined : piece.label}
+>
+  <span class="d-frame-mat">
+    <span class="d-frame-crop">
+      <Image
+        src={piece.image}
+        alt=""
+        widths={[320, 480, 720]}
+        sizes={sizes}
+        class:list={['d-frame-img', piece.whole && 'is-whole']}
+        style={piece.whole
+          ? undefined
+          : `object-position: ${piece.position}; --crop-origin: ${piece.position}; --crop-scale: ${piece.scale ?? 1}`}
+      />
+    </span>
+  </span>
+  {labeled && <span class="d-frame-label">{piece.label}</span>}
+</a>

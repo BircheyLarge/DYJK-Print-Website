@@ -1,8 +1,15 @@
 ---
+import CallLink from './CallLink.astro';
+import HeroPiece from './HeroPiece.astro';
 import ProductFrame from './ProductFrame.astro';
 import {
   audiences,
   benefits,
+  closeHeading,
+  closeLine,
+  heroHeadline,
+  heroInk,
+  heroSubhead,
   products,
   proofs,
   quoteHref,
@@ -14,30 +21,40 @@ import {
 const productSizes =
   '(min-width: 50.0625rem) 240px, (min-width: 40rem) 42vw, 46vw';
 const recentSizes = '(min-width: 50.0625rem) 420px, 88vw';
+const heroSizes = '(min-width: 68.8125rem) 200px, 28vw';
 ---
 
 <div class="draft">
   <section class="db-hero on-dark">
-    <div class="db-mark" aria-hidden="true">
-      <svg viewBox="0 0 200 200">
-        <circle
-          cx="100"
-          cy="100"
-          r="78"
-          fill="none"
-          stroke="#00a0e4"
-          stroke-width="3"></circle>
-        <circle
-          cx="100"
-          cy="100"
-          r="48"
-          fill="none"
-          stroke="#c4006a"
-          stroke-width="3"></circle>
-        <circle cx="100" cy="100" r="14" fill="#ffe600"></circle>
-        <path d="M100 8 V192 M8 100 H192" stroke="#ffffff" stroke-width="1.5"
-        ></path>
-      </svg>
+    <div class="db-fan">
+      {
+        heroInk.map((piece, index) => (
+          <div class="db-fan-card" style={`--fan: ${index}`}>
+            <HeroPiece piece={piece} sizes={heroSizes} />
+          </div>
+        ))
+      }
+      <div class="db-mark" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <circle
+            cx="100"
+            cy="100"
+            r="78"
+            fill="none"
+            stroke="#00a0e4"
+            stroke-width="3"></circle>
+          <circle
+            cx="100"
+            cy="100"
+            r="48"
+            fill="none"
+            stroke="#c4006a"
+            stroke-width="3"></circle>
+          <circle cx="100" cy="100" r="14" fill="#ffe600"></circle>
+          <path d="M100 8 V192 M8 100 H192" stroke="#ffffff" stroke-width="1.5"
+          ></path>
+        </svg>
+      </div>
     </div>
     <div class="d-wrap db-hero-inner">
       <p class="d-kicker db-kicker">
@@ -47,13 +64,14 @@ const recentSizes = '(min-width: 50.0625rem) 420px, 88vw';
           <i class="d-dot-y"></i>
           <i class="d-dot-k-light"></i>
         </span>
-        Press check
+        Utah-based · Shipping nationwide
       </p>
-      <h1 class="db-title">Color that holds for the whole run.</h1>
-      <p class="d-sub db-sub">Offset or digital, shipped nationwide.</p>
+      <h1 class="db-title">{heroHeadline}</h1>
+      <p class="d-sub db-sub">{heroSubhead}</p>
       <div class="d-actions">
         <a href={quoteHref} class="press-cta">Get a free quote</a>
         <a href={workHref} class="btn btn-ghost">See our work</a>
+        <CallLink />
       </div>
       <ul class="db-proofs">
         {proofs.map((proof) => <li>{proof}</li>)}
@@ -154,12 +172,12 @@ const recentSizes = '(min-width: 50.0625rem) 420px, 88vw';
       <span></span><span></span>
     </div>
     <div class="d-wrap">
-      <h2 class="d-h2">Send the job.</h2>
-      <p>
-        Share the piece and where it ships. You get a quote, then a proof,
-        before anything prints.
-      </p>
-      <a href={quoteHref} class="press-cta">Get a free quote</a>
+      <h2 class="d-h2">{closeHeading}</h2>
+      <p>{closeLine}</p>
+      <div class="d-close-cta">
+        <a href={quoteHref} class="press-cta">Get a free quote</a>
+        <CallLink />
+      </div>
     </div>
   </section>
 </div>

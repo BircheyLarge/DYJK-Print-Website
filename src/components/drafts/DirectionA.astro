@@ -1,10 +1,15 @@
 ---
-import { Image } from 'astro:assets';
+import CallLink from './CallLink.astro';
+import HeroPiece from './HeroPiece.astro';
 import ProductFrame from './ProductFrame.astro';
 import {
   audiences,
   benefits,
-  heroShot,
+  closeHeading,
+  closeLine,
+  heroHeadline,
+  heroLight,
+  heroSubhead,
   products,
   proofs,
   quoteHref,
@@ -16,6 +21,7 @@ import {
 const productSizes =
   '(min-width: 50.0625rem) 240px, (min-width: 40rem) 42vw, 46vw';
 const recentSizes = '(min-width: 50.0625rem) 520px, 92vw';
+const heroSizes = '(min-width: 68.8125rem) 220px, 30vw';
 ---
 
 <div class="draft">
@@ -28,32 +34,25 @@ const recentSizes = '(min-width: 50.0625rem) 520px, 92vw';
           <i class="d-dot-y"></i>
           <i class="d-dot-k"></i>
         </span>
-        Commercial printing
+        Utah-based · Shipping nationwide
       </p>
-      <h1 class="da-title">Hand them something worth keeping.</h1>
-      <p class="d-sub da-sub">Designed, proofed, and shipped nationwide.</p>
+      <h1 class="da-title">{heroHeadline}</h1>
+      <p class="d-sub da-sub">{heroSubhead}</p>
       <div class="d-actions">
         <a href={quoteHref} class="btn btn-solid">Get a free quote</a>
         <a href={workHref} class="btn btn-ghost">See our work</a>
+        <CallLink />
       </div>
       <ul class="da-proofs">
         {proofs.map((proof) => <li>{proof}</li>)}
       </ul>
     </div>
-    <div class="da-media">
-      <div class="da-shot">
-        <Image
-          src={heroShot.image}
-          alt={heroShot.alt}
-          widths={[720, 1100, 1400]}
-          sizes="(min-width: 68.8125rem) 50vw, 100vw"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-      <div class="da-crops" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-      </div>
+    <div class="da-stage">
+      {
+        heroLight.map((piece) => (
+          <HeroPiece piece={piece} sizes={heroSizes} labeled />
+        ))
+      }
     </div>
   </section>
 
@@ -144,13 +143,13 @@ const recentSizes = '(min-width: 50.0625rem) 520px, 92vw';
   <section class="d-section da-close">
     <div class="d-wrap da-close-row">
       <div>
-        <h2 class="d-h2">Tell us what you need printed.</h2>
-        <p>
-          Share the piece and where it ships. You get a quote, then a proof,
-          before anything prints.
-        </p>
+        <h2 class="d-h2">{closeHeading}</h2>
+        <p>{closeLine}</p>
       </div>
-      <a href={quoteHref} class="btn btn-solid">Get a free quote</a>
+      <div class="d-close-cta">
+        <a href={quoteHref} class="btn btn-solid">Get a free quote</a>
+        <CallLink />
+      </div>
     </div>
   </section>
 </div>
