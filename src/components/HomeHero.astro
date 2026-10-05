@@ -1,0 +1,170 @@
+---
+import { getImage } from 'astro:assets';
+import { QUOTE_PATH } from '../consts';
+import { HERO_TILES } from '../data/portfolio';
+
+// The hero opens on DYJK's printed work, like the door flyer (SPEC.md). From
+// 1101px the mosaic takes 1.12fr beside the copy's 0.96fr. Below that it's
+// full width: above the copy on tablets, below it on phones, where only the
+// first three tiles show.
+const MOSAIC_FR = 1.12;
+const COPY_FR = 0.96;
+// Four columns and two rows, with 8px of blue-dark between the photos and
+// 16px around them.
+const COLUMNS = [0.72, 1.2, 1.05, 0.82];
+const GAP = 8;
+const PADDING = 16;
+const WIDTHS = [400, 600, 800, 1000, 1200, 1600];
+// Phones pick this 1x1 GIF for the desktop-only tiles, so they never
+// download photos they don't show.
+const BLANK =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+// Where each tile in HERO_TILES order sits from md up: flyer, door hanger,
+// business cards, brochure, menus.
+const SLOTS = [
+  {
+    col: 1,
+    span: 2,
+    phone: 'calc(100vw - 20px)',
+    class: 'col-span-2 md:col-start-2 md:row-start-1',
+  },
+  {
+    col: 0,
+    span: 1,
+    phone: 'calc(50vw - 14px)',
+    class: 'md:col-start-1 md:row-start-1',
+  },
+  {
+    col: 0,
+    span: 2,
+    phone: 'calc(50vw - 14px)',
+    class: 'md:col-span-2 md:col-start-1 md:row-start-2',
+  },
+  {
+    col: 2,
+    span: 2,
+    phone: null,
+    class: 'hidden md:block md:col-span-2 md:col-start-3 md:row-start-2',
+  },
+  {
+    col: 3,
+    span: 1,
+    phone: null,
+    class: 'hidden md:block md:col-start-4 md:row-start-1',
+  },
+];
+if (SLOTS.length !== HERO_TILES.length) {
+  throw new Error('HomeHero: every hero tile needs a slot.');
+}
+
+/** A tile's rendered width when the mosaic is `share` of the viewport. */
+function tileWidth(col: number, span: number, share: number) {
+  const total = COLUMNS.reduce((sum, fr) => sum + fr, 0);
+  const part =
+    COLUMNS.slice(col, col + span).reduce((sum, fr) => sum + fr, 0) / total;
+  const outside = 2 * PADDING + (COLUMNS.length - 1) * GAP;
+  return `calc(${(share * 100 * part).toFixed(2)}vw - ${Math.round(outside * part - (span - 1) * GAP)}px)`;
+}
+
+const wideShare = MOSAIC_FR / (MOSAIC_FR + COPY_FR);
+const tiles = await Promise.all(
+  HERO_TILES.map(async (tile, index) => {
+    const slot = SLOTS[index]!;
+    const sizes = [
+      `(min-width: 68.8125rem) ${tileWidth(slot.col, slot.span, wideShare)}`,
+      `(min-width: 50.0625rem) ${tileWidth(slot.col, slot.span, 1)}`,
+      slot.phone ?? '1px',
+    ].join(', ');
+    const [avif, webp] = await Promise.all(
+      (['avif', 'webp'] as const).map((format) =>
+        // width sets the <img> fallback and its intrinsic size; widths the srcset.
+        getImage({ src: tile.item.image, width: 800, widths: WIDTHS, format }),
+      ),
+    );
+    return {
+      ...tile,
+      slot,
+      sizes,
+      avif: avif!,
+      webp: webp!,
+      lead: index === 0,
+    };
+  }),
+);
+---
+
+<section
+  aria-label="Introduction"
+  class="grid wide:min-h-160 wide:grid-cols-[minmax(0,1.12fr)_minmax(520px,0.96fr)]"
+>
+  <div
+    class="flex flex-col justify-center gap-5 px-4 pt-7 pb-4 md:gap-7 md:px-5 md:pt-9 md:pb-10 wide:py-12 wide:pr-12 wide:pl-9"
+  >
+    <div class="spine @container">
+      <p class="text-eyebrow font-semibold uppercase text-brand-blue">
+        Nationwide commercial printing
+      </p>
+      <h1
+        class="mt-3.5 font-display text-hero-sm font-extrabold text-brand-ink md:text-hero"
+      >
+        Your Vision,<br />Our&nbsp;Precision
+      </h1>
+      <p
+        class="mt-4 max-w-[38em] text-deck-sm font-medium text-brand-slate md:text-deck"
+      >
+        Offset and digital printing, graphic design and prepress — produced to
+        spec and shipped to your door anywhere in the United States.
+      </p>
+    </div>
+    <div class="ml-5 flex flex-wrap gap-3">
+      <a href={QUOTE_PATH} class="btn btn-solid">Request a Quote</a>
+      <a href="/services/" class="btn btn-ghost">Explore Services</a>
+    </div>
+  </div>
+
+  <div
+    class="grid grid-cols-2 grid-rows-[200px_142px] gap-2 bg-brand-blue-dark p-2.5 md:order-first md:min-h-105 md:grid-cols-(--columns) md:grid-rows-[1.12fr_0.88fr] md:p-4 wide:min-h-160"
+    style={`--columns: ${COLUMNS.map((fr) => `${fr}fr`).join(' ')}`}
+  >
+    {
+      tiles.map((tile) => (
+        <figure
+          class:list={[
+            'relative m-0 overflow-hidden bg-brand-ink',
+            tile.slot.class,
+          ]}
+        >
+          <picture>
+            {!tile.slot.phone && (
+              <source media="(max-width: 50rem)" srcset={BLANK} />
+            )}
+            <source
+              type="image/avif"
+              srcset={tile.avif.srcSet.attribute}
+              sizes={tile.sizes}
+            />
+            <source
+              type="image/webp"
+              srcset={tile.webp.srcSet.attribute}
+              sizes={tile.sizes}
+            />
+            <img
+              src={tile.webp.src}
+              alt={tile.item.alt}
+              width={tile.webp.attributes.width}
+              height={tile.webp.attributes.height}
+              loading="eager"
+              fetchpriority={tile.lead ? 'high' : undefined}
+              class="absolute inset-0 size-full object-cover object-(--phone-position) md:object-(--position)"
+              style={`--position: ${tile.position}; --phone-position: ${tile.phonePosition ?? tile.position}`}
+            />
+          </picture>
+          <figcaption class="absolute inset-x-0 bottom-0 bg-brand-blue-dark px-2 py-1.25 text-caption-sm font-medium text-on-dark md:px-2.5 md:py-1.75 md:text-caption">
+            {tile.caption}
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>

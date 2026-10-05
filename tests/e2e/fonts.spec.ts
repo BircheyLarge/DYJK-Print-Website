@@ -69,32 +69,37 @@ test('every page draws all of its text in Outfit or Syne', async ({ page }) => {
   expect(misses).toEqual([]);
 });
 
-test('preloads only the first screen faces: Outfit 400 and Syne 700', async ({
-  page,
-}) => {
-  await page.goto('/');
-  const preloaded = await page.evaluate(() => {
-    const faces = [...document.styleSheets]
-      .flatMap((sheet) => [...sheet.cssRules])
-      .filter(
-        (rule): rule is CSSFontFaceRule => rule instanceof CSSFontFaceRule,
-      );
-    return [
-      ...document.querySelectorAll<HTMLLinkElement>(
-        'link[rel="preload"][as="font"]',
-      ),
-    ].map((link) => {
-      const face = faces.find((rule) =>
-        rule.style
-          .getPropertyValue('src')
-          .includes(new URL(link.href).pathname),
-      );
-      // Astro suffixes family names with a hash, e.g. "Outfit-c953684c".
-      const family = face?.style
-        .getPropertyValue('font-family')
-        .replace(/-\w+$/, '');
-      return `${family} ${face?.style.getPropertyValue('font-weight')}`;
+// Each page preloads only the faces its first screen draws with: the home
+// h1 is Syne 800, interior h1s Syne 700 (web-refresh SPEC.md).
+for (const [path, expected] of [
+  ['/', ['Outfit 500', 'Outfit 600', 'Syne 800']],
+  ['/products/business-cards/', ['Outfit 400', 'Outfit 500', 'Syne 700']],
+] as const) {
+  test(`preloads only the first screen faces on ${path}`, async ({ page }) => {
+    await page.goto(path);
+    const preloaded = await page.evaluate(() => {
+      const faces = [...document.styleSheets]
+        .flatMap((sheet) => [...sheet.cssRules])
+        .filter(
+          (rule): rule is CSSFontFaceRule => rule instanceof CSSFontFaceRule,
+        );
+      return [
+        ...document.querySelectorAll<HTMLLinkElement>(
+          'link[rel="preload"][as="font"]',
+        ),
+      ].map((link) => {
+        const face = faces.find((rule) =>
+          rule.style
+            .getPropertyValue('src')
+            .includes(new URL(link.href).pathname),
+        );
+        // Astro suffixes family names with a hash, e.g. "Outfit-c953684c".
+        const family = face?.style
+          .getPropertyValue('font-family')
+          .replace(/-\w+$/, '');
+        return `${family} ${face?.style.getPropertyValue('font-weight')}`;
+      });
     });
+    expect(preloaded.sort()).toEqual([...expected]);
   });
-  expect(preloaded).toEqual(['Outfit 400', 'Syne 700']);
-});
+}

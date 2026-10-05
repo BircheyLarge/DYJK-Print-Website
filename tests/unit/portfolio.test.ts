@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { SERVICES } from '../../src/data/catalog';
 import {
   assertKnownProducts,
+  HERO_TILES,
   imagesForProduct,
   PORTFOLIO,
   PORTFOLIO_GALLERY,
@@ -83,5 +84,20 @@ describe('assertKnownProducts', () => {
 
   it('skips the check until any product entries exist', () => {
     expect(() => assertKnownProducts([])).not.toThrow();
+  });
+});
+
+describe('HERO_TILES', () => {
+  it('shows only real print work, never an AI mockup', () => {
+    expect(HERO_TILES).toHaveLength(5);
+    for (const { item } of HERO_TILES) {
+      expect(['photo', 'mockup'], item.title).toContain(item.kind);
+    }
+  });
+
+  it('uses each piece once', () => {
+    expect(new Set(HERO_TILES.map(({ item }) => item)).size).toBe(
+      HERO_TILES.length,
+    );
   });
 });

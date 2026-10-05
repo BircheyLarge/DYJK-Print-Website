@@ -9,7 +9,10 @@ test.describe('home page', () => {
     await expect(page).toHaveTitle(/DYJK Print/);
     const h1 = page.locator('h1');
     await expect(h1).toHaveCount(1);
-    await expect(h1).toContainText('Your Vision, Our Precision');
+    // The <br> stacks it like the card; innerText reads it as one line.
+    await expect(h1).toContainText('Your Vision, Our Precision', {
+      useInnerText: true,
+    });
   });
 
   test('exposes the primary quote CTA', async ({ page }) => {

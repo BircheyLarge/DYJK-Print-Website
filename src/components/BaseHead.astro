@@ -3,10 +3,24 @@ import { Font } from 'astro:assets';
 import { SITE } from '../consts';
 import { buildPageMeta, type PageMetaInput } from '../lib/seo';
 
-type Props = PageMetaInput;
+interface Props extends PageMetaInput {
+  /**
+   * The faces the first screen draws with; only these are preloaded. The
+   * default fits interior pages: Syne 700 for the h1, Outfit 400 and 500 for
+   * the prose, deck and nav.
+   */
+  fonts?: { outfit: number[]; syne: number[] };
+}
 
-const { title, description, seoTitle, seoDescription, image, noindex } =
-  Astro.props;
+const {
+  title,
+  description,
+  seoTitle,
+  seoDescription,
+  image,
+  noindex,
+  fonts = { outfit: [400, 500], syne: [700] },
+} = Astro.props;
 const meta = buildPageMeta({
   title,
   description,
@@ -22,9 +36,14 @@ const meta = buildPageMeta({
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Preload only the first screen's faces: body text and the H1's weight. -->
-<Font cssVariable="--font-outfit" preload={[{ weight: 400 }]} />
-<Font cssVariable="--font-syne" preload={[{ weight: 700 }]} />
+<Font
+  cssVariable="--font-outfit"
+  preload={fonts.outfit.map((weight) => ({ weight }))}
+/>
+<Font
+  cssVariable="--font-syne"
+  preload={fonts.syne.map((weight) => ({ weight }))}
+/>
 
 <title>{meta.title}</title>
 <meta name="description" content={meta.description} />
