@@ -198,6 +198,12 @@ body {
     transition-property: color, background-color, border-color;
     transition-duration: 150ms;
   }
+  /* The large size, for a page's one main action. */
+  .btn-lg {
+    min-height: 56px;
+    padding: 16px 28px;
+    font-size: var(--text-card);
+  }
   .btn-solid {
     background-color: var(--color-brand-blue);
     color: var(--color-on-dark);

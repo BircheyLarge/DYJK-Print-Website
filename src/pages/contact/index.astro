@@ -1,63 +1,196 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import FaqList from '../../components/FaqList.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import { QUOTE_PATH, SITE } from '../../consts';
-import { breadcrumbSchema } from '../../lib/schema';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
-const schema = breadcrumbSchema([
-  { name: 'Home', path: '/' },
-  { name: 'Contact', path: '/contact/' },
-]);
+// Copy: Content Strategist's contact-copy.md, hook option 2. The hook sells
+// the reason to reach out, the next two sections answer it, then the call
+// to action.
+const STEPS = [
+  {
+    title: 'A free quote',
+    text: 'You describe the piece. We send a quote, and the quote itself is free.',
+  },
+  {
+    title: 'You see it first',
+    text: 'Nothing prints until you approve the proof. You see the piece before the run.',
+  },
+  {
+    title: 'Design help',
+    text: 'A finished file is welcome. A logo and a rough idea are enough for us to build it.',
+  },
+  {
+    title: 'Shipped to you',
+    text: 'Name the state or ZIP. We ship the finished job anywhere in the United States.',
+  },
+];
 
-// Email-first; mentions phone only once SITE.phone is set.
-const channels = SITE.phone ? 'email or phone' : 'email';
+const CHECKLIST = [
+  { title: 'The piece.', text: 'What it is, and what it has to do.' },
+  { title: 'Quantity.', text: 'How many you need.' },
+  { title: 'Size.', text: 'The finished size, if you know it.' },
+  { title: 'Paper or finish.', text: 'Only if you already have one in mind.' },
+  { title: 'Deadline.', text: 'Your date, if you have one.' },
+  { title: 'Where it ships.', text: 'A state or ZIP.' },
+];
+
+const FAQS = [
+  {
+    question: 'Do I need a print-ready file?',
+    answer:
+      'No. A press-ready PDF can go straight to proof. A logo, a rough layout, or a few notes is enough for design and prepress to build the file. You approve a proof before we print.',
+  },
+  {
+    question: 'Will I see it before it prints?',
+    answer:
+      'Yes. After the quote we send a proof of the piece, including the cuts or the fold when those matter. We print once you approve it.',
+  },
+  {
+    question: 'Do you ship outside your area?',
+    answer:
+      'Yes. We ship anywhere in the United States. Put the state or ZIP on the quote, including a split across more than one destination if you need it.',
+  },
+];
+
+const sectionHeading =
+  'font-display text-h2-sm font-semibold text-brand-ink md:text-h2';
+// Call and Email: whole-card links on the blue-dark band.
+const contactCard =
+  'block rounded-card border border-on-dark-soft/35 p-5 text-left transition-colors hover:bg-white/8';
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Contact', path: '/contact/' },
+  ]),
+  faqSchema(FAQS),
+];
 ---
 
 <BaseLayout
   title="Contact"
-  description={`Reach DYJK Print by ${channels}, or request a quote for your nationwide print project.`}
+  description="Get a free quote from DYJK Print: send your idea, approve a proof before anything prints, and get it shipped anywhere in the US."
   schema={schema}
 >
   <PageHeader
-    eyebrow="Contact"
-    title="Let's talk about your print project"
-    subtitle={`We work with clients across the country — reach us by ${channels}, or send your project details for a quote.`}
+    eyebrow="Free quotes"
+    title="Ready to be impossible to walk past?"
+    subtitle="Send the idea. We quote it free and show you the piece before it prints."
   />
 
-  <section class="mx-auto max-w-6xl px-4 pt-9 pb-14 md:pb-18">
-    <div class="max-w-3xl">
-      <dl class="grid gap-8 sm:grid-cols-2">
-        <div>
-          <dt class="text-sm font-semibold text-brand-ink">Email</dt>
-          <dd class="mt-1">
-            <a
-              href={`mailto:${SITE.email}`}
-              class="text-lg text-brand-blue hover:text-brand-blue-dark"
-            >
-              {SITE.email}
-            </a>
-          </dd>
-        </div>
+  <section
+    class="mt-9 bg-brand-surface py-10 md:mt-12 md:py-14"
+    aria-labelledby="what-happens"
+  >
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 id="what-happens" class={sectionHeading}>
+        What happens when you reach out
+      </h2>
+      <ul
+        role="list"
+        class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:mt-8 md:gap-6 wide:grid-cols-4"
+      >
         {
-          SITE.phone && (
-            <div>
-              <dt class="text-sm font-semibold text-brand-ink">Phone</dt>
-              <dd class="mt-1">
-                <a
-                  href={`tel:${SITE.phone.e164}`}
-                  class="text-lg text-brand-blue hover:text-brand-blue-dark"
-                >
-                  {SITE.phone.display}
-                </a>
-              </dd>
-            </div>
-          )
+          STEPS.map((step) => (
+            <li class="rounded-card bg-white p-4 shadow-card md:p-6">
+              <h3 class="text-card-sm font-semibold text-brand-ink md:text-card">
+                {step.title}
+              </h3>
+              <p class="mt-2 text-sm leading-normal text-brand-slate md:text-ui">
+                {step.text}
+              </p>
+            </li>
+          ))
         }
-      </dl>
+      </ul>
+    </div>
+  </section>
 
-      <div class="mt-10">
-        <a href={QUOTE_PATH} class="btn btn-solid">Request a Quote</a>
-      </div>
+  <section class="py-10 md:py-14" aria-labelledby="what-to-send">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 id="what-to-send" class={sectionHeading}>What to send us</h2>
+      <ul
+        role="list"
+        class="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2 md:mt-8 wide:grid-cols-3"
+      >
+        {
+          CHECKLIST.map((item) => (
+            <li class="flex gap-3 text-prose-sm text-brand-slate md:text-prose">
+              <svg
+                viewBox="0 0 20 20"
+                class="mt-1 size-5 shrink-0 text-brand-blue"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.25"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 10.5l4 4 8-9" />
+              </svg>
+              <span>
+                <strong class="font-semibold text-brand-ink">
+                  {item.title}
+                </strong>{' '}
+                {item.text}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-6 max-w-3xl text-prose-sm text-brand-slate md:text-prose">
+        A rough idea or a logo is fine too. You can ask for the quote before the
+        file is press-ready.
+      </p>
+    </div>
+  </section>
+
+  <section
+    class="on-dark bg-brand-blue-dark px-4 py-12 text-center md:py-18"
+    aria-labelledby="get-noticed"
+  >
+    <h2
+      id="get-noticed"
+      class="font-display text-cta-sm font-bold text-on-dark md:text-cta"
+    >
+      Let's get you noticed.
+    </h2>
+    <a href={QUOTE_PATH} class="btn btn-solid btn-lg mt-7">Get a free quote</a>
+    <div class="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
+      {
+        SITE.phone && (
+          <a href={`tel:${SITE.phone.e164}`} class={contactCard}>
+            <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
+              Call
+            </span>
+            <span class="mt-2 block text-card font-semibold text-on-dark">
+              {SITE.phone.display}
+            </span>
+            <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
+              Talk through the piece before you send a file.
+            </span>
+          </a>
+        )
+      }
+      <a href={`mailto:${SITE.email}`} class={contactCard}>
+        <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
+          Email
+        </span>
+        <span class="mt-2 block text-card font-semibold text-on-dark">
+          {SITE.email}
+        </span>
+        <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
+          Send the piece, the specs, or just a logo.
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 pb-14 md:pb-18">
+    <div class="max-w-3xl">
+      <FaqList faqs={FAQS} />
     </div>
   </section>
 </BaseLayout>
