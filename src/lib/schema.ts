@@ -2,8 +2,10 @@
  * JSON-LD structured-data builders. Pure functions returning plain objects so
  * they are unit-testable and can be serialized by the <JsonLd> component.
  *
- * Policy: nationwide partner, not a local business. We emit `Organization`
- * (NOT `LocalBusiness`) with `areaServed: United States` and NO postalAddress.
+ * Policy (updated 2026-10-05, Stanley): DYJK is a small Utah-based team
+ * serving clients nationwide. We emit `Organization` (NOT `LocalBusiness`)
+ * with `areaServed: United States` and a region-only address (state and
+ * country): NO street address, city, map or hours.
  */
 import { SITE } from '../consts';
 import { absoluteUrl, canonicalUrl } from './seo';
@@ -24,6 +26,11 @@ export function organizationSchema(logoPath = '/brand/logo.png'): Json {
     description: SITE.description,
     logo: absoluteUrl(logoPath),
     ...(SITE.phone ? { telephone: SITE.phone.e164 } : {}),
+    address: {
+      '@type': 'PostalAddress',
+      addressRegion: SITE.addressRegion,
+      addressCountry: 'US',
+    },
     areaServed: {
       '@type': 'Country',
       name: 'United States',

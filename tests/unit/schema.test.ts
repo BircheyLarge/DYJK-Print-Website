@@ -35,13 +35,25 @@ describe('organizationSchema', () => {
     }
   });
 
-  it('NEVER emits a physical address or local-business signals', () => {
-    const serialized = JSON.stringify(org);
-    expect(serialized).not.toContain('postalAddress');
-    expect(serialized).not.toContain('PostalAddress');
-    expect(serialized).not.toContain('LocalBusiness');
-    expect(serialized).not.toContain('openingHours');
-    expect(org).not.toHaveProperty('address');
+  it('emits a region-only address and no local-business signals', () => {
+    expect(org.address).toEqual({
+      '@type': 'PostalAddress',
+      addressRegion: 'UT',
+      addressCountry: 'US',
+    });
+    const s = JSON.stringify(org);
+    for (const k of [
+      'streetAddress',
+      'postalCode',
+      'addressLocality',
+      'postOfficeBoxNumber',
+      'LocalBusiness',
+      'openingHours',
+      'geo',
+      'hasMap',
+    ]) {
+      expect(s).not.toContain(k);
+    }
   });
 
   it('omits sameAs when there are no profiles', () => {

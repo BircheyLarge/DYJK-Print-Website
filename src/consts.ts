@@ -1,9 +1,10 @@
 /**
  * Site-wide constants. Single source of truth for brand, contact and SEO defaults.
  *
- * Contact policy (locked with @you): DYJK is a nationwide print partner, NOT a
- * walk-in/local shop. We intentionally expose NO physical address, map or hours.
- * Public contact = email + quote form, plus a phone number once DYJK has one.
+ * Contact policy (updated 2026-10-05, Stanley): DYJK is a small Utah-based team
+ * serving clients nationwide. We say 'Utah-based' but expose NO street address,
+ * city, map or hours. Utah never goes in titles or H1s; product pages target
+ * nationwide queries.
  */
 
 /** A public phone number: E.164 for tel: links and schema, plus display text. */
@@ -31,8 +32,13 @@ export const SITE = {
     display: '(385) 257-9040',
   } as PhoneNumber | null,
   email: 'sales@dyjkprint.com',
-  /** Nationwide service area — drives Organization.areaServed, no local framing. */
+  /**
+   * Nationwide service area — drives Organization.areaServed. Utah-based, but
+   * the area served stays the whole US.
+   */
   areaServed: 'US',
+  /** Home state only: the Organization's region-only PostalAddress. */
+  addressRegion: 'UT',
   /** Social / external profiles for Organization.sameAs. Fill in as confirmed. */
   sameAs: [] as string[],
   locale: 'en_US',

@@ -24,7 +24,7 @@ test.describe('home page', () => {
     await expect(cta).toHaveAttribute('href', '/request-a-quote/');
   });
 
-  test('emits Organization JSON-LD without a physical address', async ({
+  test('emits Organization JSON-LD with region only, no street address', async ({
     page,
   }) => {
     await page.goto('/');
@@ -33,8 +33,16 @@ test.describe('home page', () => {
       .allTextContents();
     const joined = blocks.join('\n');
     expect(joined).toContain('"@type":"Organization"');
-    expect(joined).not.toContain('postalAddress');
-    expect(joined).not.toContain('LocalBusiness');
+    expect(joined).toContain('"addressRegion":"UT"');
+    for (const field of [
+      'streetAddress',
+      'postalCode',
+      'addressLocality',
+      'LocalBusiness',
+      'openingHours',
+    ]) {
+      expect(joined).not.toContain(field);
+    }
   });
 
   test('does not surface a street address anywhere on the page', async ({
@@ -157,7 +165,9 @@ test.describe('products hub', () => {
 });
 
 test.describe('product pages', () => {
-  const LOCAL_TERMS = ['utah', 'salt lake', 'near you', 'draper', 'po box'];
+  // Utah may appear in body copy, but never in a product page's h1 or title
+  // (checked below): those target nationwide searches.
+  const LOCAL_TERMS = ['salt lake', 'near you', 'near me', 'draper', 'po box'];
 
   test('every hub card leads to a well-formed, nationwide product page', async ({
     page,
@@ -171,6 +181,11 @@ test.describe('product pages', () => {
     for (const href of hrefs) {
       await page.goto(href);
       await expect(page.locator('h1'), href).toHaveCount(1);
+      expect(
+        (await page.locator('h1').innerText()).toLowerCase(),
+        href,
+      ).not.toContain('utah');
+      expect((await page.title()).toLowerCase(), href).not.toContain('utah');
 
       const ld = (
         await page
