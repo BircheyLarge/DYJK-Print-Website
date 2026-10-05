@@ -200,9 +200,19 @@ test.describe('navigation', () => {
     await page.setViewportSize({ width: 375, height: 800 });
     await page.goto('/');
     const toggle = page.getByRole('button', { name: 'Toggle navigation menu' });
+    const menu = page.locator('#mobile-nav');
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(menu).toBeHidden();
     await toggle.click();
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(menu.getByRole('link', { name: 'Products' })).toBeVisible();
+
+    // Escape closes it from inside and hands focus back to the toggle.
+    await menu.getByRole('link', { name: 'Products' }).focus();
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(toggle).toBeFocused();
   });
 });
 

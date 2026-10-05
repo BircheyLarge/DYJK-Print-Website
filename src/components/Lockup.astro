@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import lockup from '../assets/brand/logo-white.png';
+import { SITE } from '../consts';
+
+interface Props {
+  /** Display width in CSS px, from md up. */
+  width: number;
+  /** Display width on phones, when it differs. */
+  phoneWidth?: number;
+  loading?: 'eager' | 'lazy';
+}
+
+// The white lockup (1244x320) is the only crisp mark until Stanley sends a
+// vector, so it always sits on blue-dark (SPEC.md). Swap the file when the
+// vector arrives. The width and height attributes reserve its box, so it
+// can't shift the layout while it loads.
+const { width, phoneWidth = width, loading = 'lazy' } = Astro.props;
+const widths = [...new Set([phoneWidth, width])]
+  .flatMap((w) => [w, w * 2, w * 3])
+  .sort((a, b) => a - b);
+const sizes =
+  phoneWidth === width
+    ? `${width}px`
+    : `(min-width: 50.0625rem) ${width}px, ${phoneWidth}px`;
+---
+
+<Image
+  src={lockup}
+  alt={`${SITE.name} — ${SITE.tagline}`}
+  width={width}
+  widths={widths}
+  sizes={sizes}
+  loading={loading}
+  class="h-auto w-(--w) md:w-(--w-md)"
+  style={`--w: ${phoneWidth}px; --w-md: ${width}px`}
+/>
