@@ -8,15 +8,16 @@ import {
   closeHeading,
   closeLine,
   heroHeadline,
-  heroInk,
   heroSubhead,
-  products,
+  loadMatched,
   proofs,
   quoteHref,
   recentWork,
   steps,
   workHref,
 } from './content';
+
+const { products, heroInk } = await loadMatched();
 
 const productSizes =
   '(min-width: 50.0625rem) 240px, (min-width: 40rem) 42vw, 46vw';
@@ -30,7 +31,11 @@ const heroSizes = '(min-width: 68.8125rem) 200px, 28vw';
       {
         heroInk.map((piece, index) => (
           <div class="db-fan-card" style={`--fan: ${index}`}>
-            <HeroPiece piece={piece} sizes={heroSizes} />
+            <HeroPiece
+              piece={piece}
+              sizes={heroSizes}
+              loading={index === 0 ? 'eager' : 'lazy'}
+            />
           </div>
         ))
       }

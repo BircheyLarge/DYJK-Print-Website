@@ -10,13 +10,15 @@ import {
   heroHeadline,
   heroLight,
   heroSubhead,
-  products,
+  loadMatched,
   proofs,
   quoteHref,
   recentWork,
   steps,
   workHref,
 } from './content';
+
+const { products } = await loadMatched();
 
 const productSizes =
   '(min-width: 50.0625rem) 240px, (min-width: 40rem) 42vw, 46vw';

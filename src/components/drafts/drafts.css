@@ -163,6 +163,16 @@
   transform: none;
 }
 
+.d-frame-crop.is-matched {
+  aspect-ratio: 3 / 2;
+}
+
+.d-frame-img.is-matched {
+  object-fit: cover;
+  object-position: center;
+  transform: none;
+}
+
 .d-frame-label {
   display: block;
   margin-top: 0.75rem;
@@ -548,17 +558,17 @@
 .db-fan {
   position: relative;
   order: 2;
-  height: 12.5rem;
+  height: 8.75rem;
   margin: 0.25rem 1rem 1rem;
 }
 
 .db-fan-card {
   position: absolute;
   top: 1.15rem;
-  width: 6.6rem;
-  left: calc(var(--fan) * 4.35rem);
+  width: 5.35rem;
+  left: calc(var(--fan) * 3.45rem);
   z-index: calc(var(--fan) + 1);
-  transform: rotate(calc((var(--fan) - 1.5) * 7deg));
+  transform: rotate(calc((var(--fan) - 2) * 6deg));
   filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.35));
 }
 
@@ -803,16 +813,16 @@
     position: absolute;
     top: 54%;
     right: max(1.25rem, calc((100vw - 76rem) / 2));
-    width: 30rem;
-    height: 24rem;
+    width: 32rem;
+    height: 22rem;
     margin: 0;
     transform: translateY(-46%);
   }
 
   .db-fan-card {
-    top: calc(1.5rem + var(--fan) * 1.35rem);
-    left: calc(var(--fan) * 4.6rem);
-    width: 11.5rem;
+    top: calc(0.75rem + var(--fan) * 1.15rem);
+    left: calc(var(--fan) * 4.35rem);
+    width: 10.5rem;
   }
 
   .db-mark {
@@ -981,17 +991,17 @@
 .dc-fan {
   position: relative;
   order: 2;
-  height: 12.5rem;
+  height: 8.75rem;
   margin: 0.25rem 1rem 1rem;
 }
 
 .dc-fan-card {
   position: absolute;
   top: 1.15rem;
-  width: 6.6rem;
-  left: calc(var(--fan) * 4.35rem);
+  width: 5.35rem;
+  left: calc(var(--fan) * 3.45rem);
   z-index: calc(var(--fan) + 1);
-  transform: rotate(calc((var(--fan) - 1.5) * 7deg));
+  transform: rotate(calc((var(--fan) - 2) * 6deg));
   filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.35));
   transition: transform 400ms ease;
 }
@@ -1253,8 +1263,8 @@
 @media (hover: hover) and (pointer: fine) {
   .dc-fan:hover .dc-fan-card,
   .dc-fan:focus-within .dc-fan-card {
-    transform: translateX(calc((var(--fan) - 1.5) * 12px))
-      rotate(calc((var(--fan) - 1.5) * 10deg));
+    transform: translateX(calc((var(--fan) - 2) * 10px))
+      rotate(calc((var(--fan) - 2) * 8deg));
   }
 
   .dc-products .d-frame:hover {
@@ -1288,16 +1298,16 @@
     position: absolute;
     top: 54%;
     right: max(1.25rem, calc((100vw - 76rem) / 2));
-    width: 30rem;
-    height: 24rem;
+    width: 32rem;
+    height: 22rem;
     margin: 0;
     transform: translateY(-46%);
   }
 
   .dc-fan-card {
-    top: calc(1.5rem + var(--fan) * 1.35rem);
-    left: calc(var(--fan) * 4.6rem);
-    width: 11.5rem;
+    top: calc(0.75rem + var(--fan) * 1.15rem);
+    left: calc(var(--fan) * 4.35rem);
+    width: 10.5rem;
   }
 
   .dc-mark {

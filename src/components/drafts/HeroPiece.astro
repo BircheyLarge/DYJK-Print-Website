@@ -7,9 +7,11 @@ interface Props {
   sizes: string;
   /** Visible name under the frame. Off for the overlapping fan. */
   labeled?: boolean;
+  /** The first fan image loads with the hero. The rest of the fan can wait. */
+  loading?: 'eager' | 'lazy';
 }
 
-const { piece, sizes, labeled = false } = Astro.props;
+const { piece, sizes, labeled = false, loading = 'eager' } = Astro.props;
 ---
 
 <a
@@ -18,14 +20,19 @@ const { piece, sizes, labeled = false } = Astro.props;
   aria-label={labeled ? undefined : piece.label}
 >
   <span class="d-frame-mat">
-    <span class="d-frame-crop">
+    <span class:list={['d-frame-crop', piece.matched && 'is-matched']}>
       <Image
         src={piece.image}
         alt=""
         widths={[320, 480, 720]}
         sizes={sizes}
-        class:list={['d-frame-img', piece.whole && 'is-whole']}
-        style={piece.whole
+        loading={loading}
+        class:list={[
+          'd-frame-img',
+          piece.whole && 'is-whole',
+          piece.matched && 'is-matched',
+        ]}
+        style={piece.whole || piece.matched
           ? undefined
           : `object-position: ${piece.position}; --crop-origin: ${piece.position}; --crop-scale: ${piece.scale ?? 1}`}
       />

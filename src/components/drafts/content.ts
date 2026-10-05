@@ -1,7 +1,7 @@
 /**
- * Shared words for both homepage drafts, from home-copy.md v2, so Stanley
- * compares the layouts. Product crops are a stand-in until the matched
- * backdrop set arrives: same mat, padding, and ratio in ProductFrame.astro.
+ * Shared words for the homepage drafts, from home-copy.md v2, so Stanley
+ * compares the layouts. The product grid uses the matched 3:2 set. A's hero
+ * stays on the current pieces until the re-rendered flat-lay lands.
  */
 import type { ImageMetadata } from 'astro';
 import { QUOTE_PATH } from '../../consts';
@@ -9,11 +9,6 @@ import { PORTFOLIO, PORTFOLIO_GALLERY } from '../../data/portfolio';
 import cardsDespain from '../../assets/portfolio/business-cards-despain-subaru.jpg';
 import presentationFolder from '../../assets/portfolio/presentation-folder-and-insert.jpg';
 import flyerAutoShow from '../../assets/portfolio/flyers-atomic-auto-show.jpg';
-import brochureSunTree from '../../assets/portfolio/brochures-sun-tree-hospice.jpg';
-import menuBagelShop from '../../assets/portfolio/menus-bagel-shop.jpg';
-import doorHanger from '../../assets/portfolio/door-hangers-clean-it-up.jpg';
-import postcardWater from '../../assets/portfolio/postcards-water-sensations.jpg';
-import stickerGlobe from '../../assets/portfolio/stickers-globe-candy.jpg';
 
 export const quoteHref = QUOTE_PATH;
 export const workHref = '/portfolio/';
@@ -112,6 +107,8 @@ export interface FramedPiece {
   scale?: number;
   /** Show the whole photograph inside the frame, instead of a tight crop. */
   whole?: boolean;
+  /** Matched 3:2 product shot. The frame matches the photo, with no crop. */
+  matched?: boolean;
 }
 
 function altFor(image: ImageMetadata): string {
@@ -132,35 +129,20 @@ function piece(
   return { image, alt: altFor(image), href, label, position, scale };
 }
 
-/** Eight products, cropped to the piece. Order is the grid order. */
-export const products: readonly FramedPiece[] = [
-  piece(
-    cardsDespain,
-    'Business cards',
-    '/products/business-cards/',
-    '30% 70%',
-    1.2,
-  ),
-  piece(
-    presentationFolder,
-    'Presentation folders',
-    '/products/presentation-folders/',
-    '48% 44%',
-    1.2,
-  ),
-  piece(flyerAutoShow, 'Flyers', '/products/flyers/', '86% 48%', 1.35),
-  piece(brochureSunTree, 'Brochures', '/products/brochures/', '52% 48%', 1.45),
-  piece(menuBagelShop, 'Menus', '/products/menus/', '14% 52%', 2.15),
-  piece(doorHanger, 'Door hangers', '/products/door-hangers/', '50% 46%', 1.25),
-  piece(
-    postcardWater,
-    'Postcards',
-    '/products/postcards-mailers/',
-    '70% 68%',
-    1.45,
-  ),
-  piece(stickerGlobe, 'Stickers', '/products/stickers/', '50% 70%', 1.25),
-];
+/**
+ * The matched jpgs are a dev-only import. A static import would copy the
+ * originals into the production build, where no page references them.
+ */
+export async function loadMatched(): Promise<{
+  products: readonly FramedPiece[];
+  heroInk: readonly FramedPiece[];
+}> {
+  if (!import.meta.env.DEV) {
+    return { products: [], heroInk: [] };
+  }
+  const images = await import('./matched-images');
+  return { products: images.products, heroInk: images.heroInk };
+}
 
 const flyerWhole: FramedPiece = {
   ...piece(flyerAutoShow, 'Flyers', '/products/flyers/', '50% 50%', 1),
@@ -169,17 +151,21 @@ const flyerWhole: FramedPiece = {
 
 /** A's hero: three pieces, the flyer shown whole inside its frame. */
 export const heroLight: readonly FramedPiece[] = [
-  products[0]!,
+  piece(
+    cardsDespain,
+    'Business cards',
+    '/products/business-cards/',
+    '30% 70%',
+    1.2,
+  ),
   flyerWhole,
-  products[1]!,
-];
-
-/** B's hero: four pieces fanned on the ink field. The flyer stays whole. */
-export const heroInk: readonly FramedPiece[] = [
-  products[0]!,
-  flyerWhole,
-  products[1]!,
-  products[3]!,
+  piece(
+    presentationFolder,
+    'Presentation folders',
+    '/products/presentation-folders/',
+    '48% 44%',
+    1.2,
+  ),
 ];
 
 /** The two photos the live homepage already treats as recent work. */

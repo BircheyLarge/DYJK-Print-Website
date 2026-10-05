@@ -7,21 +7,26 @@ interface Props {
   sizes: string;
   /** Label color. The mat, padding, and ratio stay the same either way. */
   tone?: 'ink' | 'light';
+  /** Product grid and recent work sit below the fold. */
+  loading?: 'eager' | 'lazy';
 }
 
-const { piece, sizes, tone = 'ink' } = Astro.props;
+const { piece, sizes, tone = 'ink', loading = 'lazy' } = Astro.props;
 ---
 
 <a href={piece.href} class="d-frame">
   <span class="d-frame-mat">
-    <span class="d-frame-crop">
+    <span class:list={['d-frame-crop', piece.matched && 'is-matched']}>
       <Image
         src={piece.image}
         alt=""
         widths={[320, 480, 720]}
         sizes={sizes}
-        class="d-frame-img"
-        style={`object-position: ${piece.position}; --crop-origin: ${piece.position}; --crop-scale: ${piece.scale ?? 1}`}
+        loading={loading}
+        class:list={['d-frame-img', piece.matched && 'is-matched']}
+        style={piece.matched
+          ? undefined
+          : `object-position: ${piece.position}; --crop-origin: ${piece.position}; --crop-scale: ${piece.scale ?? 1}`}
       />
     </span>
   </span>
