@@ -43,21 +43,11 @@ describe('relatedService', () => {
 });
 
 describe('imagesForProduct', () => {
-  it("returns that product's pieces of every kind, and none for others", () => {
+  it("returns that product's pieces, and none for others", () => {
     for (const item of PORTFOLIO) {
       expect(imagesForProduct(item.product)).toContain(item);
     }
     expect(imagesForProduct('no-such-product')).toEqual([]);
-  });
-
-  it('puts real artwork before AI mockups', () => {
-    for (const slug of new Set(PORTFOLIO.map((item) => item.product))) {
-      const isAi = imagesForProduct(slug).map(
-        (item) => item.kind === 'ai-mockup',
-      );
-      // false (real) sorts before true (AI).
-      expect(isAi, slug).toEqual([...isAi].sort());
-    }
   });
 });
 
@@ -88,16 +78,8 @@ describe('assertKnownProducts', () => {
 });
 
 describe('HERO_TILES', () => {
-  it('shows only real print work, never an AI mockup', () => {
+  it('shows five different pieces', () => {
     expect(HERO_TILES).toHaveLength(5);
-    for (const { item } of HERO_TILES) {
-      expect(['photo', 'mockup'], item.title).toContain(item.kind);
-    }
-  });
-
-  it('uses each piece once', () => {
-    expect(new Set(HERO_TILES.map(({ item }) => item)).size).toBe(
-      HERO_TILES.length,
-    );
+    expect(new Set(HERO_TILES.map(({ item }) => item)).size).toBe(5);
   });
 });

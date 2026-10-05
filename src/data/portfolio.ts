@@ -1,14 +1,13 @@
 /**
- * DYJK's work: photos of past print jobs, mockups built from DYJK's real
- * print files, and AI mockups of customers' designs. Product pages show every
- * kind for their product, real artwork first; the /portfolio/ gallery and the
- * homepage "Recent work" strip show PORTFOLIO_GALLERY.
+ * DYJK's work: photos of past print jobs and mockups built from DYJK's real
+ * print files. Product pages show every piece for their product; the
+ * /portfolio/ gallery and the homepage "Recent work" strip show
+ * PORTFOLIO_GALLERY.
  *
  * To add a piece: save the original image in src/assets/portfolio/, import it
  * below and add one entry with its product slug and kind. Entries are in
- * display order: a product page lists its real artwork in the order below,
- * then its AI mockups, and its first image is the thumbnail on the /products/
- * hub card. Gallery photos go newest first; the homepage shows the first two.
+ * display order: a product page lists its pieces in the order below, and its
+ * first image is the thumbnail on the /products/ hub card. Gallery photos go newest first; the homepage shows the first two.
  * Astro generates the responsive AVIF/WebP sizes at build time. Product pages
  * crop every thumbnail to 3:2 (set cropPosition if the subject isn't central)
  * and link to the full image.
@@ -23,13 +22,9 @@ import brochureBagelShop from '../assets/portfolio/brochures-bagel-shop-menu.jpg
 import brochureSunTree from '../assets/portfolio/brochures-sun-tree-hospice.jpg';
 import cardsAveron from '../assets/portfolio/business-cards-averon-group.jpg';
 import cardsCanyonMedical from '../assets/portfolio/business-cards-canyon-medical.jpg';
-import cardsCarvit from '../assets/portfolio/business-cards-carvit-rounded-corners.jpg';
 import cardsCarvitSurf from '../assets/portfolio/business-cards-carvit-surf.jpg';
 import cardsDespain from '../assets/portfolio/business-cards-despain-subaru.jpg';
 import cardsMillcreek from '../assets/portfolio/business-cards-millcreek.jpg';
-import cardsMotoSkiveez from '../assets/portfolio/business-cards-moto-skiveez-carbon-pattern.jpg';
-import cardsPrestigeBlack from '../assets/portfolio/business-cards-prestige-performance-black.jpg';
-import cardsPrestigeWhite from '../assets/portfolio/business-cards-prestige-performance-white.jpg';
 import doorHangerCleanItUp from '../assets/portfolio/door-hangers-clean-it-up.jpg';
 import doorHangerMikeGreen from '../assets/portfolio/door-hangers-mike-green-campaign.jpg';
 import envelopesApexAdvance from '../assets/portfolio/envelopes-letterhead-apex-advance-envelopes.jpg';
@@ -41,17 +36,13 @@ import flyerAspire from '../assets/portfolio/flyers-aspire-surgical.jpg';
 import flyerAutoShow from '../assets/portfolio/flyers-atomic-auto-show.jpg';
 import flyerUew from '../assets/portfolio/flyers-united-energy-workers.jpg';
 import labelsCuttingEdge from '../assets/portfolio/labels-cutting-edge-box.jpg';
-import labelsRust from '../assets/portfolio/labels-rust-automation-roll-desk.jpg';
 import menuBagelShop from '../assets/portfolio/menus-bagel-shop.jpg';
 import postcardAspire from '../assets/portfolio/postcards-aspire-invitation.jpg';
 import postcardWaterSensations from '../assets/portfolio/postcards-water-sensations.jpg';
-import foldersOakridge from '../assets/portfolio/presentation-folders-oakridge-dental.jpg';
-import foldersOakridgeFanned from '../assets/portfolio/presentation-folders-oakridge-dental-fanned.jpg';
 import presentationFolder from '../assets/portfolio/presentation-folder-and-insert.jpg';
 import promotionalCards from '../assets/portfolio/promotional-cards.jpg';
 import stickersAssorted from '../assets/portfolio/stickers-assorted-logos.jpg';
 import stickerGlobeCandy from '../assets/portfolio/stickers-globe-candy.jpg';
-import stickerRust from '../assets/portfolio/stickers-rust-automation-oval-bottle.jpg';
 
 export interface PortfolioItem {
   image: ImageMetadata;
@@ -63,10 +54,9 @@ export interface PortfolioItem {
   serviceSlug: string;
   /**
    * 'photo': a photo of a finished job. 'mockup': a rendering built from
-   * DYJK's real print file, so every word is exact. 'ai-mockup': an AI
-   * rendering of a customer design; shown last and due to be retired.
+   * DYJK's real print file, so every word is exact.
    */
-  kind: 'photo' | 'mockup' | 'ai-mockup';
+  kind: 'photo' | 'mockup';
   /** Anchor for the 3:2 product-page crop; centered when unset. */
   cropPosition?: 'top' | 'bottom' | 'left' | 'right' | 'attention';
   /** Describes the printed piece for screen readers. */
@@ -88,7 +78,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     product: 'business-cards',
     serviceSlug: 'digital-printing',
     kind: 'mockup',
-    alt: 'DeSpain The Subaru Specialist business cards: two black cards with a blue and gray star logo in front of a stack showing the engine illustration on the back.',
+    alt: "DeSpain The Subaru Specialist business cards on a light gray table: two black cards side by side, each with a silver star and blue swoosh logo, in front of a stack whose top card shows the blue DeSpain name, an engine illustration and 'The Subaru Specialist'.",
   },
   {
     image: cardsCanyonMedical,
@@ -97,7 +87,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     serviceSlug: 'digital-printing',
     kind: 'mockup',
     cropPosition: 'bottom',
-    alt: 'Canyon Medical Home business card with a blue cross logo, a name, title and contact details, beside a brown envelope and green leaves.',
+    alt: 'Two Canyon Medical Home business cards on a pale gray-green surface beside two green leaves: one shows a blue square with a white cross; the other shows the logo, Jason Rees, Clinic Director, and phone, fax and email details.',
   },
   {
     image: cardsCarvitSurf,
@@ -105,7 +95,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     product: 'business-cards',
     serviceSlug: 'digital-printing',
     kind: 'mockup',
-    alt: 'Two Carvit promo cards with an edge-to-edge photo of a surfer in a breaking wave, reading "A lifestyle, shop now" and the web address, on white paper by a cream envelope.',
+    alt: "Two Carvit promo cards on a plain gray surface, each with an edge-to-edge photo of a surfer in a breaking wave, the Carvit logo, and 'A lifestyle, shop now' with the web address.",
   },
   {
     image: cardsMillcreek,
@@ -113,7 +103,7 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     product: 'business-cards',
     serviceSlug: 'digital-printing',
     kind: 'mockup',
-    alt: 'Two white Millcreek Tile & Stone business cards on a gray stone surface: one with the logo and contact details, the other with the copper-colored tile logo and web address.',
+    alt: 'Two white Millcreek Tile & Stone business cards on gray marble: one with the logo, street address, phone numbers and email, partly covered by the other, which shows the copper-colored tile logo and web address.',
   },
   {
     image: postcardWaterSensations,
@@ -270,70 +260,6 @@ export const PORTFOLIO: ReadonlyArray<PortfolioItem> = [
     alt: 'The Bagel Shop tri-fold brochure open to three panels of menu items and prices with food photos, partly covered by its chalkboard-style front panel, on a light wooden surface.',
   },
   {
-    image: cardsPrestigeBlack,
-    title: 'Black business cards with a gold logo',
-    product: 'business-cards',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'Black Prestige Performance business card with a gold logo and web address, lying on a light stone surface.',
-  },
-  {
-    image: cardsMotoSkiveez,
-    title: 'Business cards with a carbon-fiber pattern',
-    product: 'business-cards',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'Stack of dark Moto-Skiveez business cards with a carbon-fiber pattern and a red, blue and gray logo, on a wooden desk beside a pen.',
-  },
-  {
-    image: cardsCarvit,
-    title: 'Promo cards with rounded corners',
-    product: 'business-cards',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'Carvit promo card with rounded corners and an action-sports photo collage, reading "Shop now" with a promo code, propped on a stack of matching cards.',
-  },
-  {
-    image: cardsPrestigeWhite,
-    title: 'White business cards with a black logo',
-    product: 'business-cards',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'White Prestige Performance business cards on a marble surface: one with a large black monogram, one with contact details, and a stack beside them.',
-  },
-  {
-    image: foldersOakridgeFanned,
-    title: 'Presentation folders, fanned out',
-    product: 'presentation-folders',
-    serviceSlug: 'offset-printing',
-    kind: 'ai-mockup',
-    alt: 'White Oakridge Dental presentation folders fanned out on a wooden desk, the top one showing the logo.',
-  },
-  {
-    image: foldersOakridge,
-    title: 'Presentation folder with a centered logo',
-    product: 'presentation-folders',
-    serviceSlug: 'offset-printing',
-    kind: 'ai-mockup',
-    alt: 'White Oakridge Dental presentation folder with the logo centered on the cover, on a dark wooden desk.',
-  },
-  {
-    image: labelsRust,
-    title: 'Round labels on a roll, one peeled from its backing',
-    product: 'labels',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'Roll of round RUST Automation & Controls labels on a desk, with the label applied to paper bags and a box and one label peeled from its backing.',
-  },
-  {
-    image: stickerRust,
-    title: 'Oval logo sticker on a water bottle',
-    product: 'stickers',
-    serviceSlug: 'digital-printing',
-    kind: 'ai-mockup',
-    alt: 'Oval blue RUST Automation & Controls sticker with an oil-derrick logo on a metal water bottle.',
-  },
-  {
     image: presentationFolder,
     title: 'Presentation folder & insert',
     product: 'presentation-folders',
@@ -377,9 +303,9 @@ export interface HeroTile {
 }
 
 /**
- * The homepage hero mosaic (web-refresh SPEC.md): DYJK's real print files,
- * never AI mockups. Phones show the first three; HeroMosaic.astro places
- * the five on larger screens.
+ * The homepage hero mosaic (web-refresh SPEC.md): DYJK's real print files.
+ * Phones show the first three; HomeHero.astro places the five on larger
+ * screens.
  */
 export const HERO_TILES: ReadonlyArray<HeroTile> = [
   {
@@ -413,16 +339,9 @@ export function relatedService(item: PortfolioItem): ServiceItem {
   return service;
 }
 
-/**
- * Images for one product page: real artwork (photos and mockups) first, then
- * AI mockups, each group newest first.
- */
+/** Images for one product page, in portfolio order. */
 export function imagesForProduct(slug: string): PortfolioItem[] {
-  const images = PORTFOLIO.filter((item) => item.product === slug);
-  return [
-    ...images.filter((item) => item.kind !== 'ai-mockup'),
-    ...images.filter((item) => item.kind === 'ai-mockup'),
-  ];
+  return PORTFOLIO.filter((item) => item.product === slug);
 }
 
 /**
