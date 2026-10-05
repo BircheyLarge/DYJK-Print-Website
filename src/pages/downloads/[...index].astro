@@ -1,0 +1,57 @@
+---
+import { stat } from 'node:fs/promises';
+import { join } from 'node:path';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { DOWNLOADS, DOWNLOADS_DIR, downloadSlug } from './_files';
+
+// Dev only, like [file].ts. A plain index.astro can't opt out of the build,
+// so the list is a rest route that matches /downloads/ and gets no paths in
+// production.
+export const getStaticPaths = (() =>
+  import.meta.env.DEV
+    ? [{ params: { index: undefined } }]
+    : []) satisfies GetStaticPaths;
+
+const files = await Promise.all(
+  DOWNLOADS.map(async (download) => {
+    const { size } = await stat(join(DOWNLOADS_DIR, download.file));
+    const mb = size / 1024 / 1024;
+    return {
+      ...download,
+      size: mb >= 1 ? `${mb.toFixed(1)} MB` : `${Math.round(size / 1024)} KB`,
+    };
+  }),
+);
+---
+
+<BaseLayout
+  title="Print files"
+  description="Print-ready PDFs for Stanley, in the dev preview only."
+  noindex
+>
+  <PageHeader
+    eyebrow="Downloads"
+    title="Print files"
+    subtitle="Print-ready PDFs. This page exists only in the preview."
+  />
+  <section class="mx-auto max-w-6xl px-4 pt-9 pb-14 md:pb-18">
+    <ul class="max-w-3xl space-y-4">
+      {
+        files.map(({ file, label, size }) => (
+          <li>
+            <a
+              href={`/downloads/${downloadSlug(file)}/`}
+              download
+              class="text-prose-sm font-semibold text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark md:text-prose"
+            >
+              {label}
+            </a>
+            <span class="text-sm text-brand-slate"> PDF, {size}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
