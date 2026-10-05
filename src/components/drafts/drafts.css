@@ -931,18 +931,30 @@
 }
 
 @keyframes dc-reg-c {
-  from { transform: translate(-8px, 4px); }
-  to { transform: none; }
+  from {
+    transform: translate(-8px, 4px);
+  }
+  to {
+    transform: none;
+  }
 }
 
 @keyframes dc-reg-m {
-  from { transform: translate(7px, -4px); }
-  to { transform: none; }
+  from {
+    transform: translate(7px, -4px);
+  }
+  to {
+    transform: none;
+  }
 }
 
 @keyframes dc-reg-y {
-  from { transform: translate(3px, 7px); }
-  to { transform: none; }
+  from {
+    transform: translate(3px, 7px);
+  }
+  to {
+    transform: none;
+  }
 }
 
 .dc-sub {
@@ -1006,10 +1018,18 @@
   height: 0.55rem;
 }
 
-.dc-cmyk span:nth-child(1) { background: #00a0e4; }
-.dc-cmyk span:nth-child(2) { background: #c4006a; }
-.dc-cmyk span:nth-child(3) { background: #ffe600; }
-.dc-cmyk span:nth-child(4) { background: var(--color-brand-ink); }
+.dc-cmyk span:nth-child(1) {
+  background: #00a0e4;
+}
+.dc-cmyk span:nth-child(2) {
+  background: #c4006a;
+}
+.dc-cmyk span:nth-child(3) {
+  background: #ffe600;
+}
+.dc-cmyk span:nth-child(4) {
+  background: var(--color-brand-ink);
+}
 
 .dc-ticker-band {
   position: relative;
@@ -1063,12 +1083,16 @@
 }
 
 @keyframes dc-ticker {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .dc-sheet .d-h2::before {
-  content: "";
+  content: '';
   display: block;
   width: 0.9rem;
   height: 0.9rem;
@@ -1299,7 +1323,7 @@
   }
 
   .dc-run::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 1.625rem;
     left: 1.625rem;

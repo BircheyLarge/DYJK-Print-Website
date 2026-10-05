@@ -29,5 +29,13 @@ const title =
   noindex
   fonts={{ outfit: [400, 500, 600], syne: [800] }}
 >
-  {direction === 'a' ? <DirectionA /> : direction === 'b' ? <DirectionB /> : <DirectionC />}
+  {
+    direction === 'a' ? (
+      <DirectionA />
+    ) : direction === 'b' ? (
+      <DirectionB />
+    ) : (
+      <DirectionC />
+    )
+  }
 </BaseLayout>
