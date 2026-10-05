@@ -29,9 +29,9 @@ for (const width of [390, 1440]) {
   });
 }
 
-test('the CTA band asks "Need <product>?" on product pages only', async ({
-  page,
-}) => {
+// Product and service pages ask for themselves, the portfolio has its own
+// heading, and every other page with the band keeps the default.
+test('the CTA band heading fits each page', async ({ page }) => {
   test.slow();
   const wrong: string[] = [];
   for (const path of routes) {
@@ -39,9 +39,11 @@ test('the CTA band asks "Need <product>?" on product pages only', async ({
     const cta = page.locator('main section.on-dark h2');
     if ((await cta.count()) === 0) continue;
     const heading = (await cta.innerText()).trim();
-    const expected = /^\/products\/[^/]+\/$/.test(path)
+    const expected = /^\/(products|services)\/[^/]+\/$/.test(path)
       ? `Need ${(await page.locator('h1').innerText()).trim().toLowerCase()}?`
-      : 'Ready to start your print project?';
+      : path === '/portfolio/'
+        ? 'Want to see examples like yours?'
+        : 'Ready to start your print project?';
     if (heading !== expected) wrong.push(`${path}: "${heading}"`);
   }
   expect(wrong).toEqual([]);
