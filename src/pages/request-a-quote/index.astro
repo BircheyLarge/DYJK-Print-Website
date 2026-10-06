@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Checklist from '../../components/Checklist.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import { SITE } from '../../consts';
 import { breadcrumbSchema } from '../../lib/schema';
@@ -9,54 +10,99 @@ const schema = breadcrumbSchema([
   { name: 'Request a Quote', path: '/request-a-quote/' },
 ]);
 
-// P0 ships an email-based path so the conversion flow works today. The full
-// quote form (Cloudflare Function + Turnstile + R2 artwork upload) lands in P1.
+// Copy: Content Strategist's thin-pages-copy.md. Quotes come in by email or
+// phone; the page promises no upload and no date for one. (The full quote
+// form, a Cloudflare Function with Turnstile and R2 artwork upload, is P1.)
+const INCLUDE = [
+  { title: 'The piece.', text: 'What it is, and what it has to do.' },
+  { title: 'Quantity.', text: 'How many you need.' },
+  { title: 'Size.', text: 'The finished size, if you know it.' },
+  { title: 'Paper or finish.', text: 'Only if you already have one in mind.' },
+  {
+    title: 'Your date.',
+    text: 'If you have one. It is your date, not a promise from us.',
+  },
+  { title: 'Where it ships.', text: 'A state or ZIP.' },
+];
+
+// The email opens with the same list to fill in.
 const mailtoSubject = encodeURIComponent('Quote request');
 const mailtoBody = encodeURIComponent(
   [
-    'Project / product:',
+    'The piece:',
     'Quantity:',
-    'Size / specs:',
-    'Deadline:',
-    'Ship-to (state / ZIP):',
+    'Size:',
+    'Paper or finish:',
+    'Your date (if you have one):',
+    'Where it ships (state or ZIP):',
     'Notes:',
   ].join('\n'),
 );
 const mailto = `mailto:${SITE.email}?subject=${mailtoSubject}&body=${mailtoBody}`;
+
+const sectionHeading =
+  'crop-mark text-h2-sm font-bold text-balance text-brand-ink md:text-h2';
 ---
 
 <BaseLayout
-  title="Request a Quote"
-  description="Tell DYJK Print about your project for a fast quote and clear production timeline — printing shipped nationwide."
+  title="Request a Free Quote"
+  description="Send DYJK Print the piece by email or phone. The quote is free, you approve a proof before it prints, and we ship anywhere in the US."
   schema={schema}
 >
   <PageHeader
     eyebrow="Request a Quote"
-    title="Get a fast quote"
-    subtitle="Share your project details and we'll come back with pricing and a production timeline. We print and ship nationwide."
+    title="Get a free quote"
+    subtitle="Email the details, or call. The quote is free, and nothing prints until you approve it."
   />
 
-  <section class="mx-auto max-w-6xl px-4 pt-9 pb-14 md:pb-18">
-    <div class="max-w-3xl">
-      <p class="text-prose-sm text-brand-slate md:text-prose">
-        To quote your job quickly, include the product, quantity, size/specs,
-        deadline, and where it ships. Send it over and we'll take it from there.
+  <div
+    class="mx-auto grid max-w-6xl gap-12 px-4 pt-10 pb-14 md:grid-cols-2 md:gap-16 md:pt-14 md:pb-18"
+  >
+    <section aria-labelledby="after-you-send">
+      <h2 id="after-you-send" class={sectionHeading}>
+        What happens after you send this
+      </h2>
+      <p class="mt-4 text-prose-sm text-pretty text-brand-slate md:text-prose">
+        You email <a
+          href={mailto}
+          class="text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+          >{SITE.email}</a
+        >, or you call. There is no upload on this page. If you would rather
+        talk the piece through first, use the number below. Either way, we read
+        what you sent and reply with a quote. We price the job you described.
+        The quote itself is free. Nothing prints until you approve a proof, so
+        you see the piece before the run. A finished file is welcome. A logo and
+        a rough idea are enough, and design help can build the file from that.
+        Tell us the state or ZIP. We ship the finished job anywhere in the
+        United States.
       </p>
-
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href={mailto} class="btn btn-solid">Email your project details</a>
+      <div class="mt-8 flex flex-col items-start gap-4">
+        <a href={mailto} class="btn btn-solid btn-lg">
+          Email your project details
+        </a>
         {
           SITE.phone && (
-            <a href={`tel:${SITE.phone.e164}`} class="btn btn-ghost">
-              Call {SITE.phone.display}
-            </a>
+            <p class="text-prose-sm font-medium text-brand-ink md:text-prose">
+              Prefer to talk?{' '}
+              <a
+                href={`tel:${SITE.phone.e164}`}
+                class="font-semibold text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+              >
+                {SITE.phone.display}
+              </a>
+            </p>
           )
         }
       </div>
+    </section>
 
-      <p class="mt-6 text-sm text-brand-slate">
-        An online quote form with secure artwork upload is on the way.
+    <section aria-labelledby="what-to-include">
+      <h2 id="what-to-include" class={sectionHeading}>What to include</h2>
+      <p class="mt-4 text-prose-sm text-pretty text-brand-slate md:text-prose">
+        Send these if you have them. A logo or a rough idea is enough when you
+        don't.
       </p>
-    </div>
-  </section>
+      <Checklist items={INCLUDE} class="mt-6" />
+    </section>
+  </div>
 </BaseLayout>

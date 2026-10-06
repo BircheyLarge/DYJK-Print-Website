@@ -1,0 +1,35 @@
+---
+interface Props {
+  items: ReadonlyArray<{ title: string; text: string }>;
+  /** Spacing and columns from the page. */
+  class?: string;
+}
+const { items, class: className } = Astro.props;
+---
+
+<!-- What to send with a quote request: a blue check, the item in ink, then
+     a short note in slate. -->
+<ul role="list" class:list={['grid gap-x-8 gap-y-3', className]}>
+  {
+    items.map((item) => (
+      <li class="flex gap-3 text-prose-sm text-pretty text-brand-slate md:text-prose">
+        <svg
+          viewBox="0 0 20 20"
+          class="mt-1 size-5 shrink-0 text-brand-blue"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.25"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 10.5l4 4 8-9" />
+        </svg>
+        <span>
+          <strong class="font-semibold text-brand-ink">{item.title}</strong>{' '}
+          {item.text}
+        </span>
+      </li>
+    ))
+  }
+</ul>

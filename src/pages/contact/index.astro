@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Checklist from '../../components/Checklist.astro';
 import ContactCta from '../../components/ContactCta.astro';
 import FaqList from '../../components/FaqList.astro';
 import PageHeader from '../../components/PageHeader.astro';
@@ -112,35 +113,10 @@ const schema = [
   <section class="py-10 md:py-14" aria-labelledby="what-to-send">
     <div class="mx-auto max-w-6xl px-4">
       <h2 id="what-to-send" class={sectionHeading}>What to send us</h2>
-      <ul
-        role="list"
-        class="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2 md:mt-8 wide:grid-cols-3"
-      >
-        {
-          CHECKLIST.map((item) => (
-            <li class="flex gap-3 text-prose-sm text-brand-slate md:text-prose">
-              <svg
-                viewBox="0 0 20 20"
-                class="mt-1 size-5 shrink-0 text-brand-blue"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M4 10.5l4 4 8-9" />
-              </svg>
-              <span>
-                <strong class="font-semibold text-brand-ink">
-                  {item.title}
-                </strong>{' '}
-                {item.text}
-              </span>
-            </li>
-          ))
-        }
-      </ul>
+      <Checklist
+        items={CHECKLIST}
+        class="mt-6 sm:grid-cols-2 md:mt-8 wide:grid-cols-3"
+      />
       <p class="mt-6 max-w-3xl text-prose-sm text-brand-slate md:text-prose">
         A rough idea or a logo is fine too. You can ask for the quote before the
         file is press-ready.
