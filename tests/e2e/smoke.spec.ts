@@ -167,7 +167,11 @@ test.describe('products hub', () => {
     page,
   }) => {
     await page.goto('/products/');
-    const cards = await page.locator('main a[href^="/products/"]').all();
+    // The grid's cards, not the lead's inline links.
+    const cards = await page
+      .getByRole('list', { name: 'Products' })
+      .locator('a[href^="/products/"]')
+      .all();
     expect(cards.length).toBeGreaterThan(0);
 
     for (const card of cards) {
@@ -197,7 +201,8 @@ test.describe('product pages', () => {
   }) => {
     await page.goto('/products/');
     const hrefs = await page
-      .locator('main a[href^="/products/"]')
+      .getByRole('list', { name: 'Products' })
+      .locator('a[href^="/products/"]')
       .evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
     expect(hrefs.length).toBeGreaterThan(0);
 

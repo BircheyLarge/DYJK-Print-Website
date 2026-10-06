@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import ProductTile from '../../components/ProductTile.astro';
+import Prose from '../../components/Prose.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
 import { getProducts } from '../../data/products';
 import { breadcrumbSchema } from '../../lib/schema';
@@ -20,31 +21,59 @@ const schema = breadcrumbSchema([
 ---
 
 <BaseLayout
-  title="Print Products"
-  description="Business cards, presentation folders, postcards, stickers, labels, flyers, brochures, catalogs and stationery — printed to spec and shipped anywhere in the US."
+  title="Business Cards, Flyers, Menus, and More"
+  description="Business card printing, flyer printing, door hangers, and restaurant menus from DYJK Print. Free quotes, a proof before print, shipped in the US."
   schema={schema}
 >
   <PageHeader
     eyebrow="Products"
     title="What we print"
-    subtitle="A growing catalog of print products for every campaign and brand. Don't see what you need? Just ask — if it prints, we likely make it."
+    subtitle="Cards, folders, flyers, menus, and the rest of the pieces people pick up."
   />
 
+  <!-- Copy: Content Strategist's thin-pages-copy.md. -->
+  <section class="mx-auto max-w-6xl px-4 pt-9">
+    <div class="max-w-3xl">
+      <Prose>
+        <p>
+          The piece is how someone meets the business. <a
+            href="/products/business-cards/">Business card printing</a
+          > puts the name in a pocket. Presentation folders hold what a new customer
+          takes home. Postcards and mailers are the short note that shows up in the
+          mail. Door hangers wait on a knob. <a href="/products/flyers/"
+            >Flyer printing</a
+          > puts a promotion or an event on one sheet. Brochures and catalogs carry
+          a longer story. <a href="/products/menus/">Restaurant menus</a> belong on
+          the table, in a fold, or in the bag. Stickers and labels put the name on
+          a box. Envelopes and letterhead make the mail look like the firm. Say which
+          piece you need. The quote is free, you approve a proof before it prints,
+          and we ship anywhere in the United States.
+        </p>
+      </Prose>
+    </div>
+  </section>
+
   <section class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-12 md:pb-18">
-    <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <ul
+      role="list"
+      aria-label="Products"
+      class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3"
+    >
       {
         products.map((product, index) => (
-          <ProductTile
-            slug={product.id}
-            title={product.data.title}
-            description={product.data.description}
-            sizes={cardSizes}
-            loading={index < 3 ? 'eager' : 'lazy'}
-            fetchpriority={index === 0 ? 'high' : undefined}
-          />
+          <li>
+            <ProductTile
+              slug={product.id}
+              title={product.data.title}
+              description={product.data.description}
+              sizes={cardSizes}
+              loading={index < 3 ? 'eager' : 'lazy'}
+              fetchpriority={index === 0 ? 'high' : undefined}
+            />
+          </li>
         ))
       }
-    </div>
+    </ul>
   </section>
 
   <QuoteCta />

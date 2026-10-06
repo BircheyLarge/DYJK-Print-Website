@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import Prose from '../../components/Prose.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import { SERVICES } from '../../data/catalog';
@@ -13,15 +14,42 @@ const schema = breadcrumbSchema([
 ---
 
 <BaseLayout
-  title="Printing Services"
-  description="Offset printing, digital printing, and graphic design & prepress — produced to spec and shipped nationwide by DYJK Print."
+  title="Offset, Digital, and Design Help"
+  description="Offset for identical runs, digital when each piece can differ, and design help from a logo. Free quotes, a proof before print, shipped in the US."
   schema={schema}
 >
   <PageHeader
     eyebrow="Services"
     title="Printing services built around your project"
-    subtitle="From high-volume offset runs to fast digital turnarounds and press-ready design, we cover the full production path — nationwide."
+    subtitle="Offset or digital, a file that is ready, a free quote, and a proof before it prints."
   />
+
+  <!-- Copy: Content Strategist's thin-pages-copy.md. -->
+  <section class="mx-auto max-w-6xl px-4 pt-9">
+    <div class="max-w-3xl">
+      <Prose>
+        <p>
+          Offset or digital is a choice about the pieces, not a menu you have to
+          decode. <a href="/services/offset-printing/">Offset printing</a> is for
+          a run of identical pieces whose color has to match from the first sheet
+          to the last. A brochure, a flyer, or a catalog can look the same in the
+          first carton and the last. <a href="/services/digital-printing/"
+            >Digital printing</a
+          > puts the image on the sheet from the file, with no plate. One card can
+          carry a different name. One mailer can carry a different offer. You do not
+          have to pick the press. Tell us the product, how many you need, and whether
+          every piece is the same. The quote names the process.
+        </p>
+        <p>
+          <a href="/services/graphic-design/">Graphic design and prepress</a> comes
+          before either press. A press-ready file can go straight to a proof. A logo
+          and a rough layout are enough for us to build the file, with bleed, type,
+          and the cuts where they belong. The quote is free. Nothing prints until
+          you approve the proof. We then ship the job anywhere in the United States.
+        </p>
+      </Prose>
+    </div>
+  </section>
 
   <section class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-12 md:pb-18">
     <div class="grid gap-6 md:grid-cols-3">
