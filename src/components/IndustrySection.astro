@@ -1,12 +1,12 @@
 ---
 import LightboxImage from './LightboxImage.astro';
 import Prose from './Prose.astro';
+import type { Industry } from '../data/industries';
 import { pieceByFile } from '../data/portfolio';
 
 interface Props {
-  /** The heading's id, which the section is labelled by. */
-  id: string;
-  title: string;
+  /** Its id is the section's anchor, which product pages link to. */
+  industry: Industry;
   /** The job it shows: a file in src/assets/portfolio/. */
   image: string;
   /** Puts the photo on the left from md, so sections can alternate. */
@@ -14,7 +14,8 @@ interface Props {
   /** Default lazy; pass "eager" for the first section only. */
   loading?: 'eager' | 'lazy';
 }
-const { id, title, image, flip = false, loading = 'lazy' } = Astro.props;
+const { industry, image, flip = false, loading = 'lazy' } = Astro.props;
+const { id, title } = industry;
 const item = pieceByFile(image);
 
 // Half the max-w-6xl container from md (536px at full width), less a 1px rule
@@ -28,11 +29,12 @@ const textColumn = flip ? 'md:col-start-2' : 'md:col-start-1';
      it, in a ruled frame. Phones stack heading, photo, copy; from md the
      heading and copy sit centred against the photo. -->
 <section
-  aria-labelledby={id}
-  class="grid gap-6 md:grid-cols-2 md:grid-rows-[1fr_auto_auto_1fr] md:gap-x-12 md:gap-y-0"
+  id={id}
+  aria-labelledby={`${id}-title`}
+  class="grid scroll-mt-28 gap-6 md:grid-cols-2 md:grid-rows-[1fr_auto_auto_1fr] md:gap-x-12 md:gap-y-0"
 >
   <h2
-    id={id}
+    id={`${id}-title`}
     class:list={[
       'crop-mark text-h2-sm font-bold text-balance text-brand-ink md:row-start-2 md:text-h2',
       textColumn,

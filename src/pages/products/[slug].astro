@@ -8,6 +8,7 @@ import ProductExamples from '../../components/ProductExamples.astro';
 import Prose from '../../components/Prose.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
 import { SERVICES } from '../../data/catalog';
+import { industry } from '../../data/industries';
 import { assertKnownProducts, imagesForProduct } from '../../data/portfolio';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
@@ -31,6 +32,8 @@ const images = imagesForProduct(entry.id);
 const services = data.services.flatMap((slug) =>
   SERVICES.filter((service) => service.slug === slug),
 );
+// The /industries/ sections that show this product, linked from one line.
+const industries = data.industries.map(industry);
 
 // Layout: source order is examples, copy, services, so phones see the work
 // first. From lg, dense packing moves examples and services into the right
@@ -75,7 +78,26 @@ const schema = [
 
         <FaqList faqs={data.faqs} />
 
-        <p class="mt-12">
+        {
+          industries.length > 0 && (
+            <p class="mt-12 text-sm leading-relaxed text-brand-slate">
+              <span class="font-semibold text-brand-ink">By industry:</span>{' '}
+              {industries.map((entry, index) => (
+                <>
+                  {index > 0 && <span aria-hidden="true"> · </span>}
+                  <a
+                    href={`/industries/#${entry.id}`}
+                    class="font-semibold text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+                  >
+                    {entry.link}
+                  </a>
+                </>
+              ))}
+            </p>
+          )
+        }
+
+        <p class:list={[industries.length > 0 ? 'mt-6' : 'mt-12']}>
           <a
             href="/products/"
             class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"

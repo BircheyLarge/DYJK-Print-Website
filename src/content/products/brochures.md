@@ -14,6 +14,8 @@ services:
   - offset-printing
   - digital-printing
   - graphic-design
+industries:
+  - dental-and-medical
 faqs:
   - question: Which folds can I ask for?
     answer: >-

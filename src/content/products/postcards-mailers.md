@@ -14,6 +14,8 @@ services:
   - digital-printing
   - offset-printing
   - graphic-design
+industries:
+  - events-and-campaigns
 faqs:
   - question: Do you mail the cards to a list, or ship them to me?
     answer: >-

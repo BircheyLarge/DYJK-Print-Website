@@ -14,6 +14,10 @@ services:
   - offset-printing
   - digital-printing
   - graphic-design
+industries:
+  - restaurants
+  - real-estate-and-insurance
+  - events-and-campaigns
 faqs:
   - question: Will you hang these on doors, or only print them?
     answer: >-
@@ -37,9 +41,8 @@ faqs:
       have one.
 seoTitle: Door Hanger Printing, Shipped Nationwide | DYJK Print
 seoDescription: >-
-  Custom door hangers with the size, doorknob die, and coupon panel you
-  choose. DYJK Print proofs the cuts, prints one side or both, and ships
-  anywhere in the US.
+  Custom door hangers in your size, with a doorknob die and optional coupon
+  panel. DYJK Print proofs the cuts, prints, and ships anywhere in the US.
 draft: false
 ---
 

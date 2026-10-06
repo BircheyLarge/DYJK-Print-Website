@@ -13,6 +13,8 @@ keywords:
 services:
   - digital-printing
   - graphic-design
+industries:
+  - auto
 faqs:
   - question: When is this a sticker, and when is it a label?
     answer: >-

@@ -7,6 +7,7 @@
  */
 import { z } from 'zod';
 import { SERVICES } from '../data/catalog';
+import { INDUSTRIES } from '../data/industries';
 
 /** Shared SEO overrides available on every content entry. */
 const seoFields = {
@@ -50,6 +51,10 @@ export const productSchema = z.object({
   /** Related service slugs; the product page links to each one. */
   services: z
     .array(z.enum(SERVICES.map((service) => service.slug)))
+    .default([]),
+  /** The /industries/ sections that show this product; the page links each. */
+  industries: z
+    .array(z.enum(INDUSTRIES.map((industry) => industry.id)))
     .default([]),
   image: z.string().optional(),
   faqs: z

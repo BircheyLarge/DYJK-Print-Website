@@ -14,6 +14,10 @@ services:
   - offset-printing
   - digital-printing
   - graphic-design
+industries:
+  - auto
+  - restaurants
+  - events-and-campaigns
 faqs:
   - question: Is a flyer the same as a postcard?
     answer: >-

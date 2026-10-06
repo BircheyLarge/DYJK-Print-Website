@@ -4,6 +4,7 @@ import IndustrySection from '../../components/IndustrySection.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Prose from '../../components/Prose.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
+import { industry } from '../../data/industries';
 import { breadcrumbSchema } from '../../lib/schema';
 
 // Copy: Content Strategist's thin-pages-copy.md. The homepage's "Who we print
@@ -17,7 +18,7 @@ const schema = breadcrumbSchema([
 ---
 
 <BaseLayout
-  title="Print for Practices, Shops, and Events"
+  title="Printing for Dental, Auto, Restaurants & Events"
   description="Print for dental and medical, auto, restaurants, real estate and insurance, and events. See the work, then get a free quote from DYJK Print."
   schema={schema}
 >
@@ -47,8 +48,7 @@ const schema = breadcrumbSchema([
     class="mx-auto max-w-6xl space-y-16 px-4 pt-14 pb-16 md:space-y-24 md:pt-18 md:pb-24"
   >
     <IndustrySection
-      id="dental-and-medical"
-      title="Dental and medical"
+      industry={industry('dental-and-medical')}
       image="presentation-folder-and-insert.jpg"
       loading="eager"
     >
@@ -70,8 +70,7 @@ const schema = breadcrumbSchema([
     </IndustrySection>
 
     <IndustrySection
-      id="auto"
-      title="Auto"
+      industry={industry('auto')}
       image="business-cards-despain-subaru.jpg"
       flip
     >
@@ -89,8 +88,7 @@ const schema = breadcrumbSchema([
     </IndustrySection>
 
     <IndustrySection
-      id="restaurants"
-      title="Restaurants"
+      industry={industry('restaurants')}
       image="menus-bagel-shop.jpg"
     >
       <p>
@@ -110,8 +108,7 @@ const schema = breadcrumbSchema([
     </IndustrySection>
 
     <IndustrySection
-      id="real-estate-and-insurance"
-      title="Real estate and insurance"
+      industry={industry('real-estate-and-insurance')}
       image="envelopes-letterhead-apex-advance-envelopes.jpg"
       flip
     >
@@ -131,8 +128,7 @@ const schema = breadcrumbSchema([
     </IndustrySection>
 
     <IndustrySection
-      id="events-and-campaigns"
-      title="Events and campaigns"
+      industry={industry('events-and-campaigns')}
       image="flyers-atomic-auto-show.jpg"
     >
       <p>

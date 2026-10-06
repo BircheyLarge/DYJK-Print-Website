@@ -27,6 +27,7 @@ const services = defineCollection({
   schema: serviceSchema,
 });
 
+// Each product names the /industries/ sections it appears in (`industries`).
 const products = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/products' }),
   schema: productSchema,

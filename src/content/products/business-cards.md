@@ -13,6 +13,10 @@ keywords:
 services:
   - digital-printing
   - graphic-design
+industries:
+  - dental-and-medical
+  - auto
+  - real-estate-and-insurance
 faqs:
   - question: Can you print a different name on each card?
     answer: >-

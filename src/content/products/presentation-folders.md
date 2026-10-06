@@ -13,6 +13,8 @@ keywords:
 services:
   - offset-printing
   - graphic-design
+industries:
+  - dental-and-medical
 faqs:
   - question: Can you print the inserts as well as the folder?
     answer: >-
@@ -32,7 +34,7 @@ faqs:
     answer: >-
       Tell us which you want. We confirm packing on the quote so the cartons
       arrive in the form you asked for.
-seoTitle: Presentation Folders, Shipped Nationwide | DYJK Print
+seoTitle: Presentation Folder Printing | DYJK Print
 seoDescription: >-
   Custom presentation folders with the pockets and cover you choose. DYJK
   Print proofs the dieline, prints the run, and ships anywhere in the US.

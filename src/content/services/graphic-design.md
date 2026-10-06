@@ -26,7 +26,7 @@ faqs:
       No. We set the copy you provide. You are responsible for what the piece
       says, including prices and any regulated text. The proof is where you
       confirm the words.
-seoTitle: Graphic Design & Prepress, Shipped with the Job | DYJK Print
+seoTitle: Graphic Design & Prepress Services for Print | DYJK Print
 seoDescription: >-
   Press-ready file prep and design for print. DYJK Print fixes bleed, type,
   color, and imposition, then proofs the file before the job ships in the US.

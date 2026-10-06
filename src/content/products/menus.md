@@ -14,6 +14,8 @@ services:
   - digital-printing
   - offset-printing
   - graphic-design
+industries:
+  - restaurants
 faqs:
   - question: Should I order a flat menu, a folded menu, a table tent, or a takeout menu?
     answer: >-
@@ -37,9 +39,8 @@ faqs:
       file is not press-ready.
 seoTitle: Restaurant Menu Printing, Shipped Nationwide | DYJK Print
 seoDescription: >-
-  Menus for restaurants, cafes, bars, and food trucks. DYJK Print proofs the
-  flat, folded, table-tent, or takeout piece you choose, then ships anywhere
-  in the US.
+  Menus for restaurants, cafes, bars, and food trucks: flat, folded, table
+  tent, or takeout. DYJK Print proofs, prints, and ships anywhere in the US.
 draft: false
 ---
 

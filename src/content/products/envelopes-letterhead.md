@@ -14,6 +14,8 @@ services:
   - offset-printing
   - digital-printing
   - graphic-design
+industries:
+  - real-estate-and-insurance
 faqs:
   - question: Can I order letterhead only, envelopes only, or a matched set?
     answer: >-
@@ -34,7 +36,7 @@ faqs:
       Describe the color you need to hit, and send any specs you already
       have. We will say on the quote whether a match is something we can
       confirm. We do not promise a match sight unseen.
-seoTitle: Envelopes & Letterhead, Shipped Nationwide | DYJK Print
+seoTitle: Letterhead & Envelope Printing | DYJK Print
 seoDescription: >-
   Custom letterhead and envelopes, including matched sets. DYJK Print proofs
   the art, prints the stationery, and ships it anywhere in the US.
