@@ -50,7 +50,11 @@ const front = FAN.length - 1;
       class="flex items-center gap-3 text-eyebrow font-semibold uppercase text-press-cyan-soft"
     >
       <PressDots />
-      Utah-based · Shipping nationwide
+      <span class="kicker">
+        <span>Utah-based</span><span class="kicker-sep"> · </span><span
+          >Shipping nationwide</span
+        >
+      </span>
     </p>
     <div class="lockup">
       <div class="plates" aria-hidden="true">
@@ -63,18 +67,20 @@ const front = FAN.length - 1;
       <h1 class="title">{HEADLINE}</h1>
     </div>
     <p
-      class="mt-4 max-w-[42ch] text-deck-sm font-medium text-on-dark-soft md:text-deck"
+      class="mt-4 max-w-[27.5em] text-deck-sm font-medium text-on-dark-soft md:text-deck"
     >
       {SUBHEAD}
     </p>
     <div class="actions">
-      <a href={QUOTE_PATH} class="btn btn-solid btn-lg">Get a free quote</a>
-      <a href="/portfolio/" class="btn btn-ghost btn-lg">See our work</a>
+      <div class="buttons">
+        <a href={QUOTE_PATH} class="btn btn-solid btn-lg">Get a free quote</a>
+        <a href="/portfolio/" class="btn btn-ghost btn-lg">See our work</a>
+      </div>
       {
         SITE.phone && (
           <a
             href={`tel:${SITE.phone.e164}`}
-            class="self-start text-sm font-medium text-on-dark-soft underline underline-offset-[0.18em] hover:text-on-dark"
+            class="text-sm font-medium text-on-dark-soft underline underline-offset-[0.18em] hover:text-on-dark"
           >
             or call {SITE.phone.display}
           </a>
@@ -105,11 +111,39 @@ const front = FAN.length - 1;
     padding: 1.5rem 1rem 1.25rem;
   }
 
-  /* The h1 and its plates share one box, so the copies wrap like it. */
+  /* Two lines on phones, one from 25rem, set by width rather than by
+     wrapping: at 390px Outfit just fits on one line and Arial doesn't. */
+  .kicker {
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  .kicker > span {
+    display: block;
+  }
+
+  .kicker > .kicker-sep {
+    display: none;
+  }
+
+  @media (min-width: 25rem) {
+    .kicker {
+      line-height: inherit;
+    }
+
+    .kicker > span,
+    .kicker > .kicker-sep {
+      display: inline;
+    }
+  }
+
+  /* The h1 and its plates share one box, so the copies wrap like it.
+     Measures here are in em, not ch: Outfit's zero is a quarter wider than
+     its fallback's, so a ch box would change width when the font arrives. */
   .lockup {
     position: relative;
     margin-top: 1rem;
-    max-width: 11ch;
+    max-width: 7.33em;
     font-size: var(--text-hero);
     font-weight: 700;
     letter-spacing: var(--text-hero--letter-spacing);
@@ -173,20 +207,32 @@ const front = FAN.length - 1;
     }
   }
 
+  /* "or call" always gets its own line, as in the ink close, so the row
+     can't re-wrap when the font arrives. */
   .actions {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 0.75rem;
     margin-top: 1.5rem;
   }
 
-  .actions :global(.btn) {
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-self: stretch;
+  }
+
+  .buttons :global(.btn) {
     width: 100%;
   }
 
+  /* One line per proof and as many columns as fit: 7.25rem clears the
+     longest proof in either face, so the font can't change the rows. */
   .proofs {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(7.25rem, 1fr));
     gap: 0.7rem 1.25rem;
     max-width: 46rem;
     margin-top: 1.75rem;
@@ -195,6 +241,7 @@ const front = FAN.length - 1;
     font-size: 0.875rem;
     font-weight: 600;
     line-height: 1.3;
+    white-space: nowrap;
   }
 
   .fan {
@@ -233,13 +280,13 @@ const front = FAN.length - 1;
   }
 
   @media (min-width: 40rem) {
-    .actions {
+    .buttons {
       flex-direction: row;
       flex-wrap: wrap;
-      align-items: center;
+      align-self: flex-start;
     }
 
-    .actions :global(.btn) {
+    .buttons :global(.btn) {
       width: auto;
     }
   }
@@ -278,10 +325,6 @@ const front = FAN.length - 1;
       bottom: 0.25rem;
       left: -0.5rem;
       width: 5.5rem;
-    }
-
-    .proofs {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
   }
 
