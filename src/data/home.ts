@@ -9,6 +9,13 @@ import fanBusinessCard from '../assets/matched/fan/business-card.jpg';
 import fanDoorHanger from '../assets/matched/fan/door-hanger.jpg';
 import fanFlyer from '../assets/matched/fan/flyer.jpg';
 import fanMenu from '../assets/matched/fan/menu.jpg';
+import brochures from '../assets/matched/product-brochures.jpg';
+import envelopesLetterhead from '../assets/matched/product-envelopes-letterhead.jpg';
+import cardsDespain from '../assets/portfolio/business-cards-despain-subaru.jpg';
+import envelopesApexAdvance from '../assets/portfolio/envelopes-letterhead-apex-advance-envelopes.jpg';
+import flyerAutoShow from '../assets/portfolio/flyers-atomic-auto-show.jpg';
+import menuBagelShop from '../assets/portfolio/menus-bagel-shop.jpg';
+import presentationFolder from '../assets/portfolio/presentation-folder-and-insert.jpg';
 
 export const HEADLINE = 'Impossible to walk past.';
 export const SUBHEAD =
@@ -94,6 +101,40 @@ export const AUDIENCES: readonly Point[] = [
 
 export const CLOSE_HEADING = 'Ready to get noticed?';
 export const CLOSE_LINE = 'Tell us what should get noticed. The quote is free.';
+
+export interface ShownPiece {
+  image: ImageMetadata;
+  alt: string;
+}
+
+/** One real piece per benefit, in the same order as BENEFITS. */
+export const BENEFIT_PIECES: readonly ShownPiece[] = [
+  { image: fanDoorHanger, alt: 'Clean It Up door hanger.' },
+  {
+    image: envelopesLetterhead,
+    alt: 'Letterhead and an envelope laid out together.',
+  },
+  { image: brochures, alt: 'Sun Tree Hospice brochure, open and closed.' },
+  { image: fanBusinessCard, alt: 'Averon Group business card.' },
+];
+
+/** One real piece per industry, in the same order as AUDIENCES. */
+export const AUDIENCE_PIECES: readonly ShownPiece[] = [
+  {
+    image: presentationFolder,
+    alt: 'Open Jeppson Dental presentation folder with a family photo insert.',
+  },
+  {
+    image: cardsDespain,
+    alt: 'DeSpain The Subaru Specialist business cards.',
+  },
+  { image: menuBagelShop, alt: 'The Bagel Shop menu.' },
+  {
+    image: envelopesApexAdvance,
+    alt: 'Apex Insurance and Advance Insurance envelopes.',
+  },
+  { image: flyerAutoShow, alt: 'Atomic Auto Show flyer.' },
+];
 
 export interface FanPiece {
   /** Cut from the matched shot by scripts/crop-hero-fan.py. */

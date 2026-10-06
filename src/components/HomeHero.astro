@@ -10,14 +10,17 @@ import { FAN, HEADLINE, PROOFS, SUBHEAD } from '../data/home';
 // the words exist once for readers and search. Beside it, a fan of printed
 // pieces with the registration mark.
 
-// Fan cards are 10.5rem wide from md and 5.35rem on phones; the photo sits
-// inside a 12px mat and a 1px border.
-const fanSizes = '(min-width: 50.0625rem) 142px, 60px';
+// Fan cards are about 1.5× the old desktop size and 5.35rem on phones; the
+// photo sits inside a 12px mat and a 1px border. Only the first image is
+// eager; the rest wait until they're near the viewport.
+const fanSizes = '(min-width: 50.0625rem) 300px, 90px';
 const PLATES = ['cyan', 'magenta', 'yellow'] as const;
-const front = FAN.length - 1;
 ---
 
 <section class="hero on-dark" aria-label="Introduction">
+  <div class="texture" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
   <div class="fan">
     {
       FAN.map((piece, index) => (
@@ -32,10 +35,10 @@ const front = FAN.length - 1;
               src={piece.image}
               alt=""
               formats={['avif', 'webp']}
-              widths={[120, 180, 240, 360, 480]}
+              widths={[240, 360, 480, 720, 960]}
               sizes={fanSizes}
-              loading="eager"
-              fetchpriority={index === front ? 'high' : undefined}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchpriority={index === 0 ? 'high' : undefined}
               class="aspect-3/2 w-full object-cover"
             />
           </span>
@@ -103,8 +106,56 @@ const front = FAN.length - 1;
     color: var(--color-on-dark);
   }
 
+  .texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at 78% 18%,
+      rgb(255 255 255 / 0.06),
+      transparent 26rem
+    );
+  }
+
+  .texture span {
+    position: absolute;
+    width: 5.5rem;
+    height: 5.5rem;
+    opacity: 0.32;
+  }
+
+  .texture span:nth-child(1) {
+    top: 1.25rem;
+    left: 1.25rem;
+    border-top: 1.5px solid #fff;
+    border-left: 1.5px solid #fff;
+  }
+
+  .texture span:nth-child(2) {
+    top: 1.25rem;
+    right: 1.25rem;
+    border-top: 1.5px solid #fff;
+    border-right: 1.5px solid #fff;
+  }
+
+  .texture span:nth-child(3) {
+    bottom: 1.25rem;
+    left: 1.25rem;
+    border-bottom: 1.5px solid #fff;
+    border-left: 1.5px solid #fff;
+  }
+
+  .texture span:nth-child(4) {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    border-bottom: 1.5px solid #fff;
+    border-right: 1.5px solid #fff;
+  }
+
   .copy {
     position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -246,6 +297,7 @@ const front = FAN.length - 1;
 
   .fan {
     position: relative;
+    z-index: 1;
     order: 2;
     height: 8.75rem;
     margin: 0.25rem 1rem 1rem;
@@ -292,42 +344,44 @@ const front = FAN.length - 1;
   }
 
   @media (min-width: 50.0625rem) {
-    .hero,
-    .copy {
-      min-height: calc(100svh - 5.25rem);
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 34rem) minmax(16rem, 1fr);
+      align-items: center;
+      column-gap: 1.5rem;
+      padding: 6rem 1.25rem 6rem max(1rem, calc((100% - 72rem) / 2 + 1rem));
     }
 
-    /* Lines up with the header's max-w-6xl content edge. */
     .copy {
-      width: min(34rem, 46vw);
-      margin-left: max(1rem, calc((100% - 72rem) / 2 + 1rem));
-      padding: 3rem 1.5rem 3rem 0;
-    }
-
-    /* Sized in em so it shrinks with the viewport up to ~1070px and never
-       runs into the copy. */
-    .fan {
-      position: absolute;
-      top: 54%;
-      right: max(1.25rem, calc((100% - 76rem) / 2));
-      width: 32em;
-      height: 22em;
+      order: 1;
+      width: auto;
+      min-width: 0;
       margin: 0;
-      font-size: clamp(0.75rem, 1.5vw, 1rem);
-      transform: translateY(-46%);
+      padding: 0;
+    }
+
+    /* The fan fills the right column. Cards are 13.5/32 of that width,
+       about 1.5× the old 10.5em-in-a-32em fan once the column is ~700px. */
+    .fan {
+      container-type: inline-size;
+      order: 2;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 32 / 22;
+      margin: 0;
     }
 
     .fan-card {
-      top: calc(0.75em + var(--fan) * 1.15em);
-      left: calc(var(--fan) * 4.35em);
-      width: 10.5em;
+      top: calc(100cqi * (0.85 + var(--fan) * 1.05) / 32);
+      left: calc(100cqi * (0.7 + var(--fan) * 3.15) / 32);
+      width: calc(100cqi * 13.5 / 32);
     }
 
     .fan :global(.mark) {
       right: auto;
-      bottom: 0.25em;
-      left: -0.5em;
-      width: 5.5em;
+      bottom: calc(100cqi * 0.25 / 32);
+      left: calc(100cqi * -0.4 / 32);
+      width: calc(100cqi * 5.5 / 32);
     }
   }
 

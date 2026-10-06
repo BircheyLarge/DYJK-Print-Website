@@ -9,7 +9,9 @@ import QuoteCta from '../components/QuoteCta.astro';
 import { SITE } from '../consts';
 import {
   AUDIENCES,
+  AUDIENCE_PIECES,
   BENEFITS,
+  BENEFIT_PIECES,
   CLOSE_HEADING,
   CLOSE_LINE,
   RECENT_WORK,
@@ -25,6 +27,13 @@ const products = (await getProducts()).filter((product) => MATCHED[product.id]);
 
 const heading = 'crop-mark text-display font-bold text-brand-ink';
 const body = 'mt-1.5 text-base leading-normal text-brand-slate';
+const ACCENTS = ['accent-c', 'accent-m', 'accent-y', 'accent-k'] as const;
+const TILES = [
+  'tile-notice',
+  'tile-established',
+  'tile-glance',
+  'tile-ready',
+] as const;
 // Step numbers in the four inks, in order: cyan, magenta, yellow, key.
 const INKS = [
   'bg-brand-ink text-press-cyan',
@@ -37,10 +46,11 @@ const INKS = [
 // four across from md (239px at full width), two on phones.
 const productSizes =
   '(min-width: 1152px) 239px, (min-width: 50.0625rem) calc(25vw - 49px), calc(50vw - 50px)';
-// Recent work frames: 1.15fr and 0.85fr from md, two across from sm. The
-// photo is cropped in by 25%, so ask for a little more.
-const recentSizes =
-  '(min-width: 1152px) 750px, (min-width: 50.0625rem) 66vw, (min-width: 40rem) 60vw, 120vw';
+// Recent work: two equal frames from sm. The photo is cropped in by 25%.
+const recentSizes = '(min-width: 1152px) 540px, (min-width: 40rem) 46vw, 92vw';
+const benefitSizes = '(min-width: 50.0625rem) 640px, 92vw';
+const audienceSizes =
+  '(min-width: 50.0625rem) 360px, (min-width: 40rem) 46vw, 92vw';
 
 const schema = [organizationSchema(), websiteSchema()];
 ---
@@ -51,23 +61,31 @@ const schema = [organizationSchema(), websiteSchema()];
   fonts={[500, 600, 700]}
 >
   <HomeHero />
-  <CmykBar />
+  <CmykBar separated />
   <ProductTicker />
 
-  <section class="px-4 py-16 md:py-24" aria-labelledby="why">
+  <section class="home-block home-first px-4" aria-labelledby="why">
     <div class="mx-auto max-w-6xl">
       <h2 id="why" class={heading}>Why businesses choose DYJK</h2>
-      <ul
-        role="list"
-        class="mt-10 grid gap-x-5 gap-y-6 sm:grid-cols-2 md:grid-cols-4"
-      >
+      <ul class="bento" role="list">
         {
-          BENEFITS.map((benefit) => (
-            <li>
-              <h3 class="text-card font-semibold text-brand-ink">
-                {benefit.title}
-              </h3>
-              <p class={body}>{benefit.body}</p>
+          BENEFITS.map((benefit, index) => (
+            <li class:list={['tile', ACCENTS[index], TILES[index]]}>
+              <span class="tile-frame">
+                <Picture
+                  src={BENEFIT_PIECES[index]!.image}
+                  alt={BENEFIT_PIECES[index]!.alt}
+                  formats={['avif', 'webp']}
+                  widths={[480, 720, 960, 1200]}
+                  sizes={benefitSizes}
+                  loading="lazy"
+                  class="tile-photo"
+                />
+              </span>
+              <div>
+                <h3>{benefit.title}</h3>
+                <p>{benefit.body}</p>
+              </div>
             </li>
           ))
         }
@@ -75,20 +93,14 @@ const schema = [organizationSchema(), websiteSchema()];
     </div>
   </section>
 
-  <section class="px-4 pb-16 md:pb-24" aria-labelledby="how">
+  <section class="home-block px-4" aria-labelledby="how">
     <div class="mx-auto max-w-6xl">
       <h2 id="how" class={heading}>How it works</h2>
-      <ol class="steps mt-10 grid md:grid-cols-4 md:gap-6">
+      <ol class="steps">
         {
           STEPS.map((step, index) => (
-            <li class="grid grid-cols-[4.25rem_minmax(0,1fr)] items-start gap-x-4 border-t border-rule py-5 md:grid-cols-1 md:gap-y-4 md:border-t-0 md:py-0">
-              <span
-                class:list={[
-                  'relative z-10 grid size-13 place-items-center text-card font-semibold',
-                  INKS[index],
-                ]}
-                aria-hidden="true"
-              >
+            <li class="step">
+              <span class:list={['step-num', INKS[index]]} aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <div>
@@ -104,7 +116,7 @@ const schema = [organizationSchema(), websiteSchema()];
     </div>
   </section>
 
-  <section class="px-4 pb-16 md:pb-24" aria-labelledby="products">
+  <section class="home-block px-4" aria-labelledby="products">
     <div class="mx-auto max-w-6xl">
       <div class="flex items-end justify-between gap-4">
         <h2 id="products" class={heading}>The products</h2>
@@ -141,20 +153,24 @@ const schema = [organizationSchema(), websiteSchema()];
     </div>
   </section>
 
-  <section class="px-4 pb-16 md:pb-24" aria-labelledby="who">
+  <section class="home-who px-4" aria-labelledby="who">
     <div class="mx-auto max-w-6xl">
       <h2 id="who" class={heading}>Who we print for</h2>
-      <ul
-        role="list"
-        class="mt-10 grid gap-x-5 gap-y-6 sm:grid-cols-2 md:grid-cols-5"
-      >
+      <ul class="who" role="list">
         {
-          AUDIENCES.map((audience) => (
-            <li class="min-w-0">
-              <h3 class="text-card font-semibold text-brand-ink">
-                {audience.title}
-              </h3>
-              <p class={body}>{audience.body}</p>
+          AUDIENCES.map((audience, index) => (
+            <li class="who-tile">
+              <Picture
+                src={AUDIENCE_PIECES[index]!.image}
+                alt={AUDIENCE_PIECES[index]!.alt}
+                formats={['avif', 'webp']}
+                widths={[320, 480, 720, 960]}
+                sizes={audienceSizes}
+                loading="lazy"
+                class="who-photo"
+              />
+              <h3>{audience.title}</h3>
+              <p>{audience.body}</p>
             </li>
           ))
         }
@@ -162,19 +178,13 @@ const schema = [organizationSchema(), websiteSchema()];
     </div>
   </section>
 
-  <section
-    class="bg-brand-surface px-4 py-16 md:py-24"
-    aria-labelledby="recent"
-  >
+  <section class="home-recent bg-brand-surface px-4" aria-labelledby="recent">
     <div class="mx-auto max-w-6xl">
       <h2 id="recent" class={heading}>Recent work</h2>
-      <ul
-        role="list"
-        class="mt-10 grid gap-8 sm:grid-cols-2 md:grid-cols-[1.15fr_0.85fr] md:items-start"
-      >
+      <ul class="recent" role="list">
         {
-          RECENT_WORK.map((item, index) => (
-            <li class:list={[index === 1 && 'md:mt-16']}>
+          RECENT_WORK.map((item) => (
+            <li>
               <a href={`/products/${item.product}/`} class="group block">
                 <span class="block border border-rule bg-brand-surface p-3">
                   <span class="relative block aspect-4/5 overflow-hidden">
@@ -184,6 +194,7 @@ const schema = [organizationSchema(), websiteSchema()];
                       formats={['avif', 'webp']}
                       widths={[400, 600, 800, 1000, 1200]}
                       sizes={recentSizes}
+                      loading="lazy"
                       class="recent-photo absolute inset-0 size-full object-cover"
                     />
                   </span>
@@ -203,24 +214,259 @@ const schema = [organizationSchema(), websiteSchema()];
 </BaseLayout>
 
 <style>
-  /* From md, the steps hang off one rule, like a press run. */
+  .home-block {
+    padding-bottom: 4rem;
+  }
+
+  .home-first {
+    padding-top: 4rem;
+  }
+
+  .home-who {
+    padding-bottom: 2.5rem;
+  }
+
+  .home-recent {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .bento,
+  .who,
+  .recent,
+  .steps {
+    margin-top: 2.5rem;
+  }
+
+  .bento,
+  .who,
+  .recent {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .recent {
+    gap: 2rem;
+  }
+
+  .tile {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    min-width: 0;
+    padding: 0.85rem;
+    background: var(--color-brand-surface);
+  }
+
+  .tile h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-brand-ink);
+  }
+
+  .tile p {
+    margin-top: 0.4rem;
+    font-size: 1.125rem;
+    line-height: 1.45;
+    color: var(--color-brand-slate);
+  }
+
+  .accent-c {
+    box-shadow: inset 4px 0 0 #00a0e4;
+  }
+
+  .accent-m {
+    box-shadow: inset 4px 0 0 #c4006a;
+  }
+
+  .accent-y {
+    box-shadow: inset 4px 0 0 #ffe600;
+  }
+
+  .accent-k {
+    box-shadow: inset 4px 0 0 var(--color-brand-ink);
+  }
+
+  .tile-frame {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    background: var(--color-brand-surface);
+  }
+
+  .tile-frame :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  :global(.tile-photo) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :global(.who-photo) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    background: #fff;
+  }
+
+  .who-tile {
+    display: grid;
+    align-content: start;
+    min-width: 0;
+    border: 1px solid var(--color-rule);
+    background: #fff;
+  }
+
+  .who-tile h3 {
+    margin: 0.85rem 0.9rem 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-brand-ink);
+  }
+
+  .who-tile p {
+    margin: 0.35rem 0.9rem 0.95rem;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--color-brand-slate);
+  }
+
+  .steps {
+    display: grid;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 4.75rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0 1rem;
+    border-top: 1px solid var(--color-rule);
+    padding: 1.15rem 0;
+  }
+
+  .step-num {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 4.5rem;
+    height: 4.5rem;
+    place-items: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  @media (min-width: 40rem) {
+    .who,
+    .recent {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .who-tile:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+
   @media (min-width: 50.0625rem) {
+    .home-block {
+      padding-bottom: 5.5rem;
+    }
+
+    .home-first {
+      padding-top: 5.5rem;
+    }
+
+    .home-recent {
+      padding-bottom: 5.5rem;
+    }
+
+    .bento {
+      grid-template-columns: 1.35fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      align-items: start;
+    }
+
+    .tile-notice {
+      grid-column: 1 / span 2;
+      grid-row: 1;
+      grid-template-columns: 1.2fr 0.9fr;
+      align-items: center;
+    }
+
+    .tile-established {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .tile-glance {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .tile-ready {
+      grid-column: 2 / span 2;
+      grid-row: 2;
+      grid-template-columns: 0.95fr 1.15fr;
+      align-items: center;
+    }
+
+    .who {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .who-tile:nth-child(-n + 3) {
+      grid-column: span 2;
+    }
+
+    .who-tile:nth-child(n + 4) {
+      grid-column: span 3;
+    }
+
     .steps {
       position: relative;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
     }
 
     .steps::before {
       content: '';
       position: absolute;
-      top: 1.625rem;
-      right: 12%;
-      left: 1.625rem;
-      height: 2px;
-      background: var(--color-rule);
+      top: 2.25rem;
+      right: 6%;
+      left: 2.25rem;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        #00a0e4 0%,
+        #00a0e4 18%,
+        #c4006a 32%,
+        #c4006a 48%,
+        #ffe600 62%,
+        #ffe600 78%,
+        var(--color-brand-ink) 88%,
+        var(--color-brand-ink) 100%
+      );
+    }
+
+    .step {
+      grid-template-columns: 1fr;
+      gap: 1rem 0;
+      border-top: 0;
+      padding: 0;
     }
   }
 
-  /* Recent work is framed in on the piece, as in the draft. */
+  /* Recent work is framed in on the piece, the same crop on both. */
   :global(.recent-photo) {
     object-position: 50% 46%;
     transform: scale(1.25);
