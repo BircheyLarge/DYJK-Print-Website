@@ -1,32 +1,46 @@
 ---
+import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CmykBar from '../components/CmykBar.astro';
 import HomeHero from '../components/HomeHero.astro';
-import PortfolioPicture from '../components/PortfolioPicture.astro';
-import ProductCard from '../components/ProductCard.astro';
+import MatchedFrame from '../components/MatchedFrame.astro';
+import ProductTicker from '../components/ProductTicker.astro';
 import QuoteCta from '../components/QuoteCta.astro';
-import ServiceCard from '../components/ServiceCard.astro';
 import { SITE } from '../consts';
-import { organizationSchema, websiteSchema } from '../lib/schema';
-import { SERVICES } from '../data/catalog';
-import { PORTFOLIO_GALLERY } from '../data/portfolio';
+import {
+  AUDIENCES,
+  BENEFITS,
+  CLOSE_HEADING,
+  CLOSE_LINE,
+  RECENT_WORK,
+  STEPS,
+} from '../data/home';
+import { MATCHED } from '../data/matched';
 import { getProducts } from '../data/products';
+import { organizationSchema, websiteSchema } from '../lib/schema';
 
-const products = await getProducts();
-const recentWork = PORTFOLIO_GALLERY.slice(0, 2);
+// Direction C, which Stanley picked: the ink hero, then a white sheet of
+// sections with crop-mark headings, and the ink close.
+const products = (await getProducts()).filter((product) => MATCHED[product.id]);
 
-// Card width in the Popular products row: four columns with 20px gaps from
-// 1101px (265px at full width), three from md, two below with a 20px gap
-// from sm and 16px under it.
+const heading = 'crop-mark text-display font-bold text-brand-ink';
+const body = 'mt-1.5 text-base leading-normal text-brand-slate';
+// Step numbers in the four inks, in order: cyan, magenta, yellow, key.
+const INKS = [
+  'bg-brand-ink text-press-cyan',
+  'border-2 border-press-magenta bg-white text-press-magenta',
+  'bg-brand-ink text-press-yellow',
+  'border-2 border-brand-ink bg-white text-brand-ink',
+];
+
+// Photo width inside each product frame (12px mat and 1px border a side):
+// four across from md (239px at full width), two on phones.
 const productSizes =
-  '(min-width: 1152px) 265px, (min-width: 68.8125rem) calc(25vw - 23px), (min-width: 50.0625rem) calc(33.3vw - 24px), (min-width: 40rem) calc(50vw - 26px), calc(50vw - 24px)';
-
-// Slot width in the Recent work grid: two columns across the max-w-6xl
-// container (548px at full width; gap-4 under sm, gap-6 from sm).
-const recentWorkSizes =
-  '(min-width: 1152px) 548px, (min-width: 640px) calc(50vw - 28px), calc(50vw - 24px)';
-
-const sectionHeading =
-  'text-center text-h2-sm font-bold text-brand-ink md:text-h2';
+  '(min-width: 1152px) 239px, (min-width: 50.0625rem) calc(25vw - 49px), calc(50vw - 50px)';
+// Recent work frames: 1.15fr and 0.85fr from md, two across from sm. The
+// photo is cropped in by 25%, so ask for a little more.
+const recentSizes =
+  '(min-width: 1152px) 750px, (min-width: 50.0625rem) 66vw, (min-width: 40rem) 60vw, 120vw';
 
 const schema = [organizationSchema(), websiteSchema()];
 ---
@@ -37,32 +51,23 @@ const schema = [organizationSchema(), websiteSchema()];
   fonts={{ outfit: [500, 600, 700], syne: [] }}
 >
   <HomeHero />
+  <CmykBar />
+  <ProductTicker />
 
-  <section class="bg-brand-surface py-14 md:py-18">
-    <div class="mx-auto max-w-6xl px-4">
-      <h2 class={sectionHeading}>Our services</h2>
-      <div class="mt-10 grid gap-6 md:grid-cols-3">
-        {SERVICES.map((service) => <ServiceCard service={service} />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="py-14 md:py-18">
-    <div class="mx-auto max-w-6xl px-4">
-      <h2 class={sectionHeading}>Popular products</h2>
-      {/* Flex rather than grid, so a short last row sits centered. */}
-      <ul class="mt-10 flex flex-wrap justify-center gap-4 sm:gap-5">
+  <section class="px-4 py-16 md:py-24" aria-labelledby="why">
+    <div class="mx-auto max-w-6xl">
+      <h2 id="why" class={heading}>Why businesses choose DYJK</h2>
+      <ul
+        role="list"
+        class="mt-10 grid gap-x-5 gap-y-6 sm:grid-cols-2 md:grid-cols-4"
+      >
         {
-          products.map((product) => (
-            <li class="w-[calc(50%-0.5rem)] sm:w-[calc(50%-0.625rem)] md:w-[calc((100%-2.5rem)/3)] wide:w-[calc((100%-3.75rem)/4)]">
-              <ProductCard
-                slug={product.id}
-                title={product.data.title}
-                description={product.data.description}
-                sizes={productSizes}
-                headingLevel={3}
-                compact
-              />
+          BENEFITS.map((benefit) => (
+            <li>
+              <h3 class="text-card font-semibold text-brand-ink">
+                {benefit.title}
+              </h3>
+              <p class={body}>{benefit.body}</p>
             </li>
           ))
         }
@@ -70,33 +75,155 @@ const schema = [organizationSchema(), websiteSchema()];
     </div>
   </section>
 
-  <section class="bg-brand-surface py-14 md:py-18">
-    <div class="mx-auto max-w-6xl px-4">
-      <h2 class={sectionHeading}>Recent work</h2>
-      <div class="mt-10 grid grid-cols-2 gap-4 sm:gap-6">
+  <section class="px-4 pb-16 md:pb-24" aria-labelledby="how">
+    <div class="mx-auto max-w-6xl">
+      <h2 id="how" class={heading}>How it works</h2>
+      <ol class="steps mt-10 grid md:grid-cols-4 md:gap-6">
         {
-          recentWork.map((item) => (
-            <figure>
-              <PortfolioPicture item={item} sizes={recentWorkSizes} elevated />
-              <figcaption class="mt-3">
-                <h3 class="text-card-sm font-semibold text-brand-ink">
-                  {item.title}
+          STEPS.map((step, index) => (
+            <li class="grid grid-cols-[4.25rem_minmax(0,1fr)] items-start gap-x-4 border-t border-rule py-5 md:grid-cols-1 md:gap-y-4 md:border-t-0 md:py-0">
+              <span
+                class:list={[
+                  'relative z-10 grid size-13 place-items-center text-card font-semibold',
+                  INKS[index],
+                ]}
+                aria-hidden="true"
+              >
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="text-card font-semibold text-brand-ink">
+                  {step.title}
                 </h3>
-              </figcaption>
-            </figure>
+                <p class={body}>{step.body}</p>
+              </div>
+            </li>
           ))
         }
-      </div>
-      <p class="mt-9 text-center">
-        <a
-          href="/portfolio/"
-          class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
-        >
-          View our portfolio&nbsp;<span aria-hidden="true">→</span>
-        </a>
-      </p>
+      </ol>
     </div>
   </section>
 
-  <QuoteCta />
+  <section class="px-4 pb-16 md:pb-24" aria-labelledby="products">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex items-end justify-between gap-4">
+        <h2 id="products" class={heading}>The products</h2>
+        <a
+          href="/products/"
+          class="shrink-0 text-sm font-semibold text-brand-blue underline underline-offset-[0.18em] hover:text-brand-blue-dark"
+        >
+          All products
+        </a>
+      </div>
+      <p class="mt-3 max-w-2xl text-prose-sm text-brand-slate md:text-prose">
+        One set of pieces, from the card in a pocket to the mailer in a box.
+      </p>
+      <ul
+        role="list"
+        class="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-5"
+      >
+        {
+          products.map((product) => (
+            <li>
+              <a href={`/products/${product.id}/`} class="group block">
+                <MatchedFrame
+                  image={MATCHED[product.id]!}
+                  sizes={productSizes}
+                />
+                <span class="mt-3 block text-base font-semibold text-brand-ink group-hover:text-brand-blue">
+                  {product.data.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="px-4 pb-16 md:pb-24" aria-labelledby="who">
+    <div class="mx-auto max-w-6xl">
+      <h2 id="who" class={heading}>Who we print for</h2>
+      <ul
+        role="list"
+        class="mt-10 grid gap-x-5 gap-y-6 sm:grid-cols-2 md:grid-cols-5"
+      >
+        {
+          AUDIENCES.map((audience) => (
+            <li class="min-w-0">
+              <h3 class="text-card font-semibold text-brand-ink">
+                {audience.title}
+              </h3>
+              <p class={body}>{audience.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section
+    class="bg-brand-surface px-4 py-16 md:py-24"
+    aria-labelledby="recent"
+  >
+    <div class="mx-auto max-w-6xl">
+      <h2 id="recent" class={heading}>Recent work</h2>
+      <ul
+        role="list"
+        class="mt-10 grid gap-8 sm:grid-cols-2 md:grid-cols-[1.15fr_0.85fr] md:items-start"
+      >
+        {
+          RECENT_WORK.map((item, index) => (
+            <li class:list={[index === 1 && 'md:mt-16']}>
+              <a href={`/products/${item.product}/`} class="group block">
+                <span class="block border border-rule bg-brand-surface p-3">
+                  <span class="relative block aspect-4/5 overflow-hidden">
+                    <Picture
+                      src={item.image}
+                      alt=""
+                      formats={['avif', 'webp']}
+                      widths={[400, 600, 800, 1000, 1200]}
+                      sizes={recentSizes}
+                      class="recent-photo absolute inset-0 size-full object-cover"
+                    />
+                  </span>
+                </span>
+                <span class="mt-3 block text-base font-semibold text-brand-ink group-hover:text-brand-blue">
+                  {item.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <QuoteCta heading={CLOSE_HEADING} text={CLOSE_LINE} />
 </BaseLayout>
+
+<style>
+  /* From md, the steps hang off one rule, like a press run. */
+  @media (min-width: 50.0625rem) {
+    .steps {
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 1.625rem;
+      right: 12%;
+      left: 1.625rem;
+      height: 2px;
+      background: var(--color-rule);
+    }
+  }
+
+  /* Recent work is framed in on the piece, as in the draft. */
+  :global(.recent-photo) {
+    object-position: 50% 46%;
+    transform: scale(1.25);
+    transform-origin: 50% 46%;
+  }
+</style>

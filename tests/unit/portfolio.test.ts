@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { SERVICES } from '../../src/data/catalog';
 import {
   assertKnownProducts,
-  HERO_TILES,
   imagesForProduct,
   moreWork,
   pieceByFile,
@@ -76,13 +75,6 @@ describe('assertKnownProducts', () => {
 
   it('skips the check until any product entries exist', () => {
     expect(() => assertKnownProducts([])).not.toThrow();
-  });
-});
-
-describe('HERO_TILES', () => {
-  it('shows five different pieces', () => {
-    expect(HERO_TILES).toHaveLength(5);
-    expect(new Set(HERO_TILES.map(({ item }) => item)).size).toBe(5);
   });
 });
 

@@ -9,10 +9,28 @@ test.describe('home page', () => {
     await expect(page).toHaveTitle(/DYJK Print/);
     const h1 = page.locator('h1');
     await expect(h1).toHaveCount(1);
-    // The <br> stacks it like the card; innerText reads it as one line.
-    await expect(h1).toContainText('Your Vision, Our Precision', {
-      useInnerText: true,
-    });
+    await expect(h1).toHaveText('Impossible to walk past.');
+  });
+
+  test('says the headline once: its color plates are hidden copies', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const plates = page.locator('.plates');
+    await expect(plates).toHaveAttribute('aria-hidden', 'true');
+    // The plates draw their text with ::before, which innerText leaves out.
+    const text = await page.locator('main').innerText();
+    expect(text.split('Impossible to walk past.')).toHaveLength(2);
+  });
+
+  test('holds the plates still for reduced motion', async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto('/');
+    for (const plate of await page.locator('.plate').all()) {
+      await expect(plate).toHaveCSS('animation-name', 'none');
+    }
+    await context.close();
   });
 
   test('exposes the primary quote CTA', async ({ page }) => {
@@ -54,10 +72,10 @@ test.describe('home page', () => {
     expect(body).not.toContain('draper');
   });
 
-  test('links the Recent work strip to the portfolio', async ({ page }) => {
+  test('links the hero to the portfolio', async ({ page }) => {
     await page.goto('/');
     await expect(
-      page.getByRole('link', { name: 'View our portfolio' }),
+      page.getByRole('link', { name: 'See our work' }),
     ).toHaveAttribute('href', '/portfolio/');
   });
 
@@ -87,13 +105,18 @@ test.describe('home page', () => {
 
   test('links to every product page', async ({ page }) => {
     await page.goto('/products/');
+    // Product pages only: the homepage also links the hub itself.
+    const productPages = (els: Element[]) =>
+      els
+        .map((el) => el.getAttribute('href'))
+        .filter((href) => /^\/products\/[^/]+\/$/.test(href ?? ''));
     const products = await page
       .locator('main a[href^="/products/"]')
-      .evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+      .evaluateAll(productPages);
     await page.goto('/');
     const linked = await page
       .locator('main a[href^="/products/"]')
-      .evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+      .evaluateAll(productPages);
     expect(products.length).toBeGreaterThan(0);
     expect(new Set(linked)).toEqual(new Set(products));
   });

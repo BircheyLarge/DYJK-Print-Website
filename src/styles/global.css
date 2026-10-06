@@ -64,18 +64,15 @@
   --font-sans: var(--font-outfit, sans-serif);
   --font-display: var(--font-syne, sans-serif);
 
-  /*
-   * Type scale (SPEC.md). Each -sm size is the phone size of the role above.
-   * The homepage h1 also shrinks with its column (an @container): its second
-   * line, "Our Precision", can't wrap and runs about 10.2em in Syne 800, so
-   * capping it at 9.45% of the column keeps it, and its fallback, inside.
-   */
-  --text-hero: min(3rem, 9.45cqw);
-  --text-hero--line-height: 0.98;
-  --text-hero--letter-spacing: -0.04em;
-  --text-hero-sm: min(2rem, 9.45cqw);
-  --text-hero-sm--line-height: 1.02;
-  --text-hero-sm--letter-spacing: -0.03em;
+  /* Type scale. Each -sm size is the phone size of the role above. */
+  /* The homepage h1, direction C's size. */
+  --text-hero: clamp(2.5rem, 4.2vw, 4.6rem);
+  --text-hero--line-height: 1.1;
+  --text-hero--letter-spacing: -0.01em;
+  /* The homepage's section h2s, one step under its h1. */
+  --text-display: clamp(2rem, 1.25rem + 2.4vw, 2.75rem);
+  --text-display--line-height: 1.2;
+  --text-display--letter-spacing: -0.01em;
   --text-h1: 2.75rem;
   --text-h1--line-height: 1.1;
   --text-h1--letter-spacing: -0.01em;

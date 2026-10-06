@@ -29,9 +29,9 @@ for (const width of [390, 1440]) {
   });
 }
 
-// Product and service pages ask for themselves; the portfolio, contact and
-// about pages close on their own heading; every other page with the band
-// keeps the default.
+// Product and service pages ask for themselves; the homepage, portfolio,
+// contact and about pages close on their own heading; every other page with
+// the band keeps the default.
 test('the CTA band heading fits each page', async ({ page }) => {
   test.slow();
   const wrong: string[] = [];
@@ -48,22 +48,29 @@ test('the CTA band heading fits each page', async ({ page }) => {
           ? "Let's get you noticed."
           : path === '/about/'
             ? "Let's print it together."
-            : 'Ready to start your print project?';
+            : path === '/'
+              ? 'Ready to get noticed?'
+              : 'Ready to start your print project?';
     if (heading !== expected) wrong.push(`${path}: "${heading}"`);
   }
   expect(wrong).toEqual([]);
 });
 
-test('the hero tiles load eagerly, the flyer first', async ({ page }) => {
+test('the hero fan loads eagerly, the front card first', async ({ page }) => {
   await page.goto('/');
-  const tiles = page.locator('section[aria-label="Introduction"] figure img');
-  await expect(tiles).toHaveCount(5);
-  for (const img of await tiles.all()) {
+  const cards = page.locator('section[aria-label="Introduction"] .fan-card');
+  await expect(cards).toHaveCount(5);
+  for (const img of await cards.locator('img').all()) {
     await expect(img).toHaveAttribute('loading', 'eager');
   }
+  // The flyer sits in front of the fan, and alone gets high priority.
   const priority = page.locator(
     'section[aria-label="Introduction"] img[fetchpriority="high"]',
   );
   await expect(priority).toHaveCount(1);
-  await expect(priority).toHaveAttribute('alt', /Atomic Auto Show flyer/);
+  await expect(cards.last().locator('img')).toHaveAttribute(
+    'fetchpriority',
+    'high',
+  );
+  await expect(cards.last()).toHaveAttribute('aria-label', 'Flyers');
 });

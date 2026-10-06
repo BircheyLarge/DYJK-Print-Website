@@ -1,0 +1,62 @@
+---
+import { TICKER } from '../data/home';
+
+// Direction C's band of product names under the hero. The moving copy is
+// hidden from assistive tech, which reads the list once instead. It pauses
+// on hover and holds still for reduced motion.
+const line = TICKER.join(' · ');
+---
+
+<div class="relative border-b border-rule bg-white">
+  <p class="sr-only">{TICKER.join(', ')}.</p>
+  <div class="ticker" aria-hidden="true">
+    <div class="track">
+      <p>{line}</p>
+      <p>{line}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ticker {
+    position: relative;
+    overflow: hidden;
+    height: 2.75rem;
+  }
+
+  .track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: max-content;
+    animation: ticker 32s linear infinite;
+  }
+
+  .track p {
+    padding: 0.75rem 1.5rem;
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    line-height: 1.25rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-brand-ink);
+  }
+
+  .ticker:hover .track {
+    animation-play-state: paused;
+  }
+
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track {
+      animation: none;
+    }
+  }
+</style>

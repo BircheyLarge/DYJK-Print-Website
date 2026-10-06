@@ -320,46 +320,6 @@ export const PORTFOLIO_GALLERY = PORTFOLIO.filter(
   (item) => item.kind === 'photo',
 );
 
-/** The portfolio entry for an imported image. */
-function piece(image: ImageMetadata): PortfolioItem {
-  const item = PORTFOLIO.find((entry) => entry.image === image);
-  if (!item) throw new Error(`No portfolio entry uses ${image.src}.`);
-  return item;
-}
-
-export interface HeroTile {
-  item: PortfolioItem;
-  /** Names the product, like the flyer's photo captions. */
-  caption: string;
-  /** object-position that keeps the key artwork in frame. */
-  position: string;
-  /** Phones crop the tile differently; defaults to `position`. */
-  phonePosition?: string;
-}
-
-/**
- * The homepage hero mosaic (web-refresh SPEC.md): DYJK's real print files.
- * Phones show the first three; HomeHero.astro places the five on larger
- * screens.
- */
-export const HERO_TILES: ReadonlyArray<HeroTile> = [
-  {
-    item: piece(flyerAutoShow),
-    caption: 'Flyers',
-    position: '78% 38%',
-    phonePosition: '86% 38%',
-  },
-  {
-    item: piece(doorHangerCleanItUp),
-    caption: 'Door hangers',
-    position: '50% 38%',
-    phonePosition: '50% 40%',
-  },
-  { item: piece(cardsDespain), caption: 'Business cards', position: '42% 58%' },
-  { item: piece(brochureSunTree), caption: 'Brochures', position: '46% 50%' },
-  { item: piece(menuBagelShop), caption: 'Menus', position: '16% 50%' },
-];
-
 /**
  * The service a portfolio item links to. Throws on an unknown slug so a typo
  * fails the build instead of shipping a dead link.
