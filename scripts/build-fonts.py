@@ -8,8 +8,9 @@ each family's OFL.txt.
     pip install fonttools brotli
     python3 scripts/build-fonts.py
 
-If the metrics change (new upstream version), update the Syne fallback faces
-in src/styles/global.css; tests/unit/fonts.test.ts prints the new values.
+If the metrics change (new upstream version), update the Outfit fallback
+faces in src/styles/global.css; tests/unit/fonts.test.ts prints the new
+values.
 """
 
 import hashlib
@@ -32,13 +33,6 @@ FAMILIES = {
         "sha256": "fc7287273e66929776e2ba54f144fe699080bec29f61bf649d70d871468aeade",
         "license": "ofl/outfit/OFL.txt",
         "weights": [400, 500, 600, 700],
-    },
-    "syne": {
-        "commit": "54fb97bd69162b95b2aa2c3996ffd71466c1aec2",  # Syne v2.200
-        "font": "ofl/syne/Syne%5Bwght%5D.ttf",
-        "sha256": "ce5ac77142a65cab2248a1a2ebb740b1d4d9c20b52488877d3ff664d1356104a",
-        "license": "ofl/syne/OFL.txt",
-        "weights": [600, 700, 800],
     },
 }
 

@@ -18,8 +18,8 @@ export default defineConfig({
   // Consistent trailing-slash policy → one canonical URL shape, no duplicate-content splits.
   trailingSlash: 'always',
   build: { format: 'directory' },
-  // Card B type (#myfkg6). <Font> in BaseHead emits the @font-face rules and
-  // the first-screen preloads; global.css maps these to --font-sans/--font-display.
+  // Outfit, the site's one typeface. <Font> in BaseHead emits the @font-face
+  // rules and the first-screen preloads; global.css maps it to --font-sans.
   fonts: [
     {
       provider: fontProviders.local(),
@@ -51,35 +51,6 @@ export default defineConfig({
             weight: 700,
             style: 'normal',
             src: ['./src/assets/fonts/outfit/outfit-latin-700.woff2'],
-          },
-        ],
-      },
-    },
-    {
-      provider: fontProviders.local(),
-      name: 'Syne',
-      cssVariable: '--font-syne',
-      // Syne widens sharply with weight (0.508em at 600, 0.789em at 800), which
-      // one set of metrics per family can't match, so its fallback faces are
-      // written per weight in global.css instead.
-      optimizedFallbacks: false,
-      fallbacks: ['Syne Fallback', 'sans-serif'],
-      options: {
-        variants: [
-          {
-            weight: 600,
-            style: 'normal',
-            src: ['./src/assets/fonts/syne/syne-latin-600.woff2'],
-          },
-          {
-            weight: 700,
-            style: 'normal',
-            src: ['./src/assets/fonts/syne/syne-latin-700.woff2'],
-          },
-          {
-            weight: 800,
-            style: 'normal',
-            src: ['./src/assets/fonts/syne/syne-latin-800.woff2'],
           },
         ],
       },

@@ -99,7 +99,7 @@ A **nationwide lead-generation marketing site**, not a SaaS app. Decisions optim
 ## 6. Design direction
 
 - Keep the **logo** (the one keeper) — build palette/type around it. Need the asset + brand colors from @you.
-- **Type:** Outfit for body and UI, Syne for display, from Stan's Card B; self-hosted (see `src/assets/fonts/README.md`).
+- **Type:** Outfit for everything, headings included (h1/h2 at 700, h3 at 600), from Stan's card; self-hosted (see `src/assets/fonts/README.md`).
 - Clean, modern, high-trust: strong hero, real work photography, social proof, obvious CTAs, sticky "Request a Quote."
 - Accessible (WCAG 2.2 AA), mobile-first, high contrast.
 

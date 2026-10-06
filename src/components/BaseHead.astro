@@ -5,11 +5,11 @@ import { buildPageMeta, type PageMetaInput } from '../lib/seo';
 
 interface Props extends PageMetaInput {
   /**
-   * The faces the first screen draws with; only these are preloaded. The
-   * default fits interior pages: Outfit 700 for the h1, 400 and 500 for the
-   * prose, deck and nav.
+   * The Outfit weights the first screen draws with; only these are
+   * preloaded. The default fits interior pages: 700 for the h1, 400 and 500
+   * for the prose, deck and nav.
    */
-  fonts?: { outfit: number[]; syne: number[] };
+  fonts?: number[];
 }
 
 const {
@@ -19,7 +19,7 @@ const {
   seoDescription,
   image,
   noindex,
-  fonts = { outfit: [400, 500, 700], syne: [] },
+  fonts = [400, 500, 700],
 } = Astro.props;
 const meta = buildPageMeta({
   title,
@@ -38,11 +38,7 @@ const meta = buildPageMeta({
 
 <Font
   cssVariable="--font-outfit"
-  preload={fonts.outfit.map((weight) => ({ weight }))}
-/>
-<Font
-  cssVariable="--font-syne"
-  preload={fonts.syne.map((weight) => ({ weight }))}
+  preload={fonts.map((weight) => ({ weight }))}
 />
 
 <title>{meta.title}</title>

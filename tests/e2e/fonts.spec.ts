@@ -39,7 +39,7 @@ async function fallbackText(client: CDPSession) {
       nodeId,
     });
     const system = fonts.filter(
-      (font) => !font.isCustomFont || !/^(Outfit|Syne)\b/.test(font.familyName),
+      (font) => !font.isCustomFont || !/^Outfit\b/.test(font.familyName),
     );
     if (system.length) {
       misses.push(
@@ -52,7 +52,7 @@ async function fallbackText(client: CDPSession) {
 
 // Characters outside the Latin subsets silently fall back to a system font.
 // If new copy needs one, add it in scripts/build-fonts.py and rebuild.
-test('every page draws all of its text in Outfit or Syne', async ({ page }) => {
+test('every page draws all of its text in Outfit', async ({ page }) => {
   test.slow();
   const client = await page.context().newCDPSession(page);
   await client.send('DOM.enable');

@@ -9,8 +9,8 @@ import type { PageMetaInput } from '../lib/seo';
 interface Props extends PageMetaInput {
   /** Optional JSON-LD nodes for this page. */
   schema?: Record<string, unknown> | Record<string, unknown>[];
-  /** Faces to preload; see BaseHead. */
-  fonts?: { outfit: number[]; syne: number[] };
+  /** Outfit weights to preload; see BaseHead. */
+  fonts?: number[];
 }
 
 const { schema, fonts, ...meta } = Astro.props;

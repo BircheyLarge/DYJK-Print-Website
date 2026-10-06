@@ -57,12 +57,11 @@
   --breakpoint-wide: 68.8125rem;
 
   /*
-   * Type from Card B: Outfit for body and UI, Syne for display. Astro's fonts
-   * API (astro.config.mjs, <Font> in BaseHead) defines --font-outfit and
-   * --font-syne with their fallback stacks.
+   * Outfit for everything: body and UI, h3 at 600, h1 and h2 at 700. Astro's
+   * fonts API (astro.config.mjs, <Font> in BaseHead) defines --font-outfit
+   * with its fallback stack.
    */
   --font-sans: var(--font-outfit, sans-serif);
-  --font-display: var(--font-syne, sans-serif);
 
   /* Type scale. Each -sm size is the phone size of the role above. */
   /* The homepage h1, direction C's size. */
@@ -160,43 +159,6 @@
   size-adjust: 96.0456%;
   ascent-override: 104.1172%;
   descent-override: 27.0705%;
-  line-gap-override: 0%;
-}
-
-/*
- * Syne's metric-matched fallbacks, one per weight because Syne widens with
- * weight (see astro.config.mjs). Arial Bold sized to each cut's average width
- * with Capsize's formula, as Astro does for Outfit, so lines wrap the same
- * before and after the swap. tests/unit/fonts.test.ts checks these against
- * the font files.
- */
-@font-face {
-  font-family: 'Syne Fallback';
-  src: local('Arial Bold');
-  font-weight: 600;
-  size-adjust: 105.8376%;
-  ascent-override: 87.398%;
-  descent-override: 25.9832%;
-  line-gap-override: 0%;
-}
-
-@font-face {
-  font-family: 'Syne Fallback';
-  src: local('Arial Bold');
-  font-weight: 700;
-  size-adjust: 114.1713%;
-  ascent-override: 81.0186%;
-  descent-override: 24.0866%;
-  line-gap-override: 0%;
-}
-
-@font-face {
-  font-family: 'Syne Fallback';
-  src: local('Arial Bold');
-  font-weight: 800;
-  size-adjust: 164.3817%;
-  ascent-override: 56.2715%;
-  descent-override: 16.7294%;
   line-gap-override: 0%;
 }
 

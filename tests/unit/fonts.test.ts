@@ -49,7 +49,6 @@ function fallbackFace(name: string, weight: number): Record<string, string> {
 // [family folder, fallback family, the local font each weight stands in for]
 const FAMILIES = [
   ['outfit', 'Outfit Fallback', (weight: number) => weight >= 700],
-  ['syne', 'Syne Fallback', () => true],
 ] as const;
 
 for (const [family, name, usesBold] of FAMILIES) {
