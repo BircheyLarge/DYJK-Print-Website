@@ -9,6 +9,7 @@ import fanBusinessCard from '../assets/matched/fan/business-card.jpg';
 import fanDoorHanger from '../assets/matched/fan/door-hanger.jpg';
 import fanFlyer from '../assets/matched/fan/flyer.jpg';
 import fanMenu from '../assets/matched/fan/menu.jpg';
+import fanPostcard from '../assets/matched/fan/postcard.jpg';
 import brochures from '../assets/matched/product-brochures.jpg';
 import envelopesLetterhead from '../assets/matched/product-envelopes-letterhead.jpg';
 import cardsDespain from '../assets/portfolio/business-cards-despain-subaru.jpg';
@@ -177,21 +178,26 @@ export interface FanPiece {
   href: string;
 }
 
-/** Back to front: the flyer is the front card. */
+/** Back to front. Business cards start in front; each step sends that card to the back. */
 export const FAN: readonly FanPiece[] = [
-  {
-    image: fanBusinessCard,
-    label: 'Business cards',
-    href: '/products/business-cards/',
-  },
   { image: fanMenu, label: 'Menus', href: '/products/menus/' },
+  { image: fanBrochure, label: 'Brochures', href: '/products/brochures/' },
   {
     image: fanDoorHanger,
     label: 'Door hangers',
     href: '/products/door-hangers/',
   },
-  { image: fanBrochure, label: 'Brochures', href: '/products/brochures/' },
   { image: fanFlyer, label: 'Flyers', href: '/products/flyers/' },
+  {
+    image: fanPostcard,
+    label: 'Postcards & mailers',
+    href: '/products/postcards-mailers/',
+  },
+  {
+    image: fanBusinessCard,
+    label: 'Business cards',
+    href: '/products/business-cards/',
+  },
 ];
 
 /** Recent work: the two newest photos of finished jobs. */

@@ -56,25 +56,27 @@ test('the CTA band heading fits each page', async ({ page }) => {
   expect(wrong).toEqual([]);
 });
 
-test('the hero fan loads the first image eagerly', async ({ page }) => {
+test('the hero fan loads the front card eagerly', async ({ page }) => {
   await page.goto('/');
   const cards = page.locator('section[aria-label="Introduction"] .fan-card');
-  await expect(cards).toHaveCount(5);
-  const images = await cards.locator('img').all();
-  for (const [index, img] of images.entries()) {
-    await expect(img).toHaveAttribute(
-      'loading',
-      index === 0 ? 'eager' : 'lazy',
-    );
-  }
-  // The first fan image is the one the browser should fetch immediately.
-  const priority = page.locator(
-    'section[aria-label="Introduction"] img[fetchpriority="high"]',
+  await expect(cards).toHaveCount(6);
+  // Business cards start in front, and that image is the one to fetch first.
+  const frontCard = page.locator(
+    'section[aria-label="Introduction"] .fan-card[aria-label="Business cards"]',
   );
-  await expect(priority).toHaveCount(1);
-  await expect(cards.first().locator('img')).toHaveAttribute(
+  await expect(frontCard).toHaveCount(1);
+  await expect(frontCard.locator('img')).toHaveAttribute('loading', 'eager');
+  await expect(frontCard.locator('img')).toHaveAttribute(
     'fetchpriority',
     'high',
   );
-  await expect(cards.last()).toHaveAttribute('aria-label', 'Flyers');
+  for (const img of await cards.locator('img').all()) {
+    if ((await img.getAttribute('fetchpriority')) === 'high') continue;
+    await expect(img).toHaveAttribute('loading', 'lazy');
+  }
+  await expect(
+    page.locator(
+      'section[aria-label="Introduction"] img[fetchpriority="high"]',
+    ),
+  ).toHaveCount(1);
 });

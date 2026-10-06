@@ -24,6 +24,8 @@ PIECES = [
     ("door-hanger", "product-door-hangers.jpg", 5.373, (0.2423, 0.3072)),
     ("brochure", "product-brochures.jpg", 3.75, (0.8788, 0.2841)),
     ("flyer", "product-flyers.jpg", 2.432, (0.1415, 0.2052)),
+    # No Time to Die postcard, framed like the other single pieces.
+    ("postcard", "product-postcards-mailers.jpg", 2.64706, (0.17857, 0.41515)),
 ]
 
 
