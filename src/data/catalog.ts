@@ -29,9 +29,9 @@ export const SERVICES: ReadonlyArray<ServiceItem> = [
     name: 'Digital Printing',
     href: '/services/digital-printing/',
     blurb:
-      'Fast-turnaround short runs — business cards, personalized mailers and proofs.',
+      'Short runs with no plates, from business cards to personalized mailers and proofs.',
     detail:
-      'Digital printing turns short runs around fast, with no plates and easy personalization. It is ideal for business cards, on-demand reprints, variable-data mailers and proofs when you need quality quickly.',
+      'Digital printing puts the image on the sheet from the file, with no plates, so a short run or a different name on every piece is simple. It suits business cards, reprints, variable-data mailers and proofs.',
   },
   {
     slug: 'graphic-design',
