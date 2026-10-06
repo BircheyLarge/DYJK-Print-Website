@@ -10,10 +10,11 @@ const { items } = Astro.props;
 
 // A lone example gets a full-width tile; more become a compact grid, two-up
 // on phones and in the lg side column (341px wide), three-up on tablets.
+// Sizes are the image inside C's frame, 26px narrower than the tile.
 const single = items.length === 1;
 const thumbSizes = single
-  ? '(min-width: 1152px) 341px, (min-width: 1024px) calc(33.3vw - 43px), (min-width: 640px) calc(50vw - 22px), calc(100vw - 32px)'
-  : '(min-width: 1152px) 165px, (min-width: 1024px) calc(16.7vw - 27px), (min-width: 640px) calc(33.3vw - 19px), calc(50vw - 22px)';
+  ? '(min-width: 1152px) 315px, (min-width: 1024px) calc(33.3vw - 69px), (min-width: 640px) calc(50vw - 48px), calc(100vw - 58px)'
+  : '(min-width: 1152px) 139px, (min-width: 1024px) calc(16.7vw - 53px), (min-width: 640px) calc(33.3vw - 45px), calc(50vw - 48px)';
 ---
 
 <h2 class="text-sm font-semibold text-brand-ink">Examples</h2>

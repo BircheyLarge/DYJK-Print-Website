@@ -41,12 +41,9 @@
   /* Hairline rules and frame borders on light grounds. Never text. */
   --color-rule: #d5e3ec;
 
+  /* Buttons and controls. Cards and photos have none: they're C's square,
+     ruled frames. */
   --radius-control: 6px;
-  --radius-card: 16px;
-  /* Tinted with blue-dark, so photos sit off the page instead of looking gray.
-     Text cards don't use it: they're C's ruled frames. */
-  --shadow-card:
-    0 1px 2px rgb(11 26 34 / 0.06), 0 12px 28px rgb(20 81 125 / 0.1);
 
   /*
    * Card B layout (web-refresh SPEC.md): phone layouts at 800px and under, so

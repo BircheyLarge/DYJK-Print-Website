@@ -42,7 +42,7 @@ const textColumn = flip ? 'md:col-start-2' : 'md:col-start-1';
   </h2>
   <div
     class:list={[
-      'border border-rule bg-brand-surface p-3 md:row-span-4 md:row-start-1 md:self-center',
+      'md:row-span-4 md:row-start-1 md:self-center',
       flip ? 'md:col-start-1' : 'md:col-start-2',
     ]}
   >
@@ -53,7 +53,6 @@ const textColumn = flip ? 'md:col-start-2' : 'md:col-start-1';
       sizes={sizes}
       loading={loading}
       crop
-      flush
     />
   </div>
   <div class:list={['md:row-start-3 md:mt-5', textColumn]}>

@@ -13,10 +13,6 @@ interface Props {
   crop?: boolean;
   /** Empty alt, for cards whose own text already names the product. */
   decorative?: boolean;
-  /** Square corners, for an image inside one of C's ruled frames. */
-  flush?: boolean;
-  /** Card shadow, for photos that stand on their own (Recent work, gallery). */
-  elevated?: boolean;
 }
 
 const {
@@ -26,8 +22,6 @@ const {
   fetchpriority,
   crop,
   decorative,
-  flush,
-  elevated,
 } = Astro.props;
 
 // Shared by every portfolio image so pages reuse the same generated files.
@@ -78,10 +72,5 @@ if (crop) {
   loading={loading}
   fetchpriority={fetchpriority}
   {...frame}
-  class:list={[
-    'w-full bg-brand-surface',
-    !flush && 'rounded-card',
-    elevated && 'shadow-card',
-    crop && 'aspect-3/2 object-cover',
-  ]}
+  class:list={['w-full bg-brand-surface', crop && 'aspect-3/2 object-cover']}
 />

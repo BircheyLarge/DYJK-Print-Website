@@ -33,14 +33,15 @@ const groups = moreWork(
   new Set(stories.map((story) => story.item)),
 );
 
-// Story images: half the max-w-6xl container beside the text from md (536px
-// at full width), the full column on phones.
+// Image widths inside C's frame, 26px narrower than the slot. Story images:
+// half the max-w-6xl container beside the text from md (536px at full
+// width), the full column on phones.
 const storySizes =
-  '(min-width: 1152px) 536px, (min-width: 50.0625rem) calc(50vw - 40px), calc(100vw - 32px)';
+  '(min-width: 1152px) 510px, (min-width: 50.0625rem) calc(50vw - 66px), calc(100vw - 58px)';
 // Gallery thumbnails: three across from md (357px at full width), two below
 // (gap-6 from sm, gap-4 under it).
 const gallerySizes =
-  '(min-width: 1152px) 357px, (min-width: 50.0625rem) calc(33.3vw - 27px), (min-width: 40rem) calc(50vw - 28px), calc(50vw - 24px)';
+  '(min-width: 1152px) 331px, (min-width: 50.0625rem) calc(33.3vw - 53px), (min-width: 40rem) calc(50vw - 54px), calc(50vw - 50px)';
 
 const sectionHeading =
   'crop-mark text-h2-sm font-bold text-brand-ink md:text-h2';
@@ -102,7 +103,6 @@ const schema = breadcrumbSchema([
                 sizes={storySizes}
                 loading={index === 0 ? 'eager' : 'lazy'}
                 crop
-                elevated
               />
             </div>
             <div>
