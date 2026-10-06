@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import { Font } from 'astro:assets';
 import { SITE } from '../consts';
 import { buildPageMeta, type PageMetaInput } from '../lib/seo';
@@ -21,12 +23,21 @@ const {
   noindex,
   fonts = [400, 500, 700],
 } = Astro.props;
+// Pages without their own image share the site default, once the file is
+// in public/ (until then, no og:image rather than a broken one).
+const defaultCard = fs.existsSync(
+  path.join(process.cwd(), 'public', SITE.ogImage.src),
+)
+  ? SITE.ogImage
+  : undefined;
+const card = image ? undefined : defaultCard;
+
 const meta = buildPageMeta({
   title,
   description,
   seoTitle,
   seoDescription,
-  image,
+  image: image ?? card?.src,
   noindex,
   path: Astro.url.pathname,
 });
@@ -54,6 +65,15 @@ const meta = buildPageMeta({
 {meta.canonical && <meta property="og:url" content={meta.canonical} />}
 <meta property="og:locale" content={SITE.locale} />
 {meta.image && <meta property="og:image" content={meta.image} />}
+{
+  card && (
+    <>
+      <meta property="og:image:width" content={String(card.width)} />
+      <meta property="og:image:height" content={String(card.height)} />
+      <meta property="og:image:alt" content={card.alt} />
+    </>
+  )
+}
 
 <!-- Twitter -->
 <meta
@@ -63,6 +83,7 @@ const meta = buildPageMeta({
 <meta name="twitter:title" content={meta.title} />
 <meta name="twitter:description" content={meta.description} />
 {meta.image && <meta name="twitter:image" content={meta.image} />}
+{card && <meta name="twitter:image:alt" content={card.alt} />}
 
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

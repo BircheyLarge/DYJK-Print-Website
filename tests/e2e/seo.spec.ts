@@ -1,7 +1,8 @@
+import fs from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 // The voyeur's final SEO pass (#5wcfs8): titles that carry the search term,
-// and product pages linking to the industries that use them.
+// product pages linking to the industries that use them, and a share image.
 
 test('titles carry the search terms', async ({ page }) => {
   const TITLES: Record<string, string> = {
@@ -64,5 +65,37 @@ test('product pages link to the industries that use them', async ({ page }) => {
     for (const text of await links.allInnerTexts()) {
       expect(text, slug).toMatch(/^Print for /);
     }
+  }
+});
+
+test('every page shares the default card once it exists', async ({ page }) => {
+  const exists = fs.existsSync('public/og/dyjk-default.jpg');
+  for (const path of ['/', '/industries/', '/products/business-cards/']) {
+    await page.goto(path);
+    const og = page.locator('meta[property="og:image"]');
+    const card = page.locator('meta[name="twitter:card"]');
+    if (!exists) {
+      // Guarded: no image tags until the file is in public/og/.
+      await expect(og, path).toHaveCount(0);
+      await expect(card, path).toHaveAttribute('content', 'summary');
+      continue;
+    }
+    await expect(og, path).toHaveAttribute(
+      'content',
+      'https://www.dyjkprint.com/og/dyjk-default.jpg',
+    );
+    await expect(
+      page.locator('meta[property="og:image:width"]'),
+      path,
+    ).toHaveAttribute('content', '1200');
+    await expect(
+      page.locator('meta[property="og:image:height"]'),
+      path,
+    ).toHaveAttribute('content', '630');
+    await expect(
+      page.locator('meta[property="og:image:alt"]'),
+      path,
+    ).toHaveAttribute('content', /\S/);
+    await expect(card, path).toHaveAttribute('content', 'summary_large_image');
   }
 });

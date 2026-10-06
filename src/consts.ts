@@ -42,6 +42,16 @@ export const SITE = {
   /** Social / external profiles for Organization.sameAs. Fill in as confirmed. */
   sameAs: [] as string[],
   locale: 'en_US',
+  /**
+   * The share image for every page that doesn't pass its own: a 1200x630 card
+   * in public/og/. BaseHead only uses it once the file exists.
+   */
+  ogImage: {
+    src: '/og/dyjk-default.jpg',
+    width: 1200,
+    height: 630,
+    alt: "The DYJK Print logo and the line 'Impossible to walk past.' on a dark ink field, beside a printed flyer, an invitation and a business card.",
+  },
 } as const;
 
 /** Primary navigation — mirrors the locked IA in ARCHITECTURE.md §4. */
