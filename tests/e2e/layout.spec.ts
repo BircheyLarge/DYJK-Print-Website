@@ -60,10 +60,10 @@ test('the hero fan loads the front card eagerly', async ({ page }) => {
   await page.goto('/');
   const cards = page.locator('section[aria-label="Introduction"] .fan-card');
   await expect(cards).toHaveCount(6);
-  // Business cards start in front, and that image is the one to fetch first.
-  const frontCard = page.locator(
-    'section[aria-label="Introduction"] .fan-card[aria-label="Business cards"]',
-  );
+  // The first card in the server HTML is the one painted in front.
+  await expect(cards.first()).toHaveAttribute('aria-label', 'Business cards');
+  await expect(cards.first()).toHaveAttribute('style', /--slot:\s*5/);
+  const frontCard = cards.first();
   await expect(frontCard).toHaveCount(1);
   await expect(frontCard.locator('img')).toHaveAttribute('loading', 'eager');
   await expect(frontCard.locator('img')).toHaveAttribute(
@@ -73,6 +73,7 @@ test('the hero fan loads the front card eagerly', async ({ page }) => {
   for (const img of await cards.locator('img').all()) {
     if ((await img.getAttribute('fetchpriority')) === 'high') continue;
     await expect(img).toHaveAttribute('loading', 'lazy');
+    await expect(img).toHaveAttribute('fetchpriority', 'low');
   }
   await expect(
     page.locator(
