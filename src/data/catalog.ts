@@ -1,9 +1,7 @@
 /**
- * Lightweight catalog data driving the home page and section hubs.
- * Service detail pages exist; products live in the src/content/products
- * collection. Industry detail pages arrive in P2, so those entries
- * intentionally have no `href` yet (the hub renders them as non-linked cards
- * to avoid dead links).
+ * The three services: the /services/ hub cards and each service page's slug.
+ * Products live in the src/content/products collection; the industries are
+ * sections of /industries/ itself.
  */
 
 export interface ServiceItem {
@@ -43,37 +41,5 @@ export const SERVICES: ReadonlyArray<ServiceItem> = [
       'Press-ready file prep and design support so your job prints right the first time.',
     detail:
       'Our design and prepress team makes sure your files are press-ready — bleeds, color, resolution and imposition — so your job prints right the first time. Need design help from scratch? We do that too.',
-  },
-];
-
-export interface CatalogItem {
-  name: string;
-  blurb: string;
-}
-
-export const INDUSTRIES: ReadonlyArray<CatalogItem> = [
-  {
-    name: 'Agencies & Marketing Teams',
-    blurb: 'A reliable production partner for client campaigns nationwide.',
-  },
-  {
-    name: 'Franchises & Multi-Location',
-    blurb: 'Consistent brand collateral across every location.',
-  },
-  {
-    name: 'Nonprofits',
-    blurb: 'Cost-effective print for outreach and fundraising.',
-  },
-  {
-    name: 'Schools',
-    blurb: 'Programs, handbooks, signage and event materials.',
-  },
-  {
-    name: 'Events',
-    blurb: 'Signage, badges and printed collateral on deadline.',
-  },
-  {
-    name: 'Real Estate',
-    blurb: 'Listing sheets, postcards and branded marketing.',
   },
 ];

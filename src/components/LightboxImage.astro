@@ -17,6 +17,8 @@ interface Props {
   crop?: boolean;
   /** Card shadow on the thumbnail. */
   elevated?: boolean;
+  /** Square corners, for a thumbnail inside one of C's ruled frames. */
+  flush?: boolean;
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   fetchpriority,
   crop,
   elevated,
+  flush,
 } = Astro.props;
 
 // A thumbnail that opens the whole, uncropped image in a dialog, up to 2000px
@@ -51,7 +54,10 @@ const largeSizes = `(min-aspect-ratio: ${Math.round(ratio * 1000)}/1000) calc((1
 <a
   href={large.src}
   data-lightbox={id}
-  class="block rounded-card transition-opacity hover:opacity-85"
+  class:list={[
+    'block transition-opacity hover:opacity-85',
+    !flush && 'rounded-card',
+  ]}
 >
   <PortfolioPicture
     item={item}
@@ -60,6 +66,7 @@ const largeSizes = `(min-aspect-ratio: ${Math.round(ratio * 1000)}/1000) calc((1
     fetchpriority={fetchpriority}
     crop={crop}
     elevated={elevated}
+    flush={flush}
   />
   <span class="sr-only">View larger</span>
 </a>

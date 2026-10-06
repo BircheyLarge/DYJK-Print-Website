@@ -1,10 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import IndustrySection from '../../components/IndustrySection.astro';
 import PageHeader from '../../components/PageHeader.astro';
-import CatalogGrid from '../../components/CatalogGrid.astro';
+import Prose from '../../components/Prose.astro';
 import QuoteCta from '../../components/QuoteCta.astro';
-import { INDUSTRIES } from '../../data/catalog';
 import { breadcrumbSchema } from '../../lib/schema';
+
+// Copy: Content Strategist's thin-pages-copy.md. The homepage's "Who we print
+// for", expanded: the same five industries in the same order, each beside a
+// job we printed for one of them. Utah appears once, in the close.
 
 const schema = breadcrumbSchema([
   { name: 'Home', path: '/' },
@@ -13,19 +17,141 @@ const schema = breadcrumbSchema([
 ---
 
 <BaseLayout
-  title="Industries We Serve"
-  description="DYJK Print is a nationwide production partner for agencies, franchises, nonprofits, schools, events, real estate and more."
+  title="Print for Practices, Shops, and Events"
+  description="Print for dental and medical, auto, restaurants, real estate and insurance, and events. See the work, then get a free quote from DYJK Print."
   schema={schema}
 >
   <PageHeader
     eyebrow="Industries"
-    title="A print partner for your industry"
-    subtitle="We produce the collateral teams rely on — consistently, on deadline, and shipped wherever you operate."
+    title="Who we print for"
+    subtitle="Dental and medical, auto, restaurants, real estate and insurance, events and campaigns."
   />
 
-  <section class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-12 md:pb-18">
-    <CatalogGrid items={INDUSTRIES} />
+  <section class="mx-auto max-w-6xl px-4 pt-9">
+    <div class="max-w-3xl">
+      <Prose>
+        <p>
+          Print has a person on the other end of it. A practice, a shop, a
+          restaurant, a firm, or a campaign needs a piece that makes them look
+          strong to their own customers. The sections below are the businesses
+          we print for, each one tied to a job we have already printed. You can
+          see more of that work in the <a href="/portfolio/">portfolio</a>. The
+          quote is free. You approve a proof before anything prints. We ship
+          anywhere in the United States.
+        </p>
+      </Prose>
+    </div>
   </section>
 
-  <QuoteCta />
+  <div
+    class="mx-auto max-w-6xl space-y-16 px-4 pt-14 pb-16 md:space-y-24 md:pt-18 md:pb-24"
+  >
+    <IndustrySection
+      id="dental-and-medical"
+      title="Dental and medical"
+      image="presentation-folder-and-insert.jpg"
+      loading="eager"
+    >
+      <p>
+        A new patient feels the practice before anyone says hello. The folder
+        they carry out, the card they keep, the brochure in the chair: that is
+        the practice. Jeppson Dental, a family dental practice, needed a packet
+        a new patient could take home. The folder opens onto a printed bio and a
+        short list of how a visit works. A full-color insert lies across it,
+        built around a photograph of a family. The logo is on the insert and on
+        the folder, so the packet still names Jeppson Dental after the insert
+        comes out. Practices also hand over <a href="/products/business-cards/"
+          >business cards</a
+        > and <a href="/products/brochures/">brochures</a> that explain a service
+        without a lecture. The piece that holds it all is a <a
+          href="/products/presentation-folders/">presentation folder</a
+        >.
+      </p>
+    </IndustrySection>
+
+    <IndustrySection
+      id="auto"
+      title="Auto"
+      image="business-cards-despain-subaru.jpg"
+      flip
+    >
+      <p>
+        The card is the shop, the moment it changes hands. The cards we printed
+        for DeSpain The Subaru Specialist are black, with a silver star and a
+        blue swoosh. Two of them sit in front of a stack. The top card shows the
+        DeSpain name, an engine illustration, and the line The Subaru
+        Specialist. Whoever takes that card already knows the shop is the
+        specialist. A <a href="/products/business-cards/">business card</a> is the
+        piece they keep. A <a href="/products/flyers/">flyer</a> covers a promotion
+        the shop wants seen. A <a href="/products/stickers/">sticker</a> puts the
+        same name on a box or a window.
+      </p>
+    </IndustrySection>
+
+    <IndustrySection
+      id="restaurants"
+      title="Restaurants"
+      image="menus-bagel-shop.jpg"
+    >
+      <p>
+        The menu is the meal before the first bite. The Bagel Shop needed a menu
+        a guest would recognize at the table. The piece is a tall card. The
+        cover is chalkboard-style: a round logo, the line "More than just a
+        bagel," and the word Menu set large. That is the side a guest sees
+        before any dish. <a href="/products/menus/">Restaurant menus</a> can be a
+        single sheet, a fold, a tent on the table, or a takeout sheet that leaves
+        with the bag. You name the one you need. A <a href="/products/flyers/"
+          >flyer</a
+        > can carry a special off the menu. A <a href="/products/door-hangers/"
+          >door hanger</a
+        > can put that special on a knob down the street. We print them. You decide
+        where they go.
+      </p>
+    </IndustrySection>
+
+    <IndustrySection
+      id="real-estate-and-insurance"
+      title="Real estate and insurance"
+      image="envelopes-letterhead-apex-advance-envelopes.jpg"
+      flip
+    >
+      <p>
+        People judge the firm from the envelope, before they open it. Apex
+        Insurance and Advance Insurance are two firms, each with its own
+        envelope and its own logo. One carries a red and gray mountain. The
+        other carries a red and gray curve along the bottom. A closed face that
+        looks settled is the whole point. <a
+          href="/products/envelopes-letterhead/">Envelopes and letterhead</a
+        > do that job. <a href="/products/business-cards/">Business cards</a> are
+        what a client keeps after the meeting. <a href="/products/door-hangers/"
+          >Door hangers</a
+        > are what a real estate team uses for an open house on that street. We print
+        them and ship them. We do not walk the route.
+      </p>
+    </IndustrySection>
+
+    <IndustrySection
+      id="events-and-campaigns"
+      title="Events and campaigns"
+      image="flyers-atomic-auto-show.jpg"
+    >
+      <p>
+        An event gets one sheet to explain itself. Clinch River Home Healthcare
+        needed that sheet for its Atomic Auto Show. The flyer leads with a red
+        headline and drawings of a classic car and a pickup. Under the art,
+        three boxes divide the rest: where it is held, the entry details, and
+        how to register. The logo and the website run along the bottom. A <a
+          href="/products/flyers/">flyer</a
+        > does that job in one sheet, handed to a person. A <a
+          href="/products/door-hangers/">door hanger</a
+        > stays on a knob until someone takes the invitation inside. A <a
+          href="/products/postcards-mailers/">postcard</a
+        > is the same news when it should arrive in the mail.
+      </p>
+    </IndustrySection>
+  </div>
+
+  <QuoteCta
+    text="Tell us the piece and who has to notice it. The quote is free. You approve a proof before we print. We are in Utah, and we ship the finished job anywhere in the United States."
+  />
 </BaseLayout>
