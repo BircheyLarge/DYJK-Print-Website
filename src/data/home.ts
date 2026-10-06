@@ -102,6 +102,19 @@ export const AUDIENCES: readonly Point[] = [
 export const CLOSE_HEADING = 'Ready to get noticed?';
 export const CLOSE_LINE = 'Tell us what should get noticed. The quote is free.';
 
+/**
+ * One short intro under each homepage h2. The other four stay blank until
+ * the section intros in home-copy.md are ready to drop in.
+ */
+export const LEADS = {
+  why: '',
+  how: '',
+  products:
+    'One set of pieces, from the card in a pocket to the mailer in a box.',
+  who: '',
+  recent: '',
+} as const;
+
 export interface ShownPiece {
   image: ImageMetadata;
   alt: string;

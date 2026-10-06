@@ -14,6 +14,7 @@ import {
   BENEFIT_PIECES,
   CLOSE_HEADING,
   CLOSE_LINE,
+  LEADS,
   RECENT_WORK,
   STEPS,
 } from '../data/home';
@@ -67,6 +68,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-block home-first px-4" aria-labelledby="why">
     <div class="mx-auto max-w-6xl">
       <h2 id="why" class={heading}>Why businesses choose DYJK</h2>
+      {LEADS.why && <p class="lead">{LEADS.why}</p>}
       <ul class="bento" role="list">
         {
           BENEFITS.map((benefit, index) => (
@@ -96,6 +98,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-block px-4" aria-labelledby="how">
     <div class="mx-auto max-w-6xl">
       <h2 id="how" class={heading}>How it works</h2>
+      {LEADS.how && <p class="lead">{LEADS.how}</p>}
       <ol class="steps">
         {
           STEPS.map((step, index) => (
@@ -127,12 +130,10 @@ const schema = [organizationSchema(), websiteSchema()];
           All products
         </a>
       </div>
-      <p class="mt-3 max-w-2xl text-prose-sm text-brand-slate md:text-prose">
-        One set of pieces, from the card in a pocket to the mailer in a box.
-      </p>
+      {LEADS.products && <p class="lead">{LEADS.products}</p>}
       <ul
         role="list"
-        class="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-5"
+        class="product-grid grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-5"
       >
         {
           products.map((product) => (
@@ -156,6 +157,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-who px-4" aria-labelledby="who">
     <div class="mx-auto max-w-6xl">
       <h2 id="who" class={heading}>Who we print for</h2>
+      {LEADS.who && <p class="lead">{LEADS.who}</p>}
       <ul class="who" role="list">
         {
           AUDIENCES.map((audience, index) => (
@@ -181,6 +183,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-recent bg-brand-surface px-4" aria-labelledby="recent">
     <div class="mx-auto max-w-6xl">
       <h2 id="recent" class={heading}>Recent work</h2>
+      {LEADS.recent && <p class="lead">{LEADS.recent}</p>}
       <ul class="recent" role="list">
         {
           RECENT_WORK.map((item) => (
@@ -231,11 +234,28 @@ const schema = [organizationSchema(), websiteSchema()];
     padding-bottom: 4rem;
   }
 
+  .lead {
+    max-width: 60ch;
+    margin-top: 0.85rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--color-brand-slate);
+  }
+
   .bento,
   .who,
   .recent,
-  .steps {
+  .steps,
+  .product-grid {
     margin-top: 2.5rem;
+  }
+
+  .lead + .bento,
+  .lead + .who,
+  .lead + .recent,
+  .lead + .steps,
+  .lead + .product-grid {
+    margin-top: 2rem;
   }
 
   .bento,
