@@ -103,17 +103,38 @@ export const CLOSE_HEADING = 'Ready to get noticed?';
 export const CLOSE_LINE = 'Tell us what should get noticed. The quote is free.';
 
 /**
- * One short intro under each homepage h2. The other four stay blank until
- * the section intros in home-copy.md are ready to drop in.
+ * One short intro under each homepage h2, from home-copy.md. Bracketed
+ * links are [label](href).
  */
 export const LEADS = {
-  why: '',
-  how: '',
+  why: 'Commercial printing should get you noticed. The card, the door, the folder: we make the piece people stop for, and [graphic design and prepress](/services/graphic-design/) can build it from a logo.',
+  how: 'Simple on purpose. Ask for a [free quote](/request-a-quote/), approve a proof before anything prints, and we run it offset or digital, then ship it anywhere in the US.',
   products:
-    'One set of pieces, from the card in a pocket to the mailer in a box.',
-  who: '',
-  recent: '',
+    'Business cards, flyers, brochures, door hangers, postcards, menus, and [presentation folders](/products/presentation-folders/). Commercial printing for the moment someone picks the piece up and decides who you are.',
+  who: 'The piece has a person on the other end. A practice, a shop, a restaurant, a firm, or a campaign needs print that makes them look strong to their own customers.',
+  recent:
+    'Real printed pieces for companies that wanted to be seen. Cards, flyers, brochures, and the rest of the work, gathered in the [portfolio](/portfolio/) so you can see it up close.',
 } as const;
+
+export interface LeadPart {
+  text: string;
+  href?: string;
+}
+
+/** Split a lead into text and its [label](href) links. */
+export function leadParts(source: string): LeadPart[] {
+  const parts: LeadPart[] = [];
+  const pattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let cursor = 0;
+  for (const match of source.matchAll(pattern)) {
+    const start = match.index ?? 0;
+    if (start > cursor) parts.push({ text: source.slice(cursor, start) });
+    parts.push({ text: match[1] ?? '', href: match[2] });
+    cursor = start + match[0].length;
+  }
+  if (cursor < source.length) parts.push({ text: source.slice(cursor) });
+  return parts;
+}
 
 export interface ShownPiece {
   image: ImageMetadata;

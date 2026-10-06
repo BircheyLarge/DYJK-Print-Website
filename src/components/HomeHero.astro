@@ -205,6 +205,8 @@ const PLATES = ['cyan', 'magenta', 'yellow'] as const;
     position: relative;
     z-index: 1;
     color: var(--color-on-dark);
+    white-space: normal;
+    text-wrap: balance;
   }
 
   .plates {
@@ -223,6 +225,9 @@ const PLATES = ['cyan', 'magenta', 'yellow'] as const;
 
   .plate::before {
     content: attr(data-text);
+    display: block;
+    white-space: normal;
+    text-wrap: balance;
   }
 
   .plate-cyan {
@@ -244,17 +249,41 @@ const PLATES = ['cyan', 'magenta', 'yellow'] as const;
     from {
       transform: translate(-8px, 4px);
     }
+
+    80% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
   }
 
   @keyframes plate-magenta {
     from {
       transform: translate(7px, -4px);
     }
+
+    80% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
   }
 
   @keyframes plate-yellow {
     from {
       transform: translate(3px, 7px);
+    }
+
+    80% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
     }
   }
 
@@ -387,6 +416,7 @@ const PLATES = ['cyan', 'magenta', 'yellow'] as const;
 
   @media (prefers-reduced-motion: reduce) {
     .plate {
+      display: none;
       animation: none;
     }
 

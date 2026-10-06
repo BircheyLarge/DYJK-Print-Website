@@ -3,6 +3,7 @@ import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CmykBar from '../components/CmykBar.astro';
 import HomeHero from '../components/HomeHero.astro';
+import HomeLead from '../components/HomeLead.astro';
 import MatchedFrame from '../components/MatchedFrame.astro';
 import ProductTicker from '../components/ProductTicker.astro';
 import QuoteCta from '../components/QuoteCta.astro';
@@ -68,7 +69,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-block home-first px-4" aria-labelledby="why">
     <div class="mx-auto max-w-6xl">
       <h2 id="why" class={heading}>Why businesses choose DYJK</h2>
-      {LEADS.why && <p class="lead">{LEADS.why}</p>}
+      <HomeLead source={LEADS.why} />
       <ul class="bento" role="list">
         {
           BENEFITS.map((benefit, index) => (
@@ -98,7 +99,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-block px-4" aria-labelledby="how">
     <div class="mx-auto max-w-6xl">
       <h2 id="how" class={heading}>How it works</h2>
-      {LEADS.how && <p class="lead">{LEADS.how}</p>}
+      <HomeLead source={LEADS.how} />
       <ol class="steps">
         {
           STEPS.map((step, index) => (
@@ -130,7 +131,7 @@ const schema = [organizationSchema(), websiteSchema()];
           All products
         </a>
       </div>
-      {LEADS.products && <p class="lead">{LEADS.products}</p>}
+      <HomeLead source={LEADS.products} />
       <ul
         role="list"
         class="product-grid grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-5"
@@ -157,7 +158,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-who px-4" aria-labelledby="who">
     <div class="mx-auto max-w-6xl">
       <h2 id="who" class={heading}>Who we print for</h2>
-      {LEADS.who && <p class="lead">{LEADS.who}</p>}
+      <HomeLead source={LEADS.who} />
       <ul class="who" role="list">
         {
           AUDIENCES.map((audience, index) => (
@@ -183,7 +184,7 @@ const schema = [organizationSchema(), websiteSchema()];
   <section class="home-recent bg-brand-surface px-4" aria-labelledby="recent">
     <div class="mx-auto max-w-6xl">
       <h2 id="recent" class={heading}>Recent work</h2>
-      {LEADS.recent && <p class="lead">{LEADS.recent}</p>}
+      <HomeLead source={LEADS.recent} />
       <ul class="recent" role="list">
         {
           RECENT_WORK.map((item) => (
@@ -234,14 +235,6 @@ const schema = [organizationSchema(), websiteSchema()];
     padding-bottom: 4rem;
   }
 
-  .lead {
-    max-width: 60ch;
-    margin-top: 0.85rem;
-    font-size: 1.125rem;
-    line-height: 1.5;
-    color: var(--color-brand-slate);
-  }
-
   .bento,
   .who,
   .recent,
@@ -250,11 +243,11 @@ const schema = [organizationSchema(), websiteSchema()];
     margin-top: 2.5rem;
   }
 
-  .lead + .bento,
-  .lead + .who,
-  .lead + .recent,
-  .lead + .steps,
-  .lead + .product-grid {
+  :global(.lead) + .bento,
+  :global(.lead) + .who,
+  :global(.lead) + .recent,
+  :global(.lead) + .steps,
+  :global(.lead) + .product-grid {
     margin-top: 2rem;
   }
 
