@@ -109,10 +109,10 @@ export const CLOSE_LINE = 'Tell us what should get noticed. The quote is free.';
  */
 export const LEADS = {
   why: 'Commercial printing should get you noticed. The card, the door, the folder: we make the piece people stop for, and [graphic design and prepress](/services/graphic-design/) can build it from a logo.',
-  how: 'Simple on purpose. Ask for a [free quote](/request-a-quote/), approve a proof before anything prints, and we run it offset or digital, then ship it anywhere in the US.',
+  how: 'Simple on purpose. Ask for a free quote, approve a proof before anything prints, and we run it [offset](/services/offset-printing/) or [digital](/services/digital-printing/), then ship it anywhere in the US.',
   products:
     'Business cards, flyers, brochures, door hangers, postcards, menus, and [presentation folders](/products/presentation-folders/). Commercial printing for the moment someone picks the piece up and decides who you are.',
-  who: 'The piece has a person on the other end. A practice, a shop, a restaurant, a firm, or a campaign needs print that makes them look strong to their own customers.',
+  who: 'The piece has a person on the other end. [A practice, a shop, a restaurant, a firm, or a campaign](/industries/) needs print that makes them look strong to their own customers.',
   recent:
     'Real printed pieces for companies that wanted to be seen. Cards, flyers, brochures, and the rest of the work, gathered in the [portfolio](/portfolio/) so you can see it up close.',
 } as const;
