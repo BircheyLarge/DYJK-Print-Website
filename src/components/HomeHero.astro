@@ -29,7 +29,7 @@ const fanOrder = [
   <div class="fan" data-fan>
     {
       fanOrder.map((index) => {
-        const piece = FAN[index];
+        const piece = FAN[index]!;
         return (
           <a
             href={piece.href}
