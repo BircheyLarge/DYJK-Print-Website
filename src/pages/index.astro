@@ -26,7 +26,7 @@ const recentWorkSizes =
   '(min-width: 1152px) 548px, (min-width: 640px) calc(50vw - 28px), calc(50vw - 24px)';
 
 const sectionHeading =
-  'text-center font-display text-h2-sm font-semibold text-brand-ink md:text-h2';
+  'text-center text-h2-sm font-bold text-brand-ink md:text-h2';
 
 const schema = [organizationSchema(), websiteSchema()];
 ---
@@ -34,7 +34,7 @@ const schema = [organizationSchema(), websiteSchema()];
 <BaseLayout
   description={SITE.description}
   schema={schema}
-  fonts={{ outfit: [500, 600], syne: [800] }}
+  fonts={{ outfit: [500, 600, 700], syne: [] }}
 >
   <HomeHero />
 

@@ -1,8 +1,8 @@
 ---
 // Typography for rendered markdown. Tailwind's preflight resets element
 // styles and the typography plugin isn't installed, so this restores a small
-// rhythm from the site's own type scale: Syne 600 section heads, Outfit body
-// in slate (SPEC.md).
+// rhythm from the site's own type scale: Outfit 700 section heads, body in
+// slate.
 ---
 
 <div class="prose"><slot /></div>
@@ -14,7 +14,7 @@
     @apply mt-0;
   }
   .prose :global(h2) {
-    @apply mt-12 font-display text-h2-sm font-semibold text-brand-ink md:text-h2;
+    @apply mt-12 text-h2-sm font-bold text-brand-ink md:text-h2;
   }
   .prose :global(h3) {
     @apply mt-8 text-lg font-semibold text-brand-ink;

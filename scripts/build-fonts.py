@@ -31,7 +31,7 @@ FAMILIES = {
         "font": "ofl/outfit/Outfit%5Bwght%5D.ttf",
         "sha256": "fc7287273e66929776e2ba54f144fe699080bec29f61bf649d70d871468aeade",
         "license": "ofl/outfit/OFL.txt",
-        "weights": [400, 500, 600],
+        "weights": [400, 500, 600, 700],
     },
     "syne": {
         "commit": "54fb97bd69162b95b2aa2c3996ffd71466c1aec2",  # Syne v2.200

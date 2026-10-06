@@ -25,9 +25,11 @@ export default defineConfig({
       provider: fontProviders.local(),
       name: 'Outfit',
       cssVariable: '--font-outfit',
-      // Astro derives the metric-matched Arial fallback from the first file.
-      // Outfit's average width barely moves across these weights (0.445 to
-      // 0.454em), so one set of metrics fits all three.
+      // Headings are Outfit 700, 3.6% wider than 400, so one set of fallback
+      // metrics no longer fits every weight: the fallback faces are written
+      // per weight in global.css.
+      optimizedFallbacks: false,
+      fallbacks: ['Outfit Fallback', 'sans-serif'],
       options: {
         variants: [
           {
@@ -44,6 +46,11 @@ export default defineConfig({
             weight: 600,
             style: 'normal',
             src: ['./src/assets/fonts/outfit/outfit-latin-600.woff2'],
+          },
+          {
+            weight: 700,
+            style: 'normal',
+            src: ['./src/assets/fonts/outfit/outfit-latin-700.woff2'],
           },
         ],
       },

@@ -8,8 +8,9 @@ const css = readFileSync(
   'utf8',
 );
 
-// Arial Bold as Astro's fonts API measures it, so the hand-written Syne
-// fallbacks follow the same rules as the generated Outfit ones.
+// Arial and Arial Bold as Astro's fonts API measures them, so the
+// hand-written fallbacks follow the same rules Astro would.
+const ARIAL = { xWidthAvg: 913, unitsPerEm: 2048 };
 const ARIAL_BOLD = { xWidthAvg: 983, unitsPerEm: 2048 };
 
 /** The self-hosted files of a family, one per weight. */
@@ -28,54 +29,48 @@ const metrics = (file: URL) => fromBuffer(readFileSync(file));
 const percent = (value: number) =>
   `${Number.parseFloat((value * 100).toFixed(4))}%`;
 
-/** The descriptors of the 'Syne Fallback' face for one weight. */
-function syneFallback(weight: number): Record<string, string> {
+/** The descriptors of one fallback face in global.css. */
+function fallbackFace(name: string, weight: number): Record<string, string> {
   const face = [...css.matchAll(/@font-face\s*\{([^}]*)\}/g)]
     .map(([, body]) => body!)
     .find(
       (body) =>
-        body.includes("font-family: 'Syne Fallback'") &&
+        body.includes(`font-family: '${name}'`) &&
         body.includes(`font-weight: ${weight};`),
     );
-  if (!face) throw new Error(`No 'Syne Fallback' face for weight ${weight}`);
+  if (!face) throw new Error(`No '${name}' face for weight ${weight}`);
   return Object.fromEntries(
-    [...face.matchAll(/([\w-]+(?:-adjust|-override)):\s*([^;]+);/g)].map(
-      ([, name, value]) => [name, value!.trim()],
+    [...face.matchAll(/([\w-]+(?:-adjust|-override)|src):\s*([^;]+);/g)].map(
+      ([, property, value]) => [property, value!.trim()],
     ),
   );
 }
 
-describe('Syne fallback faces in global.css', () => {
-  for (const [weight, file] of weights('syne')) {
-    it(`match the metrics of Syne ${weight}`, async () => {
-      const font = await metrics(file);
-      const sizeAdjust =
-        font.xWidthAvg /
-        font.unitsPerEm /
-        (ARIAL_BOLD.xWidthAvg / ARIAL_BOLD.unitsPerEm);
-      const em = font.unitsPerEm * sizeAdjust;
-      expect(syneFallback(weight)).toEqual({
-        'size-adjust': percent(sizeAdjust),
-        'ascent-override': percent(font.ascent / em),
-        'descent-override': percent(Math.abs(font.descent) / em),
-        'line-gap-override': percent(font.lineGap / em),
-      });
-    });
-  }
-});
+// [family folder, fallback family, the local font each weight stands in for]
+const FAMILIES = [
+  ['outfit', 'Outfit Fallback', (weight: number) => weight >= 700],
+  ['syne', 'Syne Fallback', () => true],
+] as const;
 
-describe('Outfit', () => {
-  // Astro sizes one Arial fallback for every Outfit weight from the 400
-  // file. That only holds while the weights stay about as wide as 400; past
-  // that, Outfit needs per-weight fallbacks like Syne's.
-  it('keeps every weight within 2.5% of the 400 width', async () => {
-    const files = weights('outfit');
-    const regular = files.find(([weight]) => weight === 400);
-    expect(regular).toBeDefined();
-    const base = (await metrics(regular![1])).xWidthAvg;
-    for (const [weight, file] of files) {
-      const ratio = (await metrics(file)).xWidthAvg / base;
-      expect(Math.abs(ratio - 1), `Outfit ${weight}`).toBeLessThan(0.025);
+for (const [family, name, usesBold] of FAMILIES) {
+  describe(`${name} faces in global.css`, () => {
+    for (const [weight, file] of weights(family)) {
+      it(`match the metrics of ${family} ${weight}`, async () => {
+        const font = await metrics(file);
+        const local = usesBold(weight) ? ARIAL_BOLD : ARIAL;
+        const sizeAdjust =
+          font.xWidthAvg /
+          font.unitsPerEm /
+          (local.xWidthAvg / local.unitsPerEm);
+        const em = font.unitsPerEm * sizeAdjust;
+        expect(fallbackFace(name, weight)).toEqual({
+          src: usesBold(weight) ? "local('Arial Bold')" : "local('Arial')",
+          'size-adjust': percent(sizeAdjust),
+          'ascent-override': percent(font.ascent / em),
+          'descent-override': percent(Math.abs(font.descent) / em),
+          'line-gap-override': percent(font.lineGap / em),
+        });
+      });
     }
   });
-});
+}

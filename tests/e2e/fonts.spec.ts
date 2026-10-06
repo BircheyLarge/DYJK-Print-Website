@@ -69,11 +69,11 @@ test('every page draws all of its text in Outfit or Syne', async ({ page }) => {
   expect(misses).toEqual([]);
 });
 
-// Each page preloads only the faces its first screen draws with: the home
-// h1 is Syne 800, interior h1s Syne 700 (web-refresh SPEC.md).
+// Each page preloads only the faces its first screen draws with: every h1 is
+// Outfit 700.
 for (const [path, expected] of [
-  ['/', ['Outfit 500', 'Outfit 600', 'Syne 800']],
-  ['/products/business-cards/', ['Outfit 400', 'Outfit 500', 'Syne 700']],
+  ['/', ['Outfit 500', 'Outfit 600', 'Outfit 700']],
+  ['/products/business-cards/', ['Outfit 400', 'Outfit 500', 'Outfit 700']],
 ] as const) {
   test(`preloads only the first screen faces on ${path}`, async ({ page }) => {
     await page.goto(path);
