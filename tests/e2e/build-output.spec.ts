@@ -36,6 +36,30 @@ test('ships the Apache config from public/', () => {
   );
 });
 
+// Cloudflare Pages reads dist/_redirects. It carries only the old-URL
+// redirects; https and the host redirect live in Cloudflare itself.
+test('ships the Cloudflare Pages redirects from public/', () => {
+  const built = new URL('_redirects', dist);
+  expect(fs.existsSync(built)).toBe(true);
+  const rules = fs.readFileSync(built, 'utf8');
+  expect(rules).toBe(
+    fs.readFileSync(
+      new URL('../../public/_redirects', import.meta.url),
+      'utf8',
+    ),
+  );
+  const active = rules
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith('#'))
+    .map((line) => line.split(/\s+/));
+  expect(active).toEqual([
+    ['/about', '/about/', '301'],
+    ['/contact', '/contact/', '301'],
+    ['/sitemap.xml', '/sitemap-index.xml', '301'],
+  ]);
+});
+
 test('lists exactly the indexable pages in the sitemap', () => {
   const sitemapPaths = fs
     .readdirSync(dist)
