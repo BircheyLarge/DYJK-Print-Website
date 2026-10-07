@@ -28,12 +28,51 @@ test('ships no image that no page references', () => {
   expect(images.filter((file) => !html.includes(file))).toEqual([]);
 });
 
-test('ships the Apache config from public/', () => {
-  const built = new URL('.htaccess', dist);
+// The site deploys to Cloudflare Pages, which ignores Apache config.
+test('ships no Apache config', () => {
+  expect(fs.existsSync(new URL('.htaccess', dist))).toBe(false);
+});
+
+// Cloudflare Pages reads dist/_headers. HSTS stays max-age only: the domain's
+// Microsoft 365 subdomains must never inherit it.
+test('ships the Cloudflare Pages headers from public/', () => {
+  const built = new URL('_headers', dist);
   expect(fs.existsSync(built)).toBe(true);
-  expect(fs.readFileSync(built, 'utf8')).toBe(
-    fs.readFileSync(new URL('../../public/.htaccess', import.meta.url), 'utf8'),
+  const file = fs.readFileSync(built, 'utf8');
+  expect(file).toBe(
+    fs.readFileSync(new URL('../../public/_headers', import.meta.url), 'utf8'),
   );
+
+  // Path line, then its indented "Name: value" lines.
+  const rules: Record<string, Record<string, string>> = {};
+  let path = '';
+  for (const line of file.split('\n')) {
+    if (!line.trim() || line.trim().startsWith('#')) continue;
+    if (!/^\s/.test(line)) {
+      path = line.trim();
+      rules[path] = {};
+      continue;
+    }
+    const [name, ...value] = line.trim().split(':');
+    rules[path]![name!.trim()] = value.join(':').trim();
+  }
+
+  expect(rules).toEqual({
+    '/*': {
+      'Strict-Transport-Security': 'max-age=31536000',
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+    },
+    '/_astro/*': {
+      'Cache-Control': 'public, max-age=31536000, immutable',
+    },
+  });
+  // The comment explains why; only the rules themselves are checked here.
+  const active = file
+    .split('\n')
+    .filter((line) => !line.trim().startsWith('#'))
+    .join('\n');
+  expect(active).not.toMatch(/includeSubDomains|preload/i);
 });
 
 // Cloudflare Pages reads dist/_redirects. It carries only the old-URL

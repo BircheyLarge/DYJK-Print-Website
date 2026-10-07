@@ -1,0 +1,13 @@
+# Cloudflare Pages response headers.
+#
+# HSTS is max-age only. No includeSubDomains and no preload: the domain also
+# carries Microsoft 365 hosts (autodiscover, lyncdiscover, sip, msoid) that
+# HSTS must not reach.
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Build assets carry a content hash in their names, so they never change.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
