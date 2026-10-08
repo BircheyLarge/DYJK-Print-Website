@@ -1,0 +1,10 @@
+# Cloudflare Pages redirects. Carries over the old-URL redirects from the
+# retired Apache .htaccess: the old Duda site's pages and its sitemap.
+#
+# Left out on purpose:
+# - http -> https and the www/apex host redirect: handled in Cloudflare.
+# - /x/index.html -> /x/ and the folder trailing slash: Pages does both
+#   itself for every built page.
+/about        /about/              301
+/contact      /contact/            301
+/sitemap.xml  /sitemap-index.xml   301

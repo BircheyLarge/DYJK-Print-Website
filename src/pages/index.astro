@@ -1,0 +1,489 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CmykBar from '../components/CmykBar.astro';
+import HomeHero from '../components/HomeHero.astro';
+import HomeLead from '../components/HomeLead.astro';
+import MatchedFrame from '../components/MatchedFrame.astro';
+import ProductTicker from '../components/ProductTicker.astro';
+import QuoteCta from '../components/QuoteCta.astro';
+import { SITE } from '../consts';
+import {
+  AUDIENCES,
+  AUDIENCE_PIECES,
+  BENEFITS,
+  BENEFIT_PIECES,
+  CLOSE_HEADING,
+  CLOSE_LINE,
+  LEADS,
+  RECENT_WORK,
+  STEPS,
+} from '../data/home';
+import { MATCHED } from '../data/matched';
+import { getProducts } from '../data/products';
+import { organizationSchema, websiteSchema } from '../lib/schema';
+
+// Direction C, which Stanley picked: the ink hero, then a white sheet of
+// sections with crop-mark headings, and the ink close.
+const products = (await getProducts()).filter((product) => MATCHED[product.id]);
+
+const heading = 'crop-mark text-display font-bold text-brand-ink';
+const body = 'mt-1.5 text-base leading-normal text-brand-slate';
+const ACCENTS = ['accent-c', 'accent-m', 'accent-y', 'accent-k'] as const;
+const TILES = [
+  'tile-notice',
+  'tile-established',
+  'tile-glance',
+  'tile-ready',
+] as const;
+// Step numbers in the four inks, in order: cyan, magenta, yellow, key.
+const INKS = [
+  'bg-brand-ink text-press-cyan',
+  'border-2 border-press-magenta bg-white text-press-magenta',
+  'bg-brand-ink text-press-yellow',
+  'border-2 border-brand-ink bg-white text-brand-ink',
+];
+
+// Photo width inside each product frame (12px mat and 1px border a side):
+// four across from md (239px at full width), two on phones.
+const productSizes =
+  '(min-width: 1152px) 239px, (min-width: 50.0625rem) calc(25vw - 49px), calc(50vw - 50px)';
+// Recent work: two equal frames from sm. The photo is cropped in by 25%.
+const recentSizes = '(min-width: 1152px) 540px, (min-width: 40rem) 46vw, 92vw';
+const benefitSizes = '(min-width: 50.0625rem) 640px, 92vw';
+const audienceSizes =
+  '(min-width: 50.0625rem) 360px, (min-width: 40rem) 46vw, 92vw';
+
+const schema = [organizationSchema(), websiteSchema()];
+---
+
+<BaseLayout
+  title="Commercial Printing, Shipped Nationwide"
+  description={SITE.description}
+  schema={schema}
+  fonts={[500, 600, 700]}
+>
+  <HomeHero />
+  <CmykBar separated />
+  <ProductTicker />
+
+  <section class="home-block home-first px-4" aria-labelledby="why">
+    <div class="mx-auto max-w-6xl">
+      <h2 id="why" class={heading}>Why businesses choose DYJK</h2>
+      <HomeLead source={LEADS.why} />
+      <ul class="bento" role="list">
+        {
+          BENEFITS.map((benefit, index) => (
+            <li class:list={['tile', ACCENTS[index], TILES[index]]}>
+              <span class="tile-frame">
+                <Picture
+                  src={BENEFIT_PIECES[index]!.image}
+                  alt={BENEFIT_PIECES[index]!.alt}
+                  formats={['avif', 'webp']}
+                  widths={[480, 720, 960, 1200]}
+                  sizes={benefitSizes}
+                  loading="lazy"
+                  class="tile-photo"
+                />
+              </span>
+              <div>
+                <h3>{benefit.title}</h3>
+                <p>{benefit.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="home-block px-4" aria-labelledby="how">
+    <div class="mx-auto max-w-6xl">
+      <h2 id="how" class={heading}>How it works</h2>
+      <HomeLead source={LEADS.how} />
+      <ol class="steps">
+        {
+          STEPS.map((step, index) => (
+            <li class="step">
+              <span class:list={['step-num', INKS[index]]} aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="text-card font-semibold text-brand-ink">
+                  {step.title}
+                </h3>
+                <p class={body}>{step.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="home-block px-4" aria-labelledby="products">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex items-end justify-between gap-4">
+        <h2 id="products" class={heading}>The products</h2>
+        <a
+          href="/products/"
+          class="shrink-0 text-sm font-semibold text-brand-blue underline underline-offset-[0.18em] hover:text-brand-blue-dark"
+        >
+          All products
+        </a>
+      </div>
+      <HomeLead source={LEADS.products} />
+      <ul
+        role="list"
+        class="product-grid grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-5"
+      >
+        {
+          products.map((product) => (
+            <li>
+              <a href={`/products/${product.id}/`} class="group block">
+                <MatchedFrame
+                  image={MATCHED[product.id]!}
+                  sizes={productSizes}
+                />
+                <span class="mt-3 block text-base font-semibold text-brand-ink group-hover:text-brand-blue">
+                  {product.data.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="home-who px-4" aria-labelledby="who">
+    <div class="mx-auto max-w-6xl">
+      <h2 id="who" class={heading}>Who we print for</h2>
+      <HomeLead source={LEADS.who} />
+      <ul class="who" role="list">
+        {
+          AUDIENCES.map((audience, index) => (
+            <li class="who-tile">
+              <Picture
+                src={AUDIENCE_PIECES[index]!.image}
+                alt={AUDIENCE_PIECES[index]!.alt}
+                formats={['avif', 'webp']}
+                widths={[320, 480, 720, 960]}
+                sizes={audienceSizes}
+                loading="lazy"
+                class="who-photo"
+              />
+              <h3>{audience.title}</h3>
+              <p>{audience.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="home-recent bg-brand-surface px-4" aria-labelledby="recent">
+    <div class="mx-auto max-w-6xl">
+      <h2 id="recent" class={heading}>Recent work</h2>
+      <HomeLead source={LEADS.recent} />
+      <ul class="recent" role="list">
+        {
+          RECENT_WORK.map((item) => (
+            <li>
+              <a href={`/products/${item.product}/`} class="group block">
+                <span class="block border border-rule bg-brand-surface p-3">
+                  <span class="relative block aspect-4/5 overflow-hidden">
+                    <Picture
+                      src={item.image}
+                      alt=""
+                      formats={['avif', 'webp']}
+                      widths={[400, 600, 800, 1000, 1200]}
+                      sizes={recentSizes}
+                      loading="lazy"
+                      class="recent-photo absolute inset-0 size-full object-cover"
+                    />
+                  </span>
+                </span>
+                <span class="mt-3 block text-base font-semibold text-brand-ink group-hover:text-brand-blue">
+                  {item.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <QuoteCta heading={CLOSE_HEADING} text={CLOSE_LINE} />
+</BaseLayout>
+
+<style>
+  .home-block {
+    padding-bottom: 4rem;
+  }
+
+  .home-first {
+    padding-top: 4rem;
+  }
+
+  .home-who {
+    padding-bottom: 2.5rem;
+  }
+
+  .home-recent {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .bento,
+  .who,
+  .recent,
+  .steps,
+  .product-grid {
+    margin-top: 2.5rem;
+  }
+
+  :global(.lead) + .bento,
+  :global(.lead) + .who,
+  :global(.lead) + .recent,
+  :global(.lead) + .steps,
+  :global(.lead) + .product-grid {
+    margin-top: 2rem;
+  }
+
+  .bento,
+  .who,
+  .recent {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .recent {
+    gap: 2rem;
+  }
+
+  .tile {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    min-width: 0;
+    padding: 0.85rem;
+    background: var(--color-brand-surface);
+  }
+
+  .tile h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-brand-ink);
+  }
+
+  .tile p {
+    margin-top: 0.4rem;
+    font-size: 1.125rem;
+    line-height: 1.45;
+    color: var(--color-brand-slate);
+  }
+
+  .accent-c {
+    box-shadow: inset 4px 0 0 #00a0e4;
+  }
+
+  .accent-m {
+    box-shadow: inset 4px 0 0 #c4006a;
+  }
+
+  .accent-y {
+    box-shadow: inset 4px 0 0 #ffe600;
+  }
+
+  .accent-k {
+    box-shadow: inset 4px 0 0 var(--color-brand-ink);
+  }
+
+  .tile-frame {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    background: var(--color-brand-surface);
+  }
+
+  .tile-frame :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  :global(.tile-photo) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :global(.who-photo) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    background: #fff;
+  }
+
+  .who-tile {
+    display: grid;
+    align-content: start;
+    min-width: 0;
+    border: 1px solid var(--color-rule);
+    background: #fff;
+  }
+
+  .who-tile h3 {
+    margin: 0.85rem 0.9rem 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-brand-ink);
+  }
+
+  .who-tile p {
+    margin: 0.35rem 0.9rem 0.95rem;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--color-brand-slate);
+  }
+
+  .steps {
+    display: grid;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 4.75rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0 1rem;
+    border-top: 1px solid var(--color-rule);
+    padding: 1.15rem 0;
+  }
+
+  .step-num {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 4.5rem;
+    height: 4.5rem;
+    place-items: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  @media (min-width: 40rem) {
+    .who,
+    .recent {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .who-tile:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 50.0625rem) {
+    .home-block {
+      padding-bottom: 5.5rem;
+    }
+
+    .home-first {
+      padding-top: 5.5rem;
+    }
+
+    .home-recent {
+      padding-bottom: 5.5rem;
+    }
+
+    .bento {
+      grid-template-columns: 1.35fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      align-items: start;
+    }
+
+    .tile-notice {
+      grid-column: 1 / span 2;
+      grid-row: 1;
+      grid-template-columns: 1.2fr 0.9fr;
+      align-items: center;
+    }
+
+    .tile-established {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .tile-glance {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .tile-ready {
+      grid-column: 2 / span 2;
+      grid-row: 2;
+      grid-template-columns: 0.95fr 1.15fr;
+      align-items: center;
+    }
+
+    .who {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .who-tile:nth-child(-n + 3) {
+      grid-column: span 2;
+    }
+
+    .who-tile:nth-child(n + 4) {
+      grid-column: span 3;
+    }
+
+    .steps {
+      position: relative;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 2.25rem;
+      right: 6%;
+      left: 2.25rem;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        #00a0e4 0%,
+        #00a0e4 18%,
+        #c4006a 32%,
+        #c4006a 48%,
+        #ffe600 62%,
+        #ffe600 78%,
+        var(--color-brand-ink) 88%,
+        var(--color-brand-ink) 100%
+      );
+    }
+
+    .step {
+      grid-template-columns: 1fr;
+      gap: 1rem 0;
+      border-top: 0;
+      padding: 0;
+    }
+  }
+
+  /* Recent work is framed in on the piece, the same crop on both. */
+  :global(.recent-photo) {
+    object-position: 50% 46%;
+    transform: scale(1.25);
+    transform-origin: 50% 46%;
+  }
+</style>

@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactCta from '../../components/ContactCta.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Prose from '../../components/Prose.astro';
+import { breadcrumbSchema } from '../../lib/schema';
+
+// Copy: Content Strategist's about-copy.md, hook option 1. Utah is the point
+// of this page; it names no people, street, city, map or hours.
+const BRING = [
+  {
+    title: 'Offset or digital',
+    text: 'A long run of one design, or a shorter run that changes by name or offer. Describe the job. The quote names the process.',
+  },
+  {
+    title: 'Design and prepress',
+    text: 'Send a press-ready PDF, or a logo and a rough idea. We build or repair the file so the proof matches the piece you want.',
+  },
+  {
+    title: 'You approve the proof',
+    text: 'We send a proof after the quote. Nothing prints until you approve it. You see the piece you are actually buying.',
+  },
+  {
+    title: 'Then we ship it',
+    text: 'Tell us the paper and finish you want considered. Name a state or ZIP. The finished job ships anywhere in the United States.',
+  },
+];
+
+const SMALL_BEATS_BIG = [
+  {
+    title: 'A person, not a number',
+    text: 'You explain the job to someone who is still on it when the proof comes back. A huge printer gives you a ticket.',
+  },
+  {
+    title: 'A conversation, not a menu',
+    text: 'Paper and finish are a talk about what the piece has to do. You are not left alone with a dropdown.',
+  },
+  {
+    title: 'Your impression comes first',
+    text: 'The win is the impression you make on your customers. We print for that. A massive shop is built to move volume.',
+  },
+];
+
+const sectionHeading =
+  'crop-mark text-h2-sm font-bold text-brand-ink md:text-h2';
+
+const schema = breadcrumbSchema([
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about/' },
+]);
+---
+
+<BaseLayout
+  title="About"
+  description="DYJK Print is a small Utah-based commercial printer that brings a personal touch to offset, digital, design and prepress work, shipped anywhere in the US."
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Utah print company"
+    title="A small company that knows your job."
+    subtitle="Two local Utah owners and a team we hire from our own community. You talk to the people who quote it, proof it, and print it."
+  />
+
+  <section
+    class="mx-auto max-w-6xl px-4 pt-10 pb-10 md:pt-12 md:pb-14"
+    aria-labelledby="who-we-are"
+  >
+    <div class="max-w-3xl">
+      <h2 id="who-we-are" class={sectionHeading}>Who we are</h2>
+      <div class="mt-4">
+        <Prose>
+          <p>
+            Two local Utah owners started DYJK and built a team hired from our
+            own community. We kept it small on purpose. You are not a ticket in
+            a queue. The people who answer you are the people who quote the job,
+            check the proof, and print it. No call center sits between you and
+            the piece.
+          </p>
+          <p>
+            You want your customers to notice you. A huge printer can produce
+            the piece and never ask what it is for. We ask, and we stay with
+            that answer through the proof. Everyone on the job knows what the
+            piece is for.
+          </p>
+          <p>
+            We are in Utah, and we ship anywhere in the United States. Close to
+            home or across the country, you are talking to the same local team.
+          </p>
+        </Prose>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="bg-brand-surface py-10 md:py-14"
+    aria-labelledby="what-we-bring"
+  >
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 id="what-we-bring" class={sectionHeading}>What we bring</h2>
+      <ul
+        role="list"
+        class="mt-6 grid gap-3 sm:grid-cols-2 sm:gap-4 md:mt-8 md:gap-6 wide:grid-cols-4"
+      >
+        {
+          BRING.map((item) => (
+            <li class="border border-rule bg-white p-5 md:p-6">
+              <h3 class="text-card font-semibold text-brand-ink">
+                {item.title}
+              </h3>
+              <p class="mt-2 text-ui leading-normal text-brand-slate">
+                {item.text}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-10 md:py-14" aria-labelledby="small-beats-big">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 id="small-beats-big" class={sectionHeading}>Why small beats big</h2>
+      <ul role="list" class="mt-6 grid gap-6 md:mt-8 md:grid-cols-3 md:gap-10">
+        {
+          SMALL_BEATS_BIG.map((item) => (
+            <li>
+              <h3 class="text-card font-semibold text-brand-ink">
+                {item.title}
+              </h3>
+              <p class="mt-2 text-prose-sm text-brand-slate md:text-prose">
+                {item.text}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 pb-12 md:pb-16"
+    aria-labelledby="who-we-do-it-for"
+  >
+    <div class="max-w-3xl">
+      <h2 id="who-we-do-it-for" class={sectionHeading}>Who we do it for</h2>
+      <p class="mt-4 text-deck-sm font-medium text-brand-ink md:text-deck">
+        Small and growing businesses that want a strong impression on their
+        customers, in Utah first, with the finished job shipped anywhere in the
+        United States.
+      </p>
+    </div>
+  </section>
+
+  <ContactCta
+    id="print-together"
+    heading="Let's print it together."
+    callLine="Talk with the people who will print the job."
+    emailLine="Send the idea, the specs, or a logo."
+  />
+</BaseLayout>

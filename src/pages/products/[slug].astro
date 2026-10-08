@@ -1,0 +1,138 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FaqList from '../../components/FaqList.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ProductExamples from '../../components/ProductExamples.astro';
+import Prose from '../../components/Prose.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import { SERVICES } from '../../data/catalog';
+import { industry } from '../../data/industries';
+import { assertKnownProducts, imagesForProduct } from '../../data/portfolio';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+export const getStaticPaths = (async () => {
+  // Check portfolio.ts against every entry, drafts included, so a mistyped
+  // product slug fails the build.
+  const entries = await getCollection('products');
+  assertKnownProducts(entries.map((entry) => entry.id));
+  return entries
+    .filter(({ data }) => !data.draft)
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+const path = `/products/${entry.id}/`;
+
+const images = imagesForProduct(entry.id);
+// Content order, so the most relevant service can come first.
+const services = data.services.flatMap((slug) =>
+  SERVICES.filter((service) => service.slug === slug),
+);
+// The /industries/ sections that show this product, linked from one line.
+const industries = data.industries.map(industry);
+
+// Layout: source order is examples, copy, services, so phones see the work
+// first. From lg, dense packing moves examples and services into the right
+// column; with no examples the services card rises to the top.
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products/' },
+    { name: data.title, path },
+  ]),
+  ...(data.faqs.length > 0 ? [faqSchema(data.faqs)] : []),
+];
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  seoTitle={data.seoTitle}
+  seoDescription={data.seoDescription}
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Products"
+    title={data.title}
+    subtitle={data.description}
+  />
+
+  <section class="mx-auto max-w-6xl px-4 pt-9 pb-14 md:pb-18">
+    <div
+      class="grid gap-y-12 lg:grid-flow-dense lg:grid-cols-3 lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-8"
+    >
+      {
+        images.length > 0 && (
+          <div class="lg:col-start-3">
+            <ProductExamples items={images} />
+          </div>
+        )
+      }
+
+      <div class="lg:col-span-2 lg:col-start-1 lg:row-span-2">
+        <Prose><Content /></Prose>
+
+        <FaqList faqs={data.faqs} />
+
+        {
+          industries.length > 0 && (
+            <p class="mt-12 text-sm leading-relaxed text-brand-slate">
+              <span class="font-semibold text-brand-ink">By industry:</span>{' '}
+              {industries.map((entry, index) => (
+                <>
+                  {index > 0 && <span aria-hidden="true"> · </span>}
+                  <a
+                    href={`/industries/#${entry.id}`}
+                    class="font-semibold text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+                  >
+                    {entry.link}
+                  </a>
+                </>
+              ))}
+            </p>
+          )
+        }
+
+        <p class:list={[industries.length > 0 ? 'mt-6' : 'mt-12']}>
+          <a
+            href="/products/"
+            class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+          >
+            <span aria-hidden="true">←</span>&nbsp;All products
+          </a>
+        </p>
+      </div>
+
+      {
+        services.length > 0 && (
+          <div class="self-start border border-rule bg-white p-6 lg:col-start-3">
+            <h2 class="text-sm font-semibold text-brand-ink">
+              Related services
+            </h2>
+            <ul class="mt-3 space-y-4">
+              {services.map((service) => (
+                <li>
+                  <a
+                    href={service.href}
+                    class="text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+                  >
+                    {service.name}&nbsp;<span aria-hidden="true">→</span>
+                  </a>
+                  <p class="mt-1 text-sm leading-normal text-brand-slate">
+                    {service.blurb}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <QuoteCta heading={`Need ${data.title.toLowerCase()}?`} />
+</BaseLayout>

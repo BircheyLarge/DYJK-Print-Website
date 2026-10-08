@@ -1,0 +1,41 @@
+---
+// Typography for rendered markdown. Tailwind's preflight resets element
+// styles and the typography plugin isn't installed, so this restores a small
+// rhythm from the site's own type scale: Outfit 700 section heads, body in
+// slate.
+---
+
+<div class="prose"><slot /></div>
+
+<style>
+  @reference '../styles/global.css';
+
+  .prose > :global(:first-child) {
+    @apply mt-0;
+  }
+  .prose :global(h2) {
+    @apply mt-12 text-h2-sm font-bold text-brand-ink md:text-h2;
+  }
+  .prose :global(h3) {
+    @apply mt-8 text-lg font-semibold text-brand-ink;
+  }
+  .prose :global(:is(p, ul, ol)) {
+    @apply mt-4 text-prose-sm text-brand-slate md:text-prose;
+  }
+  .prose :global(ul) {
+    @apply list-disc pl-6;
+  }
+  .prose :global(ol) {
+    @apply list-decimal pl-6;
+  }
+  .prose :global(li + li) {
+    @apply mt-2;
+  }
+  .prose :global(strong) {
+    @apply font-semibold text-brand-ink;
+  }
+  /* Underlined: brand-blue alone doesn't separate a link from slate text. */
+  .prose :global(a) {
+    @apply text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark;
+  }
+</style>

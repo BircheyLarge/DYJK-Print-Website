@@ -1,0 +1,33 @@
+---
+import type { FaqItem } from '../lib/schema';
+
+interface Props {
+  faqs: ReadonlyArray<FaqItem>;
+}
+
+// Pair with faqSchema(faqs) in the page's JSON-LD; the markup has to match
+// the questions shown here.
+const { faqs } = Astro.props;
+---
+
+{
+  faqs.length > 0 && (
+    <div class="mt-16">
+      <h2 class="crop-mark text-h2-sm font-bold text-brand-ink md:text-h2">
+        Frequently asked questions
+      </h2>
+      <dl class="mt-6 space-y-6">
+        {faqs.map((faq) => (
+          <div>
+            <dt class="text-card font-semibold text-brand-ink">
+              {faq.question}
+            </dt>
+            <dd class="mt-2 text-prose-sm text-brand-slate md:text-prose">
+              {faq.answer}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  )
+}

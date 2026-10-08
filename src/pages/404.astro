@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { QUOTE_PATH } from '../consts';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <PageHeader
+    eyebrow="404"
+    title="We couldn't find that page"
+    subtitle="The page may have moved. Head back home or request a quote and we'll point you in the right direction."
+  />
+  <section class="mx-auto max-w-6xl px-4 pt-9 pb-14 md:pb-18">
+    <div class="ml-5 flex flex-wrap gap-3">
+      <a href="/" class="btn btn-solid">Back home</a>
+      <a href={QUOTE_PATH} class="btn btn-ghost">Get a free quote</a>
+    </div>
+  </section>
+</BaseLayout>

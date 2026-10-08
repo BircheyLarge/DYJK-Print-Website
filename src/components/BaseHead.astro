@@ -1,0 +1,89 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { Font } from 'astro:assets';
+import { SITE } from '../consts';
+import { buildPageMeta, type PageMetaInput } from '../lib/seo';
+
+interface Props extends PageMetaInput {
+  /**
+   * The Outfit weights the first screen draws with; only these are
+   * preloaded. The default fits interior pages: 700 for the h1, 400 and 500
+   * for the prose, deck and nav.
+   */
+  fonts?: number[];
+}
+
+const {
+  title,
+  description,
+  seoTitle,
+  seoDescription,
+  image,
+  noindex,
+  fonts = [400, 500, 700],
+} = Astro.props;
+// Pages without their own image share the site default, once the file is
+// in public/ (until then, no og:image rather than a broken one).
+const defaultCard = fs.existsSync(
+  path.join(process.cwd(), 'public', SITE.ogImage.src),
+)
+  ? SITE.ogImage
+  : undefined;
+const card = image ? undefined : defaultCard;
+
+const meta = buildPageMeta({
+  title,
+  description,
+  seoTitle,
+  seoDescription,
+  image: image ?? card?.src,
+  noindex,
+  path: Astro.url.pathname,
+});
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<Font
+  cssVariable="--font-outfit"
+  preload={fonts.map((weight) => ({ weight }))}
+/>
+
+<title>{meta.title}</title>
+<meta name="description" content={meta.description} />
+{meta.canonical && <link rel="canonical" href={meta.canonical} />}
+{meta.noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={meta.title} />
+<meta property="og:description" content={meta.description} />
+{meta.canonical && <meta property="og:url" content={meta.canonical} />}
+<meta property="og:locale" content={SITE.locale} />
+{meta.image && <meta property="og:image" content={meta.image} />}
+{
+  card && (
+    <>
+      <meta property="og:image:width" content={String(card.width)} />
+      <meta property="og:image:height" content={String(card.height)} />
+      <meta property="og:image:alt" content={card.alt} />
+    </>
+  )
+}
+
+<!-- Twitter -->
+<meta
+  name="twitter:card"
+  content={meta.image ? 'summary_large_image' : 'summary'}
+/>
+<meta name="twitter:title" content={meta.title} />
+<meta name="twitter:description" content={meta.description} />
+{meta.image && <meta name="twitter:image" content={meta.image} />}
+{card && <meta name="twitter:image:alt" content={card.alt} />}
+
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />

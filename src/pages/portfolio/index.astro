@@ -1,0 +1,176 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LightboxImage from '../../components/LightboxImage.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Prose from '../../components/Prose.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import { QUOTE_PATH } from '../../consts';
+import { moreWork, pieceByFile } from '../../data/portfolio';
+import { getProducts } from '../../data/products';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const products = await getProducts();
+const productTitles = new Map(
+  products.map((product) => [product.id, product.data.title]),
+);
+
+// Featured stories (src/content/projects/), each told around one piece.
+const projects = (
+  await getCollection('projects', ({ data }) => !data.draft)
+).sort((a, b) => a.data.order - b.data.order);
+const stories = await Promise.all(
+  projects.map(async (project) => ({
+    heading: project.data.heading,
+    item: pieceByFile(project.data.image),
+    Content: (await render(project)).Content,
+  })),
+);
+
+// Everything else, grouped by product in the /products/ hub's order.
+const groups = moreWork(
+  products.map((product) => product.id),
+  new Set(stories.map((story) => story.item)),
+);
+
+// Image widths inside C's frame, 26px narrower than the slot. Story images:
+// half the max-w-6xl container beside the text from md (536px at full
+// width), the full column on phones.
+const storySizes =
+  '(min-width: 1152px) 510px, (min-width: 50.0625rem) calc(50vw - 66px), calc(100vw - 58px)';
+// Gallery thumbnails: three across from md (357px at full width), two below
+// (gap-6 from sm, gap-4 under it).
+const gallerySizes =
+  '(min-width: 1152px) 331px, (min-width: 50.0625rem) calc(33.3vw - 53px), (min-width: 40rem) calc(50vw - 54px), calc(50vw - 50px)';
+
+const sectionHeading =
+  'crop-mark text-h2-sm font-bold text-brand-ink md:text-h2';
+
+const schema = breadcrumbSchema([
+  { name: 'Home', path: '/' },
+  { name: 'Portfolio', path: '/portfolio/' },
+]);
+---
+
+<BaseLayout
+  title="Portfolio"
+  seoTitle="Projects and Products We Print | DYJK Print"
+  description="See folders, cards, flyers, brochures, menus, door hangers, and stationery from DYJK Print. Every job is quoted, proofed, printed, and shipped nationwide."
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Portfolio"
+    title="Our work"
+    subtitle="The projects and products we print: what each piece had to do, and how it was put together."
+  />
+
+  <section class="mx-auto max-w-6xl px-4 pt-9">
+    <div class="max-w-3xl">
+      <Prose>
+        <p>
+          DYJK prints the pieces a business puts in someone else's hands.
+          Practices, shops, clinics, and restaurants use them as a folder for a
+          welcome packet, cards for an offer, a brochure a family can reread, or
+          a menu at the table. The work below is a spread of those jobs:
+          folders, cards, flyers, brochures, menus, door hangers, and matched
+          letterhead and envelopes.
+        </p>
+        <p>
+          Every job runs the same way. You say what the piece has to do. We send
+          a <a href={QUOTE_PATH}>quote</a>, then a proof of the file. You
+          approve the proof. We print it and ship it anywhere in the United
+          States.
+        </p>
+      </Prose>
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 pt-14 md:pt-18"
+    aria-labelledby="featured-projects"
+  >
+    <h2 id="featured-projects" class={sectionHeading}>Featured projects</h2>
+    <div class="mt-10 space-y-14 md:space-y-18">
+      {
+        stories.map(({ heading, item, Content }, index) => (
+          <article class="grid items-center gap-6 md:grid-cols-2 md:gap-12">
+            {/* Images alternate sides from md; phones show each one first. */}
+            <div class:list={[index % 2 === 1 && 'md:order-last']}>
+              <LightboxImage
+                item={item}
+                id={`project-${index + 1}`}
+                caption={heading}
+                sizes={storySizes}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                crop
+              />
+            </div>
+            <div>
+              <h3 class="text-deck font-semibold text-brand-ink">{heading}</h3>
+              <div class="mt-3">
+                <Prose>
+                  <Content />
+                </Prose>
+              </div>
+              <a
+                href={`/products/${item.product}/`}
+                class="mt-4 inline-block text-sm font-semibold text-brand-blue hover:text-brand-blue-dark"
+              >
+                {productTitles.get(item.product)}&nbsp;
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 pt-14 pb-14 md:pt-18 md:pb-18"
+    aria-labelledby="more-work"
+  >
+    <h2 id="more-work" class={sectionHeading}>More of our work</h2>
+    {
+      groups.map(({ product, items }) => (
+        <section aria-labelledby={`more-${product}`} class="mt-10">
+          <h3 id={`more-${product}`} class="text-card font-semibold">
+            <a
+              href={`/products/${product}/`}
+              class="text-brand-ink hover:text-brand-blue"
+            >
+              {productTitles.get(product)}&nbsp;
+              <span aria-hidden="true" class="text-brand-blue">
+                →
+              </span>
+            </a>
+          </h3>
+          <ul
+            role="list"
+            class="mt-4 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3"
+          >
+            {items.map((item, index) => (
+              <li>
+                <LightboxImage
+                  item={item}
+                  id={`more-${product}-${index + 1}`}
+                  caption={item.galleryCaption ?? item.title}
+                  sizes={gallerySizes}
+                  crop
+                />
+                <p class="mt-3 text-sm leading-normal text-brand-slate">
+                  {item.galleryCaption ?? item.title}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </section>
+
+  <QuoteCta
+    heading="Want to see examples like yours?"
+    text="Tell us what you're printing and we'll send relevant samples and specs."
+  />
+</BaseLayout>

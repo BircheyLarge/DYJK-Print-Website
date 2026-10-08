@@ -1,0 +1,587 @@
+---
+import { Picture } from 'astro:assets';
+import PressDots from './PressDots.astro';
+import RegistrationMark from './RegistrationMark.astro';
+import { QUOTE_PATH, SITE } from '../consts';
+import { FAN, HEADLINE, PROOFS, SUBHEAD } from '../data/home';
+
+// Direction C's ink hero. The headline comes into register: three color
+// plates (aria-hidden copies drawn by ::before) slide onto the white h1, so
+// the words exist once for readers and search. Beside it, a fan of printed
+// pieces with the registration mark.
+
+// The card in front at first paint is the LCP image. Emit it first so the
+// preload scanner fetches that eager, high-priority file before the other
+// five (lazy, low priority). --slot still draws it in front.
+const fanSizes = '(min-width: 50.0625rem) 420px, 220px';
+const PLATES = ['cyan', 'magenta', 'yellow'] as const;
+const front = FAN.length - 1;
+const fanOrder = [
+  front,
+  ...FAN.map((_, index) => index).filter((index) => index !== front),
+];
+---
+
+<section class="hero on-dark" aria-label="Introduction">
+  <div class="texture" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="fan" data-fan>
+    {
+      fanOrder.map((index) => {
+        const piece = FAN[index]!;
+        return (
+          <a
+            href={piece.href}
+            class="fan-card"
+            style={`--slot: ${index}`}
+            data-i={index}
+            aria-label={piece.label}
+          >
+            <span class="fan-mat">
+              <Picture
+                src={piece.image}
+                alt=""
+                formats={['avif', 'webp']}
+                widths={[240, 360, 480, 720, 960]}
+                sizes={fanSizes}
+                loading={index === front ? 'eager' : 'lazy'}
+                fetchpriority={index === front ? 'high' : 'low'}
+                class="aspect-3/2 w-full object-cover"
+              />
+              <span class="fan-chip">
+                {piece.label}
+                <span aria-hidden="true"> →</span>
+              </span>
+            </span>
+          </a>
+        );
+      })
+    }
+    <RegistrationMark class="mark" />
+    <div class="fan-controls">
+      <button type="button" class="fan-control" data-fan-prev> Prev </button>
+      <button
+        type="button"
+        class="fan-control fan-toggle"
+        data-fan-toggle
+        aria-pressed="false"
+      >
+        Pause
+      </button>
+      <button type="button" class="fan-control" data-fan-next>Next</button>
+    </div>
+  </div>
+
+  <script>
+    const fan = document.querySelector<HTMLElement>('[data-fan]');
+    if (fan) {
+      const cards = [...fan.querySelectorAll<HTMLElement>('.fan-card')];
+      const toggle = fan.querySelector<HTMLButtonElement>('[data-fan-toggle]');
+      const count = cards.length;
+      const reduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches;
+      let step = 0;
+      let paused = false;
+      let held = false;
+      let timer = 0;
+
+      const place = () => {
+        cards.forEach((card) => {
+          const index = Number(card.dataset.i);
+          const slot = (index + step) % count;
+          const previous = Number(card.getAttribute('data-slot') ?? slot);
+          const wraps = Math.abs(slot - previous) > 1;
+          card.setAttribute('data-slot', String(slot));
+          card.style.setProperty('--slot', String(slot));
+          if (wraps && !reduced) {
+            card.style.zIndex = String(count + 2);
+            card.addEventListener(
+              'transitionend',
+              () => {
+                card.style.zIndex = '';
+              },
+              { once: true },
+            );
+          } else {
+            card.style.zIndex = '';
+          }
+        });
+      };
+
+      // Auto-advance stays off until 3s after load, so a slow image can't
+      // swap the LCP candidate while the page is still loading.
+      let auto = false;
+      const arm = () => {
+        window.clearInterval(timer);
+        if (reduced || paused || held || !auto) return;
+        timer = window.setInterval(() => {
+          step = (step + 1) % count;
+          place();
+        }, 3000);
+      };
+
+      const go = (delta: number) => {
+        step = (step + delta + count) % count;
+        place();
+        arm();
+      };
+
+      fan.addEventListener('mouseenter', () => {
+        held = true;
+        arm();
+      });
+      fan.addEventListener('mouseleave', () => {
+        held = false;
+        arm();
+      });
+      fan.addEventListener('focusin', () => {
+        held = true;
+        arm();
+      });
+      fan.addEventListener('focusout', (event: FocusEvent) => {
+        if (
+          event.relatedTarget instanceof Node &&
+          fan.contains(event.relatedTarget)
+        )
+          return;
+        held = false;
+        arm();
+      });
+      fan.querySelector('[data-fan-prev]')?.addEventListener('click', () => {
+        go(-1);
+      });
+      fan.querySelector('[data-fan-next]')?.addEventListener('click', () => {
+        go(1);
+      });
+      toggle?.addEventListener('click', () => {
+        if (!toggle) return;
+        paused = !paused;
+        toggle.setAttribute('aria-pressed', String(paused));
+        toggle.textContent = paused ? 'Play' : 'Pause';
+        arm();
+      });
+
+      place();
+      window.requestAnimationFrame(() => {
+        fan.classList.add('is-ready');
+      });
+      const enableAuto = () => {
+        auto = true;
+        arm();
+      };
+      // The interval's first tick is 3s later, so nothing moves until then.
+      if (document.readyState === 'complete') enableAuto();
+      else window.addEventListener('load', enableAuto, { once: true });
+    }
+  </script>
+
+  <div class="copy">
+    <p
+      class="flex items-center gap-3 text-eyebrow font-semibold uppercase text-press-cyan-soft"
+    >
+      <PressDots />
+      <span class="kicker">
+        <span>Utah-based</span><span class="kicker-sep"> · </span><span
+          >Shipping nationwide</span
+        >
+      </span>
+    </p>
+    <div class="lockup">
+      <div class="plates" aria-hidden="true">
+        {
+          PLATES.map((plate) => (
+            <span class={`plate plate-${plate}`} data-text={HEADLINE} />
+          ))
+        }
+      </div>
+      <h1 class="title">{HEADLINE}</h1>
+    </div>
+    <p
+      class="mt-4 max-w-[27.5em] text-deck-sm font-medium text-on-dark-soft md:text-deck"
+    >
+      {SUBHEAD}
+    </p>
+    <div class="actions">
+      <div class="buttons">
+        <a href={QUOTE_PATH} class="btn btn-solid btn-lg">Get a free quote</a>
+        <a href="/portfolio/" class="btn btn-ghost btn-lg">See our work</a>
+      </div>
+      {
+        SITE.phone && (
+          <a
+            href={`tel:${SITE.phone.e164}`}
+            class="text-sm font-medium text-on-dark-soft underline underline-offset-[0.18em] hover:text-on-dark"
+          >
+            or call {SITE.phone.display}
+          </a>
+        )
+      }
+    </div>
+    <ul class="proofs" role="list">
+      {PROOFS.map((proof) => <li>{proof}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--color-brand-ink);
+    color: var(--color-on-dark);
+  }
+
+  .texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at 78% 18%,
+      rgb(255 255 255 / 0.06),
+      transparent 26rem
+    );
+  }
+
+  .texture span {
+    position: absolute;
+    width: 5.5rem;
+    height: 5.5rem;
+    opacity: 0.32;
+  }
+
+  .texture span:nth-child(1) {
+    top: 1.25rem;
+    left: 1.25rem;
+    border-top: 1.5px solid #fff;
+    border-left: 1.5px solid #fff;
+  }
+
+  .texture span:nth-child(2) {
+    top: 1.25rem;
+    right: 1.25rem;
+    border-top: 1.5px solid #fff;
+    border-right: 1.5px solid #fff;
+  }
+
+  .texture span:nth-child(3) {
+    bottom: 1.25rem;
+    left: 1.25rem;
+    border-bottom: 1.5px solid #fff;
+    border-left: 1.5px solid #fff;
+  }
+
+  .texture span:nth-child(4) {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    border-bottom: 1.5px solid #fff;
+    border-right: 1.5px solid #fff;
+  }
+
+  .copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem 1rem 1.25rem;
+  }
+
+  /* Two lines on phones, one from 25rem, set by width rather than by
+     wrapping: at 390px Outfit just fits on one line and Arial doesn't. */
+  .kicker {
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  .kicker > span {
+    display: block;
+  }
+
+  .kicker > .kicker-sep {
+    display: none;
+  }
+
+  @media (min-width: 25rem) {
+    .kicker {
+      line-height: inherit;
+    }
+
+    .kicker > span,
+    .kicker > .kicker-sep {
+      display: inline;
+    }
+  }
+
+  /* The h1 and its plates share one box, so the copies wrap like it.
+     Measures here are in em, not ch: Outfit's zero is a quarter wider than
+     its fallback's, so a ch box would change width when the font arrives. */
+  .lockup {
+    position: relative;
+    margin-top: 1rem;
+    max-width: 7.33em;
+    font-size: var(--text-hero);
+    font-weight: 700;
+    letter-spacing: var(--text-hero--letter-spacing);
+    line-height: var(--text-hero--line-height);
+  }
+
+  .title {
+    position: relative;
+    z-index: 1;
+    color: var(--color-on-dark);
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .plates {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .plate {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: screen;
+  }
+
+  .plate::before {
+    content: attr(data-text);
+    display: block;
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .plate-cyan {
+    color: var(--color-press-cyan);
+    animation: plate-cyan 700ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+  }
+
+  .plate-magenta {
+    color: var(--color-press-magenta);
+    animation: plate-magenta 700ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+  }
+
+  .plate-yellow {
+    color: var(--color-press-yellow);
+    animation: plate-yellow 700ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+  }
+
+  @keyframes plate-cyan {
+    from {
+      transform: translate(-8px, 4px);
+    }
+
+    80% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes plate-magenta {
+    from {
+      transform: translate(7px, -4px);
+    }
+
+    80% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes plate-yellow {
+    from {
+      transform: translate(3px, 7px);
+    }
+
+    80% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* "or call" always gets its own line, as in the ink close, so the row
+     can't re-wrap when the font arrives. */
+  .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-self: stretch;
+  }
+
+  .buttons :global(.btn) {
+    width: 100%;
+  }
+
+  /* One line per proof and as many columns as fit: 7.25rem clears the
+     longest proof in either face, so the font can't change the rows. */
+  .proofs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(7.25rem, 1fr));
+    gap: 0.7rem 1.25rem;
+    max-width: 46rem;
+    margin-top: 1.75rem;
+    border-top: 1px solid rgb(255 255 255 / 0.22);
+    padding-top: 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .fan {
+    position: relative;
+    z-index: 1;
+    order: 2;
+    container-type: inline-size;
+    height: auto;
+    aspect-ratio: 32 / 24;
+    margin: 1rem 0.75rem 0.75rem;
+  }
+
+  .fan-card {
+    position: absolute;
+    top: 0.35rem;
+    left: 0;
+    z-index: calc(var(--slot) + 1);
+    width: calc(100cqi * 0.54);
+    transform: translateX(calc(100cqi * 0.03 + var(--slot) * 100cqi * 0.4 / 5))
+      translateY(calc((5 - var(--slot)) * 100cqi * 0.012))
+      rotate(calc((var(--slot) - 2.5) * 3deg));
+  }
+
+  .fan.is-ready .fan-card {
+    transition: transform 700ms ease;
+  }
+
+  .fan-mat {
+    position: relative;
+    display: block;
+    border: 1px solid var(--color-rule);
+    background: var(--color-brand-surface);
+    padding: 0.4rem;
+    box-shadow: 0 10px 18px rgb(0 0 0 / 0.35);
+  }
+
+  .fan-chip {
+    position: absolute;
+    right: 0.4rem;
+    bottom: 0.4rem;
+    left: 0.4rem;
+    padding: 0.28rem 0.4rem;
+    background: #fff;
+    color: var(--color-brand-ink);
+    font-weight: 600;
+    font-size: clamp(0.75rem, 4.4cqi, 1rem);
+    line-height: 1.2;
+  }
+
+  .fan-controls {
+    position: absolute;
+    z-index: 8;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .fan-control {
+    min-height: 2rem;
+    padding: 0 0.7rem;
+    border: 1px solid var(--color-brand-ink);
+    background: #fff;
+    color: var(--color-brand-ink);
+    font: 600 0.75rem/1 var(--font-sans, sans-serif);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .fan-control:focus-visible {
+    outline: 3px solid var(--color-on-dark);
+    outline-offset: 2px;
+  }
+
+  .fan :global(.mark) {
+    position: absolute;
+    bottom: 0.15rem;
+    left: 0;
+    z-index: 0;
+    width: 3.25rem;
+    pointer-events: none;
+  }
+
+  @media (min-width: 40rem) {
+    .buttons {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-self: flex-start;
+    }
+
+    .buttons :global(.btn) {
+      width: auto;
+    }
+  }
+
+  @media (min-width: 50.0625rem) {
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 34rem) minmax(16rem, 1fr);
+      align-items: center;
+      column-gap: 1.5rem;
+      padding: 6rem 1.25rem 6rem max(1rem, calc((100% - 72rem) / 2 + 1rem));
+    }
+
+    .copy {
+      order: 1;
+      width: auto;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .fan {
+      order: 2;
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .plate {
+      display: none;
+      animation: none;
+    }
+
+    .fan-card {
+      transition: none;
+    }
+
+    .fan-toggle {
+      display: none;
+    }
+  }
+</style>

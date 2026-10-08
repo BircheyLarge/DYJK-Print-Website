@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Checklist from '../../components/Checklist.astro';
+import ContactCta from '../../components/ContactCta.astro';
+import FaqList from '../../components/FaqList.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+// Copy: Content Strategist's contact-copy.md, hook option 2. The hook sells
+// the reason to reach out, the next two sections answer it, then the call
+// to action.
+const STEPS = [
+  {
+    title: 'A free quote',
+    text: 'You describe the piece. We send a quote, and the quote itself is free.',
+  },
+  {
+    title: 'You see it first',
+    text: 'Nothing prints until you approve the proof. You see the piece before the run.',
+  },
+  {
+    title: 'Design help',
+    text: 'A finished file is welcome. A logo and a rough idea are enough for us to build it.',
+  },
+  {
+    title: 'Shipped to you',
+    text: 'Name the state or ZIP. We ship the finished job anywhere in the United States.',
+  },
+];
+
+const CHECKLIST = [
+  { title: 'The piece.', text: 'What it is, and what it has to do.' },
+  { title: 'Quantity.', text: 'How many you need.' },
+  { title: 'Size.', text: 'The finished size, if you know it.' },
+  { title: 'Paper or finish.', text: 'Only if you already have one in mind.' },
+  { title: 'Deadline.', text: 'Your date, if you have one.' },
+  { title: 'Where it ships.', text: 'A state or ZIP.' },
+];
+
+const FAQS = [
+  {
+    question: 'Do I need a print-ready file?',
+    answer:
+      'No. A press-ready PDF can go straight to proof. A logo, a rough layout, or a few notes is enough for design and prepress to build the file. You approve a proof before we print.',
+  },
+  {
+    question: 'Will I see it before it prints?',
+    answer:
+      'Yes. After the quote we send a proof of the piece, including the cuts or the fold when those matter. We print once you approve it.',
+  },
+  {
+    question: 'Do you ship outside your area?',
+    answer:
+      'Yes. We ship anywhere in the United States. Put the state or ZIP on the quote, including a split across more than one destination if you need it.',
+  },
+];
+
+const sectionHeading =
+  'crop-mark text-h2-sm font-bold text-brand-ink md:text-h2';
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Contact', path: '/contact/' },
+  ]),
+  faqSchema(FAQS),
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get a free quote from DYJK Print: send your idea, approve a proof before anything prints, and get it shipped anywhere in the US."
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Free quotes"
+    title="Ready to be impossible to walk past?"
+    subtitle="Send the idea. We quote it free and show you the piece before it prints."
+  />
+
+  <section
+    class="mt-9 bg-brand-surface py-10 md:mt-12 md:py-14"
+    aria-labelledby="what-happens"
+  >
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 id="what-happens" class={sectionHeading}>
+        What happens when you reach out
+      </h2>
+      <p class="mt-3 max-w-3xl text-prose-sm text-brand-slate md:text-prose">
+        We're a small team based in Utah, working with clients across the
+        country.
+      </p>
+      <ul
+        role="list"
+        class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:mt-8 md:gap-6 wide:grid-cols-4"
+      >
+        {
+          STEPS.map((step) => (
+            <li class="border border-rule bg-white p-4 md:p-6">
+              <h3 class="text-card-sm font-semibold text-brand-ink md:text-card">
+                {step.title}
+              </h3>
+              <p class="mt-2 text-sm leading-normal text-brand-slate md:text-ui">
+                {step.text}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-10 md:py-14" aria-labelledby="what-to-send">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 id="what-to-send" class={sectionHeading}>What to send us</h2>
+      <Checklist
+        items={CHECKLIST}
+        class="mt-6 sm:grid-cols-2 md:mt-8 wide:grid-cols-3"
+      />
+      <p class="mt-6 max-w-3xl text-prose-sm text-brand-slate md:text-prose">
+        A rough idea or a logo is fine too. You can ask for the quote before the
+        file is press-ready.
+      </p>
+    </div>
+  </section>
+
+  <ContactCta
+    id="get-noticed"
+    heading="Let's get you noticed."
+    callLine="Talk through the piece before you send a file."
+    emailLine="Send the piece, the specs, or just a logo."
+  />
+
+  <section class="mx-auto max-w-6xl px-4 pb-14 md:pb-18">
+    <div class="max-w-3xl">
+      <FaqList faqs={FAQS} />
+    </div>
+  </section>
+</BaseLayout>

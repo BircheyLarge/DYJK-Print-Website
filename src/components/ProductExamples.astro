@@ -1,0 +1,44 @@
+---
+import LightboxImage from './LightboxImage.astro';
+import type { PortfolioItem } from '../data/portfolio';
+
+interface Props {
+  items: ReadonlyArray<PortfolioItem>;
+}
+
+const { items } = Astro.props;
+
+// A lone example gets a full-width tile; more become a compact grid, two-up
+// on phones and in the lg side column (341px wide), three-up on tablets.
+// Sizes are the image inside C's frame, 26px narrower than the tile.
+const single = items.length === 1;
+const thumbSizes = single
+  ? '(min-width: 1152px) 315px, (min-width: 1024px) calc(33.3vw - 69px), (min-width: 640px) calc(50vw - 48px), calc(100vw - 58px)'
+  : '(min-width: 1152px) 139px, (min-width: 1024px) calc(16.7vw - 53px), (min-width: 640px) calc(33.3vw - 45px), calc(50vw - 48px)';
+---
+
+<h2 class="text-sm font-semibold text-brand-ink">Examples</h2>
+<ul
+  role="list"
+  class:list={[
+    'mt-3 grid gap-3',
+    single
+      ? 'sm:grid-cols-2 lg:grid-cols-1'
+      : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-2',
+  ]}
+>
+  {
+    items.map((item, index) => (
+      <li>
+        <LightboxImage
+          item={item}
+          id={`example-${index + 1}`}
+          sizes={thumbSizes}
+          loading={index === 0 ? 'eager' : 'lazy'}
+          fetchpriority={index === 0 ? 'high' : undefined}
+          crop
+        />
+      </li>
+    ))
+  }
+</ul>

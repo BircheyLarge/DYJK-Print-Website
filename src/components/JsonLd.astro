@@ -1,0 +1,21 @@
+---
+// Serializes one or more JSON-LD nodes into an inline <script>.
+type Json = Record<string, unknown>;
+
+interface Props {
+  schema: Json | Json[];
+}
+
+const { schema } = Astro.props;
+const payload = Array.isArray(schema) ? schema : [schema];
+---
+
+{
+  payload.map((node) => (
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(node)}
+    />
+  ))
+}

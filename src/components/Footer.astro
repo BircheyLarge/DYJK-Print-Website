@@ -1,0 +1,77 @@
+---
+import Lockup from './Lockup.astro';
+import { NAV, QUOTE_PATH, SITE } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="on-dark border-t border-on-dark-soft bg-brand-blue-dark text-on-dark-soft"
+>
+  <div
+    class="mx-auto grid max-w-6xl gap-7 px-4 py-10 md:grid-cols-2 md:gap-8 md:py-12 wide:grid-cols-[1.3fr_1fr_1.2fr_1fr]"
+  >
+    <div>
+      <Lockup width={200} />
+      <p class="mt-4 max-w-sm text-sm leading-normal">
+        {SITE.tagline}. Commercial printing from Utah, shipped nationwide.
+      </p>
+    </div>
+
+    <div>
+      <p class="text-sm font-semibold text-on-dark">Explore</p>
+      <ul class="mt-3 space-y-2">
+        {
+          NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="text-sm leading-normal transition-colors hover:text-on-dark"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <p class="text-sm font-semibold text-on-dark">Get a quote</p>
+      <p class="mt-3 text-sm leading-normal">
+        Tell us about your project. The quote is free, and you see a proof
+        before anything prints.
+      </p>
+      <a href={QUOTE_PATH} class="btn btn-solid mt-4">Get a free quote</a>
+    </div>
+
+    <div>
+      <p class="text-sm font-semibold text-on-dark">Contact</p>
+      <ul class="mt-3 space-y-2 text-sm leading-normal">
+        <li>
+          <a
+            href={`mailto:${SITE.email}`}
+            class="transition-colors hover:text-on-dark">{SITE.email}</a
+          >
+        </li>
+        {
+          SITE.phone && (
+            <li>
+              <a
+                href={`tel:${SITE.phone.e164}`}
+                class="transition-colors hover:text-on-dark"
+              >
+                {SITE.phone.display}
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-on-dark-soft/35">
+    <p class="mx-auto max-w-6xl px-4 py-4 text-xs">
+      &copy; {year}{' '}{SITE.name}. All rights reserved.
+    </p>
+  </div>
+</footer>

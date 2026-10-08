@@ -1,0 +1,65 @@
+---
+import LightboxImage from './LightboxImage.astro';
+import Prose from './Prose.astro';
+import type { Industry } from '../data/industries';
+import { pieceByFile } from '../data/portfolio';
+
+interface Props {
+  /** Its id is the section's anchor, which product pages link to. */
+  industry: Industry;
+  /** The job it shows: a file in src/assets/portfolio/. */
+  image: string;
+  /** Puts the photo on the left from md, so sections can alternate. */
+  flip?: boolean;
+  /** Default lazy; pass "eager" for the first section only. */
+  loading?: 'eager' | 'lazy';
+}
+const { industry, image, flip = false, loading = 'lazy' } = Astro.props;
+const { id, title } = industry;
+const item = pieceByFile(image);
+
+// Half the max-w-6xl container from md (536px at full width), less a 1px rule
+// and a 12px mat each side; the full column on phones.
+const sizes =
+  '(min-width: 1152px) 510px, (min-width: 50.0625rem) calc(50vw - 66px), calc(100vw - 58px)';
+const textColumn = flip ? 'md:col-start-2' : 'md:col-start-1';
+---
+
+<!-- One industry: a crop-mark heading and its copy beside the job that shows
+     it, in a ruled frame. Phones stack heading, photo, copy; from md the
+     heading and copy sit centred against the photo. -->
+<section
+  id={id}
+  aria-labelledby={`${id}-title`}
+  class="grid scroll-mt-28 gap-6 md:grid-cols-2 md:grid-rows-[1fr_auto_auto_1fr] md:gap-x-12 md:gap-y-0"
+>
+  <h2
+    id={`${id}-title`}
+    class:list={[
+      'crop-mark text-h2-sm font-bold text-balance text-brand-ink md:row-start-2 md:text-h2',
+      textColumn,
+    ]}
+  >
+    {title}
+  </h2>
+  <div
+    class:list={[
+      'md:row-span-4 md:row-start-1 md:self-center',
+      flip ? 'md:col-start-1' : 'md:col-start-2',
+    ]}
+  >
+    <LightboxImage
+      item={item}
+      id={`${id}-work`}
+      caption={item.galleryCaption ?? item.title}
+      sizes={sizes}
+      loading={loading}
+      crop
+    />
+  </div>
+  <div class:list={['md:row-start-3 md:mt-5', textColumn]}>
+    <Prose>
+      <slot />
+    </Prose>
+  </div>
+</section>

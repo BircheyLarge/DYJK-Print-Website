@@ -1,0 +1,37 @@
+---
+import { leadParts } from '../data/home';
+
+interface Props {
+  source: string;
+}
+
+const parts = leadParts(Astro.props.source);
+---
+
+<p class="lead">
+  {
+    parts.map((part) =>
+      part.href ? <a href={part.href}>{part.text}</a> : part.text,
+    )
+  }
+</p>
+
+<style>
+  .lead {
+    max-width: 60ch;
+    margin-top: 0.85rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--color-brand-slate);
+  }
+
+  .lead a {
+    color: var(--color-brand-blue);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .lead a:hover {
+    color: var(--color-brand-blue-dark);
+  }
+</style>

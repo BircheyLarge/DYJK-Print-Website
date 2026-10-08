@@ -1,0 +1,76 @@
+---
+import { getImage, Picture } from 'astro:assets';
+import type { PortfolioItem } from '../data/portfolio';
+
+interface Props {
+  item: PortfolioItem;
+  /** Rendered width of the image slot; must match the grid that holds it. */
+  sizes: string;
+  /** Default lazy; pass "eager" only for images above the fold. */
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high';
+  /** Crop to the shared 3:2 frame (product pages); default keeps the shape. */
+  crop?: boolean;
+  /** Empty alt, for cards whose own text already names the product. */
+  decorative?: boolean;
+}
+
+const {
+  item,
+  sizes,
+  loading = 'lazy',
+  fetchpriority,
+  crop,
+  decorative,
+} = Astro.props;
+
+// Shared by every portfolio image so pages reuse the same generated files.
+// Astro caps the set at each original's own width.
+const WIDTHS = [400, 600, 800, 1000, 1200, 1600];
+
+// 3:2 suits the mixed shapes best: square shots keep the whole subject and
+// the widest (about 2.5:1) keep their center. The crop happens at build time,
+// not just in CSS, so `sizes` stays accurate and cut-off pixels are never
+// downloaded. Taking the largest 3:2 area that fits avoids upscaling; 1200px
+// covers the biggest product-page slot (one image, full width on a 3x phone).
+const RATIO = 3 / 2;
+const MAX_CROP_WIDTH = 1200;
+
+let frame: {
+  width?: number;
+  height?: number;
+  fit?: 'cover';
+  position?: PortfolioItem['cropPosition'];
+} = {};
+let widths = WIDTHS;
+if (crop) {
+  // getImage() reports the original's size. Reading item.image.width directly
+  // would make Astro ship the full-size original in dist/ as well.
+  const { width = 0, height = 0 } = (await getImage({ src: item.image }))
+    .options;
+  const frameWidth = Math.min(
+    width,
+    Math.round(height * RATIO),
+    MAX_CROP_WIDTH,
+  );
+  frame = {
+    width: frameWidth,
+    height: Math.round(frameWidth / RATIO),
+    fit: 'cover',
+    ...(item.cropPosition && { position: item.cropPosition }),
+  };
+  widths = [...WIDTHS.filter((w) => w < frameWidth), frameWidth];
+}
+---
+
+<Picture
+  src={item.image}
+  alt={decorative ? '' : item.alt}
+  formats={['avif', 'webp']}
+  widths={widths}
+  sizes={sizes}
+  loading={loading}
+  fetchpriority={fetchpriority}
+  {...frame}
+  class:list={['w-full bg-brand-surface', crop && 'aspect-3/2 object-cover']}
+/>

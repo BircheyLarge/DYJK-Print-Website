@@ -1,0 +1,35 @@
+---
+import CmykBar from './CmykBar.astro';
+import PressDots from './PressDots.astro';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  eyebrow?: string;
+}
+const { title, subtitle, eyebrow } = Astro.props;
+---
+
+<section class="on-dark bg-brand-ink text-on-dark">
+  <div class="mx-auto max-w-6xl px-4 pt-10 pb-10 md:pt-16 md:pb-14">
+    {
+      eyebrow && (
+        <p class="flex items-center gap-3 text-eyebrow font-semibold uppercase text-press-cyan-soft">
+          <PressDots />
+          {eyebrow}
+        </p>
+      )
+    }
+    <h1 class="mt-4 max-w-3xl text-h1-sm font-bold text-on-dark md:text-h1">
+      {title}
+    </h1>
+    {
+      subtitle && (
+        <p class="mt-4 max-w-3xl text-deck-sm font-medium text-on-dark-soft md:text-deck">
+          {subtitle}
+        </p>
+      )
+    }
+  </div>
+</section>
+<CmykBar />

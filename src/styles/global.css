@@ -1,0 +1,272 @@
+@import 'tailwindcss';
+
+/*
+ * ──────────────────────────────────────────────────────────────────────────
+ * BRAND TOKENS — single swap point.
+ * Values sampled from the logo (references/dyjk-logo-from-invoice.png).
+ * Replace with exact brand values once the high-res logo lands; nothing else
+ * in the codebase hard-codes brand colors.
+ * ──────────────────────────────────────────────────────────────────────────
+ */
+@theme {
+  /*
+   * brand-blue is the AA-adjusted UI blue: the logo's true #2880c0 only hits
+   * 4.25:1 on white (fails WCAG AA for normal text and for white button
+   * labels), so the interactive/text blue is darkened to #1d6fa8 (~5.4:1).
+   * The exact logo hue is preserved in the logo image itself.
+   * Contrast of text-bearing tokens is enforced by tests/unit/color.test.ts.
+   */
+  --color-brand-blue: #1d6fa8;
+  --color-brand-blue-dark: #14517d;
+  --color-brand-slate: #506870;
+  --color-brand-ink: #0b1a22;
+  --color-brand-muted: #5b6b73;
+  --color-brand-surface: #f5f8fa;
+  /* The logo's true blue, for the spine only: 4.25:1 on white, never text. */
+  --color-brand-mark: #2880c0;
+  /* Type and icons on blue-dark fields (header, CTA band, footer). */
+  --color-on-dark: #ffffff;
+  --color-on-dark-soft: #d5e3ec;
+  /*
+   * The press palette from homepage direction C, which Stanley picked: the
+   * CMYK inks (key is brand-ink) for dots, bars, plates and step numbers,
+   * and magenta for the primary button. Contrast pairs are in color.test.ts.
+   */
+  --color-press-cyan: #00a0e4;
+  --color-press-magenta: #c4006a;
+  --color-press-magenta-dark: #a30058;
+  --color-press-yellow: #ffe600;
+  /* Cyan light enough to read as text on ink (eyebrows, kickers). */
+  --color-press-cyan-soft: #7fd4f5;
+  /* Hairline rules and frame borders on light grounds. Never text. */
+  --color-rule: #d5e3ec;
+
+  /* Buttons and controls. Cards and photos have none: they're C's square,
+     ruled frames. */
+  --radius-control: 6px;
+
+  /*
+   * Card B layout (web-refresh SPEC.md): phone layouts at 800px and under, so
+   * md starts at 801px; the homepage hero splits into two columns from 1101px.
+   */
+  --breakpoint-md: 50.0625rem;
+  --breakpoint-wide: 68.8125rem;
+
+  /*
+   * Outfit for everything: body and UI, h3 at 600, h1 and h2 at 700. Astro's
+   * fonts API (astro.config.mjs, <Font> in BaseHead) defines --font-outfit
+   * with its fallback stack.
+   */
+  --font-sans: var(--font-outfit, sans-serif);
+
+  /* Type scale. Each -sm size is the phone size of the role above. */
+  /* The homepage h1, direction C's size. */
+  --text-hero: clamp(2.5rem, 4.2vw, 4.6rem);
+  --text-hero--line-height: 1.1;
+  --text-hero--letter-spacing: -0.01em;
+  /* The homepage's section h2s, one step under its h1. */
+  --text-display: clamp(2rem, 1.25rem + 2.4vw, 2.75rem);
+  --text-display--line-height: 1.2;
+  --text-display--letter-spacing: -0.01em;
+  --text-h1: 2.75rem;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.01em;
+  --text-h1-sm: 2rem;
+  --text-h1-sm--line-height: 1.1;
+  --text-h1-sm--letter-spacing: -0.01em;
+  --text-cta: 2.25rem;
+  --text-cta--line-height: 1.1;
+  --text-cta--letter-spacing: -0.01em;
+  --text-cta-sm: 1.75rem;
+  --text-cta-sm--line-height: 1.1;
+  --text-cta-sm--letter-spacing: -0.01em;
+  --text-h2: 2rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2-sm: 1.625rem;
+  --text-h2-sm--line-height: 1.2;
+  --text-h2-sm--letter-spacing: -0.01em;
+  --text-deck: 1.25rem;
+  --text-deck--line-height: 1.45;
+  --text-deck-sm: 1.0625rem;
+  --text-deck-sm--line-height: 1.45;
+  --text-prose: 1.125rem;
+  --text-prose--line-height: 1.6;
+  --text-prose-sm: 1rem;
+  --text-prose-sm--line-height: 1.6;
+  --text-card: 1.125rem;
+  --text-card--line-height: 1.3;
+  --text-card-sm: 1rem;
+  --text-card-sm--line-height: 1.3;
+  --text-ui: 0.9375rem;
+  --text-ui--line-height: 1;
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.14em;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1;
+  --text-caption--letter-spacing: 0.04em;
+  --text-caption-sm: 0.75rem;
+  --text-caption-sm--line-height: 1;
+  --text-caption-sm--letter-spacing: 0.04em;
+}
+
+/*
+ * Outfit's metric-matched fallbacks, one per weight: headings at 700 are
+ * 3.6% wider than body text at 400. Arial (Arial Bold for 700) sized to
+ * each cut's average width with Capsize's formula, so lines wrap the same
+ * before and after the swap. tests/unit/fonts.test.ts checks these against
+ * the font files.
+ */
+@font-face {
+  font-family: 'Outfit Fallback';
+  src: local('Arial');
+  font-weight: 400;
+  size-adjust: 99.8204%;
+  ascent-override: 100.18%;
+  descent-override: 26.0468%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Outfit Fallback';
+  src: local('Arial');
+  font-weight: 500;
+  size-adjust: 100.0447%;
+  ascent-override: 99.9553%;
+  descent-override: 25.9884%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Outfit Fallback';
+  src: local('Arial');
+  font-weight: 600;
+  size-adjust: 101.8392%;
+  ascent-override: 98.194%;
+  descent-override: 25.5304%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Outfit Fallback';
+  src: local('Arial Bold');
+  font-weight: 700;
+  size-adjust: 96.0456%;
+  ascent-override: 104.1172%;
+  descent-override: 27.0705%;
+  line-gap-override: 0%;
+}
+
+/* Base element defaults. */
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  background-color: white;
+  color: var(--color-brand-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Visible keyboard focus for accessibility (WCAG 2.2). */
+:focus-visible {
+  outline: 3px solid var(--color-brand-blue);
+  outline-offset: 2px;
+}
+
+/* Brand-blue is 1.55:1 on blue-dark, so the ring turns white there. */
+.on-dark :focus-visible {
+  outline-color: var(--color-on-dark);
+}
+
+/*
+ * The spine from Card B: a 4px bar of the logo blue beside a block of text.
+ * It never runs along a photo or sits on blue-dark (SPEC.md).
+ */
+@utility spine {
+  border-inline-start: 4px solid var(--color-brand-mark);
+  padding-inline-start: var(--spine-gap, 1rem);
+}
+
+/*
+ * Direction C's crop mark: a small corner above a section heading, like the
+ * marks at the edge of a press sheet.
+ */
+@utility crop-mark {
+  &::before {
+    content: '';
+    display: block;
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-bottom: 0.85rem;
+    border-block-start: 2px solid currentColor;
+    border-inline-start: 2px solid currentColor;
+  }
+}
+
+/*
+ * Buttons. Solid is the press magenta with a white label on every ground, the
+ * one primary action. Ghost is an outline: brand-blue on light grounds, white
+ * inside .on-dark.
+ */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-control);
+    font-size: var(--text-ui);
+    font-weight: 600;
+    line-height: var(--text-ui--line-height);
+    text-align: center;
+    transition-property: color, background-color, border-color;
+    transition-duration: 150ms;
+  }
+  /* The large size, for a page's one main action. */
+  .btn-lg {
+    min-height: 56px;
+    padding: 16px 28px;
+    font-size: var(--text-card);
+  }
+  .btn-solid {
+    background-color: var(--color-press-magenta);
+    color: var(--color-on-dark);
+  }
+  .btn-solid:hover {
+    background-color: var(--color-press-magenta-dark);
+  }
+  .btn-ghost {
+    border-color: var(--color-brand-blue);
+    color: var(--color-brand-blue);
+  }
+  .btn-ghost:hover {
+    background-color: var(--color-brand-surface);
+  }
+  .on-dark .btn-ghost {
+    border-color: var(--color-on-dark);
+    color: var(--color-on-dark);
+  }
+  .on-dark .btn-ghost:hover {
+    background-color: rgb(255 255 255 / 0.08);
+  }
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
