@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Checklist from '../../components/Checklist.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { SITE } from '../../consts';
+import { QUOTE_NEXT } from '../../data/quote';
+
+// Where a sent quote request lands: the form's fetch path and its no-JS 303
+// both end here, so this URL is the conversion to count in analytics. It's
+// noindex and out of the sitemap (NOINDEX_PATHS in astro.config.mjs).
+const sectionHeading =
+  'crop-mark text-h2-sm font-bold text-balance text-brand-ink md:text-h2';
+---
+
+<BaseLayout
+  title="Quote Request Received"
+  description="Your quote request reached DYJK Print. Here is what happens next."
+  noindex
+>
+  <PageHeader
+    eyebrow="Request a Quote"
+    title="Thanks. Your request is in."
+    subtitle="It reached us. Here is what happens next."
+  />
+
+  <section
+    class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-14 md:pb-18"
+    aria-labelledby="next"
+  >
+    <div class="max-w-3xl">
+      <h2 id="next" class={sectionHeading}>What happens next</h2>
+      <Checklist items={QUOTE_NEXT} class="mt-6" />
+      <p class="mt-8 text-prose-sm text-pretty text-brand-slate md:text-prose">
+        Have files, or something to add? Email <a
+          href={`mailto:${SITE.email}`}
+          class="text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+          >{SITE.email}</a
+        >{
+          SITE.phone && (
+            <>
+              {' '}
+              or call{' '}
+              <a
+                href={`tel:${SITE.phone.e164}`}
+                class="text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+              >
+                {SITE.phone.display}
+              </a>
+            </>
+          )
+        }.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/portfolio/" class="btn btn-ghost">See our work</a>
+        <a href="/products/" class="btn btn-ghost">Browse products</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

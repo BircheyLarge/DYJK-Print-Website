@@ -1,4 +1,5 @@
 dist/
+dist-form/
 .astro/
 node_modules/
 playwright-report/

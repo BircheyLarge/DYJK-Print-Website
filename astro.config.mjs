@@ -10,11 +10,13 @@ const SITE_URL = 'https://www.dyjkprint.com';
 // the sitemap integration itself). tests/e2e/build-output.spec.ts checks the
 // two agree.
 /** @type {string[]} */
-const NOINDEX_PATHS = [];
+const NOINDEX_PATHS = ['/quote-received/'];
 
 // https://astro.build/config
 export default defineConfig({
   site: SITE_URL,
+  // The e2e suite also builds the quote form switched on, into its own folder.
+  outDir: process.env.ASTRO_OUT_DIR ?? './dist',
   // Consistent trailing-slash policy → one canonical URL shape, no duplicate-content splits.
   trailingSlash: 'always',
   build: { format: 'directory' },

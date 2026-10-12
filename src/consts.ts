@@ -4,9 +4,10 @@
  * Contact policy (Stanley, updated 2026-10-12): DYJK is a small Utah-based team
  * serving clients nationwide. Everything is ordered online or by email and
  * shipped, except in Salt Lake City, where DYJK delivers; that's the one city
- * the copy names (Contact, Request a Quote and About only). NO street address,
- * map, hours, pick-up or showroom. Utah never goes in titles or H1s; product
- * pages target nationwide queries.
+ * the copy names (Contact, Request a Quote, Quote Received, About and the
+ * quote form's auto-reply). NO street address, map, hours, pick-up or
+ * showroom. Utah never goes in titles or H1s; product pages target
+ * nationwide queries.
  */
 
 /** A public phone number: E.164 for tel: links and schema, plus display text. */

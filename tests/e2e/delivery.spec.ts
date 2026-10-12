@@ -10,7 +10,13 @@ const routes = fs
   .map((file) => `/${file.replace(/index\.html$/, '')}`)
   .sort();
 
-const DELIVERY_PAGES = ['/about/', '/contact/', '/request-a-quote/'];
+const DELIVERY_PAGES = [
+  '/about/',
+  '/contact/',
+  '/request-a-quote/',
+  // What happens after a quote request, with the form on.
+  '/quote-received/',
+];
 const NEVER = ['showroom', 'show room', 'pick-up', 'walk-in', 'in-store'];
 
 test('Salt Lake City is only where we deliver, and nothing offers pick-up', async ({
