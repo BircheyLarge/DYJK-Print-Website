@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { SITE } from '../../src/consts';
+import { mailtoHref, QUOTE_EMAIL } from '../../src/lib/email';
 
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -37,10 +38,8 @@ test.describe('contact', () => {
       ).toHaveAttribute('href', `tel:${SITE.phone.e164}`);
     }
     await expect(
-      cta.getByRole('link', {
-        name: new RegExp(`^Email ${escape(SITE.email)}`),
-      }),
-    ).toHaveAttribute('href', `mailto:${SITE.email}`);
+      cta.getByRole('link', { name: SITE.email, exact: true }),
+    ).toHaveAttribute('href', mailtoHref(SITE.email, QUOTE_EMAIL));
   });
 
   test('marks up the questions it shows as a FAQPage', async ({ page }) => {

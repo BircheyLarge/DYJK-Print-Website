@@ -1,0 +1,149 @@
+---
+import { SITE } from '../consts';
+import { gmailHref, outlookHref, type EmailDraft } from '../lib/email';
+
+interface Props {
+  /** The email the webmail links open with. */
+  draft: EmailDraft;
+  /** 'dark' on ink fields. */
+  tone?: 'light' | 'dark';
+  /**
+   * Show the address as text under the actions. Turn it off where the host
+   * already shows it; mark that element data-email-address inside a
+   * data-email-scope container, so Copy can select it.
+   */
+  showAddress?: boolean;
+  class?: string;
+}
+const {
+  draft,
+  tone = 'light',
+  showAddress = true,
+  class: className,
+} = Astro.props;
+
+const action = [
+  'inline-flex min-h-6 cursor-pointer items-center font-semibold underline underline-offset-2',
+  tone === 'dark'
+    ? 'text-on-dark hover:text-on-dark-soft'
+    : 'text-brand-blue hover:text-brand-blue-dark',
+];
+---
+
+<!-- For computers without a mail app, where a mailto: link does nothing: a
+     copy button, webmail compose links and the address as text. Copy needs
+     JavaScript, so <noscript> hides it; it's in the HTML from the start so
+     nothing moves when the script runs. -->
+<div class:list={['text-sm leading-normal', className]} data-email-actions>
+  <ul role="list" class="flex flex-wrap items-center gap-x-5 gap-y-1">
+    <li class="email-copy flex items-center gap-2">
+      <button type="button" class:list={action} data-copy-email>
+        Copy email address
+      </button>
+      <span
+        role="status"
+        aria-live="polite"
+        class:list={[
+          'font-semibold',
+          tone === 'dark' ? 'text-press-cyan-soft' : 'text-brand-ink',
+        ]}
+        data-copy-status></span>
+    </li>
+    <li>
+      <a
+        href={gmailHref(SITE.email, draft)}
+        target="_blank"
+        rel="noopener"
+        class:list={action}
+      >
+        Open in Gmail<span class="sr-only"> (opens in a new tab)</span>
+      </a>
+    </li>
+    <li>
+      <a
+        href={outlookHref(SITE.email, draft)}
+        target="_blank"
+        rel="noopener"
+        class:list={action}
+      >
+        Open in Outlook<span class="sr-only"> (opens in a new tab)</span>
+      </a>
+    </li>
+  </ul>
+  {
+    showAddress && (
+      <p
+        class:list={[
+          'mt-1.5',
+          tone === 'dark' ? 'text-on-dark-soft' : 'text-brand-slate',
+        ]}
+      >
+        Or write to{' '}
+        <span
+          class:list={[
+            'font-semibold select-all',
+            tone === 'dark' ? 'text-on-dark' : 'text-brand-ink',
+          ]}
+          data-email-address
+        >
+          {SITE.email}
+        </span>
+      </p>
+    )
+  }
+  <noscript
+    ><style is:inline>
+      .email-copy {
+        display: none !important;
+      }
+    </style></noscript
+  >
+</div>
+
+<script>
+  // Copy the visible address: the clipboard API where the browser allows it,
+  // otherwise select the address (and try the old copy command) so a copy
+  // shortcut takes it.
+  for (const root of document.querySelectorAll<HTMLElement>(
+    '[data-email-actions]',
+  )) {
+    const button = root.querySelector<HTMLButtonElement>('[data-copy-email]');
+    const status = root.querySelector<HTMLElement>('[data-copy-status]');
+    const address =
+      root.querySelector<HTMLElement>('[data-email-address]') ??
+      root
+        .closest('[data-email-scope]')
+        ?.querySelector<HTMLElement>('[data-email-address]');
+    if (!button || !status || !address) continue;
+
+    let timer: number | undefined;
+    const say = (text: string, ms: number) => {
+      status.textContent = text;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        status.textContent = '';
+      }, ms);
+    };
+
+    button.addEventListener('click', async () => {
+      const text = address.textContent?.trim() ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        say('Copied', 2000);
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(address);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+        let copied = false;
+        try {
+          copied = document.execCommand('copy');
+        } catch {
+          copied = false;
+        }
+        say(copied ? 'Copied' : 'Selected: press Ctrl+C to copy', 4000);
+      }
+    });
+  }
+</script>
