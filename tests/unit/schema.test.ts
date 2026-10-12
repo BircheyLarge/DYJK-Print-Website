@@ -11,6 +11,10 @@ import { SITE } from '../../src/consts';
 describe('organizationSchema', () => {
   const org = organizationSchema();
 
+  it('uses the square logo for the knowledge panel', () => {
+    expect(org.logo).toBe('https://www.dyjkprint.com/brand/logo-square.png');
+  });
+
   it('is an Organization (not a LocalBusiness)', () => {
     expect(org['@type']).toBe('Organization');
   });

@@ -15,8 +15,11 @@ type Json = Record<string, unknown>;
 
 const ORG_ID = `${SITE.url}/#organization`;
 
-/** Organization node — the canonical entity for the whole site. */
-export function organizationSchema(logoPath = '/brand/logo.png'): Json {
+/**
+ * Organization node — the canonical entity for the whole site. The logo is
+ * the square one: Google wants at least 112x112 for the knowledge panel.
+ */
+export function organizationSchema(logoPath = '/brand/logo-square.png'): Json {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
