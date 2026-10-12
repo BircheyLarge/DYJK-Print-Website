@@ -7,7 +7,8 @@ const PORT = 4322;
 const FORM_PORT = 4323;
 
 // Smoke + a11y run against the production build via `astro preview`, matching
-// what ships. `test:e2e` builds both versions first.
+// what ships. `test:e2e` (and CI) build dist/ first; the quote-form server
+// below builds dist-form/ itself.
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
@@ -44,12 +45,15 @@ export default defineConfig({
       reuseExistingServer: false,
       timeout: 120_000,
     },
+    // This one builds its own output first (npm run build:form, the quote form
+    // on, into dist-form/), so `npx playwright test` after `npm run build`
+    // runs the same way locally and in CI, and never tests a stale form.
     {
-      command: `npm run preview -- --port ${FORM_PORT}`,
+      command: `npm run build:form && npm run preview -- --port ${FORM_PORT}`,
       env: { ASTRO_OUT_DIR: 'dist-form' },
       url: `http://localhost:${FORM_PORT}`,
       reuseExistingServer: false,
-      timeout: 120_000,
+      timeout: 240_000,
     },
   ],
 });

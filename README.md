@@ -32,7 +32,7 @@ npm run dev        # http://localhost:4321
 | `npm run format` | Apply Prettier |
 | `npm test` | Unit tests (Vitest) |
 | `npm run build:form` | Build with the quote form on, to `dist-form/` (Turnstile test key) |
-| `npm run test:e2e` | Playwright smoke + a11y (builds both versions + previews first) |
+| `npm run test:e2e` | Playwright smoke + a11y: builds `dist/`, and the quote-form server builds `dist-form/` |
 
 ## Project layout
 
