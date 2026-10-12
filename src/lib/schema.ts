@@ -2,10 +2,11 @@
  * JSON-LD structured-data builders. Pure functions returning plain objects so
  * they are unit-testable and can be serialized by the <JsonLd> component.
  *
- * Policy (updated 2026-10-05, Stanley): DYJK is a small Utah-based team
+ * Policy (updated 2026-10-12, Stanley): DYJK is a small Utah-based team
  * serving clients nationwide. We emit `Organization` (NOT `LocalBusiness`)
  * with `areaServed: United States` and a region-only address (state and
- * country): NO street address, city, map or hours.
+ * country): NO street address, city, map or hours. (Salt Lake City delivery
+ * is said in page copy, not in the schema.)
  */
 import { SITE } from '../consts';
 import { absoluteUrl, canonicalUrl } from './seo';

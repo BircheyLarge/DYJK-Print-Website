@@ -53,6 +53,13 @@ test.describe('contact', () => {
     expect(
       faq.mainEntity.map((question: { name: string }) => question.name),
     ).toEqual(shown);
+    // The answers too, word for word.
+    expect(
+      faq.mainEntity.map(
+        (question: { acceptedAnswer: { text: string } }) =>
+          question.acceptedAnswer.text,
+      ),
+    ).toEqual(await page.locator('main dd').allInnerTexts());
   });
 
   test('a phone reaches the call to action within one scroll', async ({

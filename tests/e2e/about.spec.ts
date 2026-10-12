@@ -33,7 +33,7 @@ test.describe('about', () => {
     ).toHaveAttribute('href', mailtoHref(SITE.email, QUOTE_EMAIL));
   });
 
-  test('is indexable, and names no city, street or person', async ({ page }) => {
+  test('is indexable, and names no street or person', async ({ page }) => {
     await page.goto('/about/');
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -42,7 +42,9 @@ test.describe('about', () => {
     );
     const text = (await page.locator('main').innerText()).toLowerCase();
     expect(text).toContain('utah');
-    for (const term of ['draper', 'salt lake', 'po box', 'stanley', 'stan ']) {
+    // Salt Lake City only as where we deliver (Stanley, 2026-10-12).
+    expect(text).toContain('we deliver in salt lake city');
+    for (const term of ['draper', 'po box', 'showroom', 'stanley', 'stan ']) {
       expect(text, `mentions "${term}"`).not.toContain(term);
     }
   });
