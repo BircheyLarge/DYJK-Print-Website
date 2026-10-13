@@ -86,4 +86,9 @@ const meta = buildPageMeta({
 {card && <meta name="twitter:image:alt" content={card.alt} />}
 
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<!-- The DJK monogram (public/). Google's result shows the 48px icon; there is
+     no vector mark yet, so no SVG icon. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />

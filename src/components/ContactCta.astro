@@ -1,6 +1,8 @@
 ---
+import EmailActions from './EmailActions.astro';
 import RegistrationMark from './RegistrationMark.astro';
 import { QUOTE_PATH, SITE } from '../consts';
+import { mailtoHref, QUOTE_EMAIL } from '../lib/email';
 
 interface Props {
   /** Names the section; unique on the page. */
@@ -15,10 +17,11 @@ interface Props {
 const { id, heading, callLine, emailLine } = Astro.props;
 
 // A page's closing call to action, in direction C's ink close: the
-// registration mark, a large "Get a free quote" button, then Call and Email
-// as whole-card links. The Call card shows only while SITE.phone is set.
-const card =
-  'block border border-on-dark-soft/35 p-5 text-left transition-colors hover:bg-white/8';
+// registration mark, a large "Get a free quote" button, then the Call and
+// Email cards. Call is one link (it shows only while SITE.phone is set);
+// Email links its address and adds the no-mail-app fallbacks.
+const frame = 'block border border-on-dark-soft/35 p-5 text-left';
+const card = `${frame} transition-colors hover:bg-white/8`;
 ---
 
 <section
@@ -52,17 +55,27 @@ const card =
           </a>
         )
       }
-      <a href={`mailto:${SITE.email}`} class={card}>
+      <div class={frame} data-email-scope>
         <span class="text-eyebrow font-semibold uppercase text-on-dark-soft">
           Email
         </span>
-        <span class="mt-2 block text-card font-semibold text-on-dark">
+        <a
+          href={mailtoHref(SITE.email, QUOTE_EMAIL)}
+          class="mt-2 block text-card font-semibold text-on-dark underline-offset-4 hover:underline"
+          data-email-address
+        >
           {SITE.email}
-        </span>
+        </a>
         <span class="mt-1 block text-sm leading-normal text-on-dark-soft">
           {emailLine}
         </span>
-      </a>
+        <EmailActions
+          draft={QUOTE_EMAIL}
+          tone="dark"
+          showAddress={false}
+          class="mt-3"
+        />
+      </div>
     </div>
   </div>
 </section>

@@ -148,3 +148,82 @@ test('never shows the old number, which was never DYJK’s, or Stan’s cell', (
     .map(([file]) => file);
   expect(withWrongNumber).toEqual([]);
 });
+
+/** A page's <link> tags, as attribute maps. */
+function links(html: string): Array<Record<string, string>> {
+  return [...html.matchAll(/<link\b([^>]*)>/g)].map(([, attributes]) =>
+    Object.fromEntries(
+      [...attributes!.matchAll(/([\w-]+)(?:="([^"]*)")?/g)].map(
+        ([, name, value]) => [name!, value ?? ''],
+      ),
+    ),
+  );
+}
+
+// Google's result shows the site icon, so every page names the same set.
+test('every page links the site icons', () => {
+  const wanted = [
+    { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+    { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/icon-192.png' },
+    { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+    { rel: 'manifest', href: '/site.webmanifest' },
+  ];
+  const missing: string[] = [];
+  for (const [file, html] of builtPages()) {
+    const found = links(html);
+    for (const want of wanted) {
+      const ok = found.some((link) =>
+        Object.entries(want).every(([name, value]) => link[name] === value),
+      );
+      if (!ok) missing.push(`${file}: ${JSON.stringify(want)}`);
+    }
+    if (html.includes('favicon.svg')) missing.push(`${file}: favicon.svg`);
+  }
+  expect(missing).toEqual([]);
+});
+
+/** A PNG's width and height, from its IHDR chunk. */
+function pngSize(file: URL): [number, number] {
+  const bytes = fs.readFileSync(file);
+  expect(bytes.subarray(1, 4).toString('latin1'), String(file)).toBe('PNG');
+  return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
+}
+
+/** The square sizes inside an .ico (a 0 byte means 256). */
+function icoSizes(file: URL): number[] {
+  const bytes = fs.readFileSync(file);
+  return Array.from(
+    { length: bytes.readUInt16LE(4) },
+    (_, entry) => bytes[6 + 16 * entry] || 256,
+  ).sort((a, b) => a - b);
+}
+
+test('ships the site icons at their pixel sizes', () => {
+  expect(icoSizes(new URL('favicon.ico', dist))).toEqual([16, 32, 48]);
+  for (const [file, size] of [
+    ['icon-48.png', 48],
+    ['icon-96.png', 96],
+    ['icon-192.png', 192],
+    ['icon-512.png', 512],
+    ['apple-touch-icon.png', 180],
+  ] as const) {
+    expect(pngSize(new URL(file, dist)), file).toEqual([size, size]);
+  }
+  expect(fs.existsSync(new URL('favicon.svg', dist))).toBe(false);
+
+  const manifest = JSON.parse(
+    fs.readFileSync(new URL('site.webmanifest', dist), 'utf8'),
+  ) as {
+    theme_color: string;
+    icons: Array<{ src: string; sizes: string }>;
+  };
+  expect(manifest.theme_color).toBe('#14517d');
+  expect(manifest.icons.map((icon) => icon.sizes)).toEqual([
+    '192x192',
+    '512x512',
+  ]);
+  for (const icon of manifest.icons) {
+    const [width, height] = pngSize(new URL(icon.src.slice(1), dist));
+    expect(`${width}x${height}`, icon.src).toBe(icon.sizes);
+  }
+});
