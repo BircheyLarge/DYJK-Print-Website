@@ -1,0 +1,422 @@
+---
+import EmailActions from './EmailActions.astro';
+import FormField from './FormField.astro';
+import { SITE } from '../consts';
+import { QUOTE_EMAIL } from '../lib/email';
+import {
+  DELIVERY_SHIP,
+  DELIVERY_SLC,
+  LIMITS,
+  PRODUCT_CHOICES,
+} from '../lib/quote';
+
+interface Props {
+  /** PUBLIC_TURNSTILE_SITE_KEY. */
+  siteKey: string;
+}
+const { siteKey } = Astro.props;
+
+// Floated, so each legend sits under its group's rule instead of on it.
+const legend = 'float-left w-full text-lg font-semibold text-brand-ink';
+const group = 'border-t border-rule pt-6';
+const radio = 'size-5 shrink-0 cursor-pointer accent-brand-blue';
+---
+
+<!-- The quote form. Without our script it is a plain POST to /api/quote,
+     which answers with a 303 to /quote-received/. With it, the same rules as
+     the server (src/lib/quote.ts) run inline, errors sit by their fields, and
+     it sends with fetch, keeping what was typed if anything fails. Turnstile
+     needs JavaScript, so with it off the note says to email or call. -->
+<noscript>
+  <p
+    class="mt-6 border border-rule bg-brand-surface p-4 text-sm text-brand-ink"
+  >
+    This form keeps spam out with a script, so it needs JavaScript. With it off,
+    email <a
+      class="font-semibold text-brand-blue underline"
+      href={`mailto:${SITE.email}`}>{SITE.email}</a
+    >{
+      SITE.phone && (
+        <>
+          {' '}
+          or call{' '}
+          <a
+            class="font-semibold text-brand-blue underline"
+            href={`tel:${SITE.phone.e164}`}
+          >
+            {SITE.phone.display}
+          </a>
+        </>
+      )
+    }.
+  </p>
+</noscript>
+
+<form
+  method="post"
+  action="/api/quote"
+  class="relative mt-6 space-y-8"
+  data-quote-form
+>
+  <p class="text-sm text-brand-slate">
+    Every field is needed unless it says optional.
+  </p>
+
+  <fieldset class={group}>
+    <legend class={legend}>About you</legend>
+    <div class="clear-left grid gap-x-5 gap-y-5 pt-4 sm:grid-cols-2">
+      <FormField name="name" label="Name" autocomplete="name" />
+      <FormField
+        name="email"
+        label="Email"
+        type="email"
+        autocomplete="email"
+        hint="We send the quote here."
+      />
+      <FormField
+        name="phone"
+        label="Phone"
+        type="tel"
+        autocomplete="tel"
+        inputmode="tel"
+        optional
+      />
+      <FormField
+        name="company"
+        label="Company"
+        autocomplete="organization"
+        optional
+      />
+    </div>
+  </fieldset>
+
+  <fieldset class={group}>
+    <legend class={legend}>The job</legend>
+    <div class="clear-left grid gap-x-5 gap-y-5 pt-4 sm:grid-cols-2">
+      <FormField
+        name="product"
+        label="What are we printing?"
+        kind="select"
+        options={PRODUCT_CHOICES}
+        class="sm:col-span-2"
+      />
+      <FormField name="quantity" label="Quantity" hint="How many you need." />
+      <FormField
+        name="size"
+        label="Finished size"
+        hint="The finished size, if you know it."
+        optional
+      />
+      <FormField
+        name="paper"
+        label="Paper or finish"
+        hint="Only if you already have one in mind."
+        optional
+      />
+      <FormField
+        name="deadline"
+        label="Your date"
+        type="date"
+        hint="If you have one. It is your date, not a promise from us."
+        optional
+      />
+    </div>
+  </fieldset>
+
+  <fieldset class={group} aria-describedby="q-delivery-error">
+    <legend class={legend}>Where it goes</legend>
+    <div class="clear-left space-y-4 pt-4">
+      <label class="flex items-center gap-3 text-base text-brand-ink">
+        <input
+          type="radio"
+          name="delivery"
+          value={DELIVERY_SHIP}
+          checked
+          required
+          class={radio}
+        />
+        Ship it
+      </label>
+      <div class="pl-8">
+        <label
+          for="q-shipTo"
+          class="block text-sm font-semibold text-brand-ink"
+        >
+          State or ZIP
+        </label>
+        <p id="q-shipTo-hint" class="mt-1 text-sm text-brand-slate">
+          Where it ships. We ship anywhere in the United States.
+        </p>
+        <input
+          id="q-shipTo"
+          name="shipTo"
+          type="text"
+          autocomplete="postal-code"
+          maxlength={LIMITS.shipTo}
+          aria-describedby="q-shipTo-hint q-shipTo-error"
+          class="mt-2 block w-full max-w-xs rounded-control border border-brand-slate/75 bg-white px-3.5 py-2.5 text-base text-brand-ink aria-invalid:border-press-magenta aria-invalid:ring-1 aria-invalid:ring-press-magenta"
+        />
+        <p
+          id="q-shipTo-error"
+          class="mt-1.5 text-sm font-semibold text-press-magenta-dark"
+          data-error-for="shipTo"
+          hidden
+        >
+        </p>
+      </div>
+      <label class="flex items-center gap-3 text-base text-brand-ink">
+        <input
+          type="radio"
+          name="delivery"
+          value={DELIVERY_SLC}
+          class={radio}
+        />
+        Salt Lake City, deliver it
+      </label>
+    </div>
+    <p
+      id="q-delivery-error"
+      class="mt-2 text-sm font-semibold text-press-magenta-dark"
+      data-error-for="delivery"
+      hidden
+    >
+    </p>
+  </fieldset>
+
+  <fieldset class={group}>
+    <legend class={legend}>Files and notes</legend>
+    <div class="clear-left grid gap-y-5 pt-4">
+      <FormField
+        name="artwork"
+        label="Link to your files"
+        type="url"
+        inputmode="url"
+        placeholder="https://"
+        hint={`A Dropbox, Google Drive or WeTransfer link. You can also email files to ${SITE.email} afterward.`}
+        optional
+      />
+      <FormField
+        name="notes"
+        label="Notes"
+        kind="textarea"
+        hint="What it is, and what it has to do. Up to two links."
+        optional
+      />
+    </div>
+  </fieldset>
+
+  <!-- Spam checks: the honeypot (people never see it), the issued-at stamp the
+       server's middleware fills in, and Turnstile. -->
+  <div
+    class="absolute -left-[9999px] h-px w-px overflow-hidden"
+    aria-hidden="true"
+  >
+    <label for="q-website">Leave this field empty</label>
+    <input
+      id="q-website"
+      name="website"
+      type="text"
+      tabindex="-1"
+      autocomplete="off"
+    />
+  </div>
+  <input type="hidden" name="issued" value="" />
+  <div
+    class="cf-turnstile min-h-[65px]"
+    data-sitekey={siteKey}
+    data-size="flexible"
+    data-theme="light"
+  >
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-solid btn-lg" data-quote-submit>
+      <span data-submit-label>Send my quote request</span>
+    </button>
+    <p class="mt-3 text-sm text-brand-slate">
+      We use these details only to quote and deliver your job.
+    </p>
+    <p
+      role="status"
+      aria-live="polite"
+      class="mt-2 text-sm font-semibold text-press-magenta-dark empty:hidden"
+      data-quote-status
+    >
+    </p>
+  </div>
+</form>
+
+<div
+  class="mt-6 border border-press-magenta/60 bg-white p-5"
+  tabindex="-1"
+  data-quote-failure
+  hidden
+>
+  <p class="text-card font-semibold text-brand-ink">We couldn’t send that.</p>
+  <p class="mt-1 text-sm leading-normal text-brand-slate">
+    <span data-failure-message></span> Everything you typed is still in the form,
+    so you can send it again, or reach us another way.
+  </p>
+  {
+    SITE.phone && (
+      <p class="mt-4 text-base font-medium text-brand-ink">
+        Call{' '}
+        <a
+          href={`tel:${SITE.phone.e164}`}
+          class="font-semibold text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+        >
+          {SITE.phone.display}
+        </a>
+      </p>
+    )
+  }
+  <p class="mt-3 text-sm text-brand-slate">Or send it by email:</p>
+  <EmailActions draft={QUOTE_EMAIL} class="mt-1" />
+</div>
+
+<script
+  is:inline
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer></script>
+
+<script>
+  import {
+    FIELD_ORDER,
+    firstErrorField,
+    toQuoteValues,
+    validateQuote,
+    type QuoteErrors,
+    type QuoteField,
+  } from '../lib/quote';
+
+  declare global {
+    interface Window {
+      turnstile?: { reset: (widget?: string) => void };
+    }
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-quote-form]');
+  const failure = document.querySelector<HTMLElement>('[data-quote-failure]');
+  if (form && failure) enhance(form, failure);
+
+  function enhance(form: HTMLFormElement, failure: HTMLElement) {
+    // Our inline errors replace the browser's bubbles.
+    form.noValidate = true;
+    const status = form.querySelector<HTMLElement>('[data-quote-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>(
+      '[data-quote-submit]',
+    )!;
+    const label = submit.querySelector<HTMLElement>('[data-submit-label]')!;
+    const failureMessage = failure.querySelector<HTMLElement>(
+      '[data-failure-message]',
+    )!;
+    const idleLabel = label.textContent ?? '';
+
+    const controls = (field: QuoteField) =>
+      Array.from(form.querySelectorAll<HTMLInputElement>(`[name="${field}"]`));
+    const errorFor = (field: QuoteField) =>
+      form.querySelector<HTMLElement>(`[data-error-for="${field}"]`);
+
+    function setError(field: QuoteField, message: string | undefined) {
+      const slot = errorFor(field);
+      if (slot) {
+        slot.textContent = message ?? '';
+        slot.hidden = !message;
+      }
+      for (const control of controls(field)) {
+        if (message) control.setAttribute('aria-invalid', 'true');
+        else control.removeAttribute('aria-invalid');
+      }
+    }
+
+    function showErrors(errors: QuoteErrors) {
+      for (const field of FIELD_ORDER) setError(field, errors[field]);
+      const count = Object.keys(errors).length;
+      status.textContent =
+        count === 1
+          ? 'One detail needs another look.'
+          : `${count} details need another look.`;
+      const first = firstErrorField(errors);
+      if (first) controls(first)[0]?.focus();
+    }
+
+    function showFailure(message?: string) {
+      failureMessage.textContent =
+        message ?? 'Something went wrong on the way.';
+      failure.hidden = false;
+      failure.focus();
+      status.textContent = '';
+    }
+
+    function setBusy(busy: boolean) {
+      submit.disabled = busy;
+      label.textContent = busy ? 'Sending…' : idleLabel;
+    }
+
+    // A fixed field stops looking wrong as soon as it changes.
+    const clear = (event: Event) => {
+      const name = (event.target as HTMLInputElement).name as QuoteField;
+      if (FIELD_ORDER.includes(name)) setError(name, undefined);
+      if (name === 'delivery') setError('shipTo', undefined);
+    };
+    form.addEventListener('input', clear);
+    form.addEventListener('change', clear);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      failure.hidden = true;
+      const data = new FormData(form);
+      const record: Record<string, unknown> = {};
+      data.forEach((value, key) => {
+        record[key] = typeof value === 'string' ? value : '';
+      });
+
+      const { valid, errors } = validateQuote(toQuoteValues(record));
+      if (!valid) {
+        showErrors(errors);
+        return;
+      }
+      if (!data.get('cf-turnstile-response')) {
+        if (window.turnstile) {
+          status.textContent =
+            'The spam check is still loading. Give it a second, then send again.';
+        } else {
+          // Its script never arrived (blocked, or offline).
+          showFailure('The spam check didn’t load.');
+        }
+        return;
+      }
+
+      setBusy(true);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { accept: 'application/json' },
+        });
+        const result = (await response.json().catch(() => ({}))) as {
+          ok?: boolean;
+          errors?: QuoteErrors;
+          message?: string;
+        };
+        if (response.ok && result.ok) {
+          window.location.assign('/quote-received/');
+          return;
+        }
+        if (response.status === 422 && result.errors) {
+          showErrors(result.errors);
+        } else {
+          // The Turnstile token was spent: get a fresh one for the retry.
+          window.turnstile?.reset();
+          showFailure(result.message);
+        }
+      } catch {
+        window.turnstile?.reset();
+        showFailure('We couldn’t reach our server.');
+      } finally {
+        setBusy(false);
+      }
+    });
+  }
+</script>

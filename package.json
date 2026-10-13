@@ -16,7 +16,8 @@
     "typecheck": "astro check && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "astro build && playwright test",
+    "build:form": "PUBLIC_QUOTE_FORM_ENABLED=true PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA ASTRO_OUT_DIR=dist-form astro build",
+    "test:e2e": "npm run build && playwright test",
     "test:e2e:install": "playwright install --with-deps chromium"
   },
   "dependencies": {

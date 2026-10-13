@@ -1,0 +1,114 @@
+---
+import { LIMITS, type QuoteField } from '../lib/quote';
+
+interface Props {
+  name: QuoteField;
+  label: string;
+  /** Short help under the label (Stanley's checklist wording). */
+  hint?: string;
+  optional?: boolean;
+  kind?: 'input' | 'select' | 'textarea';
+  type?: 'text' | 'email' | 'tel' | 'url' | 'date';
+  autocomplete?: string;
+  inputmode?: 'text' | 'email' | 'tel' | 'url' | 'numeric';
+  placeholder?: string;
+  /** For a select: the choices, after a "Choose one" prompt. */
+  options?: readonly string[];
+  rows?: number;
+  class?: string;
+}
+
+const {
+  name,
+  label,
+  hint,
+  optional = false,
+  kind = 'input',
+  type = 'text',
+  autocomplete,
+  inputmode,
+  placeholder,
+  options = [],
+  rows = 5,
+  class: className,
+} = Astro.props;
+
+// A label, an optional hint, the control and a slot for its error, wired
+// together with ids so screen readers read all three. The field is three rows
+// of its parent's grid (subgrid), so inputs side by side line up even when
+// only one of them has a hint.
+const id = `q-${name}`;
+const hintId = hint ? `${id}-hint` : undefined;
+const errorId = `${id}-error`;
+const describedBy = [hintId, errorId].filter(Boolean).join(' ');
+const control =
+  'mt-2 block w-full rounded-control border border-brand-slate/75 bg-white px-3.5 py-2.5 text-base text-brand-ink placeholder:text-brand-slate aria-invalid:border-press-magenta aria-invalid:ring-1 aria-invalid:ring-press-magenta';
+---
+
+<div
+  class:list={['row-span-3 grid min-w-0 grid-rows-subgrid gap-y-0', className]}
+>
+  <div>
+    <label for={id} class="block text-sm font-semibold text-brand-ink">
+      {label}
+      {
+        optional && (
+          <span class="font-normal text-brand-slate"> (optional)</span>
+        )
+      }
+    </label>
+    {
+      hint && (
+        <p id={hintId} class="mt-1 text-sm leading-normal text-brand-slate">
+          {hint}
+        </p>
+      )
+    }
+  </div>
+  {
+    kind === 'select' ? (
+      <select
+        id={id}
+        name={name}
+        required={!optional}
+        aria-describedby={describedBy}
+        class:list={[control, 'cursor-pointer']}
+      >
+        <option value="">Choose one</option>
+        {options.map((option) => (
+          <option value={option}>{option}</option>
+        ))}
+      </select>
+    ) : kind === 'textarea' ? (
+      <textarea
+        id={id}
+        name={name}
+        rows={rows}
+        required={!optional}
+        maxlength={LIMITS[name]}
+        aria-describedby={describedBy}
+        class={control}
+      />
+    ) : (
+      <input
+        id={id}
+        name={name}
+        type={type}
+        required={!optional}
+        maxlength={type === 'date' ? undefined : LIMITS[name]}
+        autocomplete={autocomplete}
+        inputmode={inputmode}
+        placeholder={placeholder}
+        aria-describedby={describedBy}
+        class={control}
+      />
+    )
+  }
+  <p
+    id={errorId}
+    class="mt-1.5 text-sm font-semibold text-press-magenta-dark"
+    data-error-for={name}
+    hidden
+  >
+  </p>
+</div>

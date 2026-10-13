@@ -1,6 +1,9 @@
 # build output
 dist/
+dist-form/
 .astro/
+# wrangler pages dev state
+.wrangler/
 
 # dependencies
 node_modules/
