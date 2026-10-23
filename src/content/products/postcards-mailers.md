@@ -36,10 +36,9 @@ faqs:
       Leave a clear area on the side that will carry the recipient block and
       any indicia, if you plan to mail the card. If you are unsure where that
       area sits, ask prepress before the proof.
-seoTitle: Postcard & Mailer Printing, Shipped Nationwide | DYJK Print
+seoTitle: Postcard & Mailer Printing in Salt Lake City | DYJK Print
 seoDescription: >-
-  Custom postcards and mailers, including variable versions. DYJK Print
-  proofs the file, prints the run, and ships it anywhere in the US.
+  Postcards and mailers, including a different name or offer on every card. Free quote, a proof before print, delivered in Salt Lake City or shipped.
 draft: false
 ---
 
@@ -66,3 +65,7 @@ If you also want the cards mailed to a list, ask in that same request and wait f
 Art that runs edge to edge is right for the picture side. The other side needs a plan. If the card will be mailed, keep type and photos out of the area that has to stay clear for the recipient block and any indicia. If you are only shipping a stack to your own office, you can use that side for the offer instead — and you should say so, so we do not reserve a panel you never needed.
 
 Send a PDF at the finished size plus bleed. [Graphic design and prepress](/services/graphic-design/) can build the template, place variable fields, and check that nothing important sits in the trim or in a panel you meant to keep clear. Include a sample row of the data if names or offers change, so the proof shows a real card and not an empty box.
+
+## Salt Lake City delivery
+
+In the Salt Lake City area, we [deliver](/salt-lake-city/) your postcards and mailers ourselves. Everywhere else, we ship them anywhere in the United States.

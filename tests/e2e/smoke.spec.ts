@@ -191,10 +191,36 @@ test.describe('products hub', () => {
   });
 });
 
+// Other Wasatch Front cities, as whole words ("lorem" is not Orem).
+const OTHER_CITIES =
+  /\b(sandy|west valley|west jordan|south jordan|murray|provo|orem|ogden|layton|lehi)\b/i;
+
+test('the city bans match whole words only', () => {
+  expect('Orem').toMatch(OTHER_CITIES);
+  expect('West Jordan, maybe').toMatch(OTHER_CITIES);
+  for (const fine of [
+    'lorem ipsum',
+    'Davis County',
+    'Utah County',
+    'sandybrown',
+  ]) {
+    expect(fine).not.toMatch(OTHER_CITIES);
+  }
+});
+
 test.describe('product pages', () => {
-  // Utah may appear in body copy, but never in a product page's h1 or title
-  // (checked below): those target nationwide searches.
-  const LOCAL_TERMS = ['salt lake', 'near you', 'near me', 'draper', 'po box'];
+  // Local first: five products are searched with "Salt Lake City", and say
+  // it in their titles and in one delivery section. The other six stay
+  // nationwide. Utah never goes in a product title or h1, and no product
+  // page names another city.
+  const LOCAL_PRODUCTS = [
+    'business-cards',
+    'flyers',
+    'door-hangers',
+    'postcards-mailers',
+    'menus',
+  ].map((slug) => `/products/${slug}/`);
+  const LOCAL_TERMS = ['near you', 'near me', 'draper', 'po box'];
 
   test('every hub card leads to a well-formed, nationwide product page', async ({
     page,
@@ -209,11 +235,26 @@ test.describe('product pages', () => {
     for (const href of hrefs) {
       await page.goto(href);
       await expect(page.locator('h1'), href).toHaveCount(1);
-      expect(
-        (await page.locator('h1').innerText()).toLowerCase(),
-        href,
-      ).not.toContain('utah');
-      expect((await page.title()).toLowerCase(), href).not.toContain('utah');
+      const h1 = (await page.locator('h1').innerText()).toLowerCase();
+      const title = (await page.title()).toLowerCase();
+      const main = (await page.locator('main').innerText()).toLowerCase();
+      expect(h1, href).not.toContain('utah');
+      expect(title, href).not.toContain('utah');
+      if (LOCAL_PRODUCTS.includes(href)) {
+        expect(title, href).toContain('salt lake city');
+        expect(
+          (main.match(/salt lake city/g) ?? []).length,
+          `${href} names Salt Lake City too often`,
+        ).toBeLessThanOrEqual(2);
+      } else {
+        for (const term of ['salt lake', 'utah']) {
+          expect(title, `${href} title: ${term}`).not.toContain(term);
+          expect(h1, `${href} h1: ${term}`).not.toContain(term);
+          expect(main, `${href} main: ${term}`).not.toContain(term);
+        }
+      }
+      expect(title, href).not.toMatch(OTHER_CITIES);
+      expect(main, href).not.toMatch(OTHER_CITIES);
 
       const ld = (
         await page
@@ -229,9 +270,8 @@ test.describe('product pages', () => {
         shownFaqs,
       );
 
-      const text = (await page.locator('main').innerText()).toLowerCase();
       for (const term of LOCAL_TERMS) {
-        expect(text, `${href} mentions "${term}"`).not.toContain(term);
+        expect(main, `${href} mentions "${term}"`).not.toContain(term);
       }
 
       // Example thumbnails share one 3:2 frame, cropped at build time.

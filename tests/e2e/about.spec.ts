@@ -42,8 +42,8 @@ test.describe('about', () => {
     );
     const text = (await page.locator('main').innerText()).toLowerCase();
     expect(text).toContain('utah');
-    // Salt Lake City only as where we deliver (Stanley, 2026-10-12).
-    expect(text).toContain('we deliver in salt lake city');
+    // Salt Lake City only as where we deliver (Stanley, 2026-10-23).
+    expect(text).toContain('we deliver in the salt lake city area');
     for (const term of ['draper', 'po box', 'showroom', 'stanley', 'stan ']) {
       expect(text, `mentions "${term}"`).not.toContain(term);
     }

@@ -50,7 +50,9 @@ test('the CTA band heading fits each page', async ({ page }) => {
             ? "Let's print it together."
             : path === '/'
               ? 'Ready to get noticed?'
-              : 'Ready to start your print project?';
+              : path === '/salt-lake-city/'
+                ? "Let's bring it to you."
+                : 'Ready to start your print project?';
     if (heading !== expected) wrong.push(`${path}: "${heading}"`);
   }
   expect(wrong).toEqual([]);

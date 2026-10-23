@@ -1,6 +1,7 @@
 ---
 import Lockup from './Lockup.astro';
 import { NAV, QUOTE_PATH, SITE } from '../consts';
+import { SLC_PATH } from '../data/local';
 const year = new Date().getFullYear();
 ---
 
@@ -32,6 +33,14 @@ const year = new Date().getFullYear();
             </li>
           ))
         }
+        <li>
+          <a
+            href={SLC_PATH}
+            class="text-sm leading-normal transition-colors hover:text-on-dark"
+          >
+            Salt Lake City delivery
+          </a>
+        </li>
       </ul>
     </div>
 

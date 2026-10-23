@@ -8,13 +8,15 @@ interface Props {
   /** Names the section; unique on the page. */
   id: string;
   heading: string;
+  /** An optional line under the heading. */
+  text?: string;
   /** The line under the phone number. */
   callLine: string;
   /** The line under the email address. */
   emailLine: string;
 }
 
-const { id, heading, callLine, emailLine } = Astro.props;
+const { id, heading, text, callLine, emailLine } = Astro.props;
 
 // A page's closing call to action, in direction C's ink close: the
 // registration mark, a large "Get a free quote" button, then the Call and
@@ -38,6 +40,13 @@ const card = `${frame} transition-colors hover:bg-white/8`;
     >
       {heading}
     </h2>
+    {
+      text && (
+        <p class="mt-4 max-w-xl text-base leading-normal text-on-dark-soft md:text-lg">
+          {text}
+        </p>
+      )
+    }
     <a href={QUOTE_PATH} class="btn btn-solid btn-lg mt-7">Get a free quote</a>
     <div class="mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
       {

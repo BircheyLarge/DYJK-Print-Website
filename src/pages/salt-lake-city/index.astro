@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactCta from '../../components/ContactCta.astro';
+import FaqList from '../../components/FaqList.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ProductTile from '../../components/ProductTile.astro';
+import Prose from '../../components/Prose.astro';
+import { QUOTE_PATH, SITE } from '../../consts';
+import { INDUSTRIES } from '../../data/industries';
+import { DELIVERY_AREA, SLC_PATH } from '../../data/local';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
+
+// Copy: Content Strategist's slc-page-copy.md (final). The one local page:
+// it earns its place because the delivery is a real local service, so there
+// is never a page per city, or per product per city. The local claim is only
+// that we deliver; never that the work is printed in Utah. "Local work"
+// joins once Stanley names the customers in the delivery area.
+
+const DESCRIPTION =
+  'Business cards, flyers, door hangers and menus for Salt Lake City businesses. Free quotes, a proof before print, and we deliver the job ourselves.';
+
+const ORDERS = [
+  {
+    slug: 'business-cards',
+    title: 'Business cards',
+    text: 'The piece someone keeps. Your size, your stock, your finish.',
+  },
+  {
+    slug: 'flyers',
+    title: 'Flyers',
+    text: 'One full-color sheet for a promotion, an opening or an event.',
+  },
+  {
+    slug: 'door-hangers',
+    title: 'Door hangers',
+    text: 'An offer that waits on the knob, with a die-cut hole and an optional coupon.',
+  },
+  {
+    slug: 'postcards-mailers',
+    title: 'Postcards & mailers',
+    text: 'Cards that land in the mailbox, even with a different name or offer on each one.',
+  },
+  {
+    slug: 'menus',
+    title: 'Menus',
+    text: 'For restaurants, cafes, bars and food trucks. The meal, before the first bite.',
+  },
+  {
+    slug: 'presentation-folders',
+    title: 'Presentation folders',
+    text: 'The packet a client carries out, with pockets that hold your inserts.',
+  },
+];
+
+const FAQS = [
+  {
+    question: 'Where do you deliver?',
+    answer:
+      'We deliver it ourselves anywhere in Salt Lake County, plus nearby Davis and Utah counties. Everywhere else, we ship anywhere in the United States.',
+  },
+  {
+    question: 'Can I pick up my order?',
+    answer:
+      "No. There's no counter to visit and nothing to collect. We bring the finished job to you, or ship it if you're farther away.",
+  },
+  {
+    question: "What if I'm outside the Salt Lake City area?",
+    answer:
+      'Then we ship it instead of delivering it, anywhere in the United States. You get the same people, the same free quote and the same proof before anything prints. Put the state or ZIP on your quote, even if the job splits across more than one destination.',
+  },
+  {
+    question: 'How do quotes work?',
+    answer:
+      "Tell us the piece, how many you need, the size if you know it, and where it's going. Mention a paper or finish only if you already have one in mind. A press-ready PDF is great. A logo and a rough idea is enough for our design and prepress to build the file. The quote is free, and nothing prints until you approve the proof.",
+  },
+];
+
+// Step numbers in three of the inks, as on the homepage.
+const INKS = [
+  'bg-brand-ink text-press-cyan',
+  'border-2 border-press-magenta bg-white text-press-magenta',
+  'bg-brand-ink text-press-yellow',
+];
+
+// Photo width inside each frame: three across from lg, two from sm.
+const cardSizes =
+  '(min-width: 1152px) 331px, (min-width: 1024px) calc(33.3vw - 53px), (min-width: 640px) calc(50vw - 54px), calc(100vw - 58px)';
+
+const sectionHeading =
+  'crop-mark text-h2-sm font-bold text-balance text-brand-ink md:text-h2';
+const lead = 'text-prose-sm text-pretty text-brand-slate md:text-prose';
+const link =
+  'text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark';
+
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', path: '/' },
+    { name: 'Salt Lake City', path: SLC_PATH },
+  ]),
+  serviceSchema({
+    name: 'Printing for Salt Lake City businesses, delivered in person',
+    description: DESCRIPTION,
+    path: SLC_PATH,
+    areaServed: DELIVERY_AREA,
+  }),
+  faqSchema(FAQS),
+];
+---
+
+<BaseLayout
+  title="Salt Lake City"
+  seoTitle="Printing in Salt Lake City, Delivered in Person | DYJK Print"
+  description={DESCRIPTION}
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Delivered in person"
+    title="Printing for Salt Lake City businesses, delivered in person"
+    subtitle="We're a small Utah team. You talk to the people who quote your job and proof it, and when it's done, we deliver it ourselves anywhere in the Salt Lake City area."
+  />
+
+  <section class="mx-auto max-w-6xl px-4 pt-9">
+    <div class="max-w-3xl">
+      <Prose>
+        <p>
+          No call center. No ticket number. When you call or email, you reach
+          the people handling your job, and they're still on it when the proof
+          comes back.
+        </p>
+        <p>
+          You explain what the piece has to do once. Nobody loses the point of
+          it between the quote and the carton. And when it's finished, it
+          doesn't wait in a warehouse for you to come get it. We bring it to
+          you.
+        </p>
+      </Prose>
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 pt-14 md:pt-18"
+    aria-labelledby="how-it-works"
+  >
+    <h2 id="how-it-works" class={sectionHeading}>How it works</h2>
+    <p class:list={['mt-4', lead]}>Three steps. Nothing to collect.</p>
+    <ol class="mt-8 grid gap-8 md:grid-cols-3 md:gap-10">
+      <li>
+        <span
+          class:list={[
+            'grid size-13 place-items-center text-card font-semibold',
+            INKS[0],
+          ]}
+          aria-hidden="true">01</span
+        >
+        <h3 class="mt-4 text-card font-semibold text-brand-ink">
+          Ask for a quote.
+        </h3>
+        <p class:list={['mt-2', lead]}>
+          {
+            SITE.phone && (
+              <>
+                Call{' '}
+                <a href={`tel:${SITE.phone.e164}`} class={link}>
+                  {SITE.phone.display}
+                </a>
+                ,{' '}
+              </>
+            )
+          }email <a href={`mailto:${SITE.email}`} class={link}>{SITE.email}</a>,
+          or send it through our <a href={QUOTE_PATH} class={link}>quote page</a
+          >. Tell us the piece, how many you need, and what it has to do. The
+          quote is free.
+        </p>
+      </li>
+      <li>
+        <span
+          class:list={[
+            'grid size-13 place-items-center text-card font-semibold',
+            INKS[1],
+          ]}
+          aria-hidden="true">02</span
+        >
+        <h3 class="mt-4 text-card font-semibold text-brand-ink">
+          Approve the proof.
+        </h3>
+        <p class:list={['mt-2', lead]}>
+          We send a proof before anything prints, including the cuts or the fold
+          when they matter. Nothing runs until you say yes.
+        </p>
+      </li>
+      <li>
+        <span
+          class:list={[
+            'grid size-13 place-items-center text-card font-semibold',
+            INKS[2],
+          ]}
+          aria-hidden="true">03</span
+        >
+        <h3 class="mt-4 text-card font-semibold text-brand-ink">
+          It comes to you.
+        </h3>
+        <p class:list={['mt-2', lead]}>
+          In the Salt Lake City area, we deliver the finished job to your door
+          ourselves.
+        </p>
+      </li>
+    </ol>
+    <p class:list={['mt-8 max-w-3xl', lead]}>
+      There's no counter to visit and no line to stand in. You order by phone,
+      email or online, and the job comes to you.
+    </p>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 pt-14 md:pt-18"
+    aria-labelledby="what-businesses-order"
+  >
+    <h2 id="what-businesses-order" class={sectionHeading}>
+      What Salt Lake City businesses order
+    </h2>
+    <p class:list={['mt-4 max-w-3xl', lead]}>
+      The pieces we deliver most: handed across a counter, dropped in a mailbox,
+      or left on a door.
+    </p>
+    <ul
+      role="list"
+      class="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {
+        ORDERS.map((order) => (
+          <li>
+            <ProductTile
+              slug={order.slug}
+              title={order.title}
+              description={order.text}
+              sizes={cardSizes}
+              headingLevel={3}
+            />
+          </li>
+        ))
+      }
+    </ul>
+    <p class:list={['mt-10 max-w-3xl', lead]}>
+      Need something else? Brochures, labels, stickers, letterhead and more are
+      on the <a href="/products/" class={link}>products page</a>.
+    </p>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 pt-14 md:pt-18"
+    aria-labelledby="who-we-print-for"
+  >
+    <h2 id="who-we-print-for" class={sectionHeading}>Who we print for</h2>
+    <p class:list={['mt-4 max-w-3xl', lead]}>
+      A practice, a shop, a restaurant, a firm or a campaign. Each one needs a
+      piece that makes it look strong to the people it serves. Here's what we
+      make for each:
+    </p>
+    <ul role="list" class="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+      {
+        INDUSTRIES.map((industry) => (
+          <li>
+            <a
+              href={`/industries/#${industry.id}`}
+              class="text-prose-sm font-semibold text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark md:text-prose"
+            >
+              {industry.link}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 pb-14 md:pb-18">
+    <div class="max-w-3xl">
+      <FaqList faqs={FAQS} />
+    </div>
+  </section>
+
+  <ContactCta
+    id="bring-it-to-you"
+    heading="Let's bring it to you."
+    text="Tell us the piece and how many you need. The quote is free, nothing prints until you approve the proof, and in the Salt Lake City area we deliver it ourselves."
+    callLine="Talk through the piece before you send a file."
+    emailLine="Send the piece, the specs, or just a logo."
+  />
+</BaseLayout>

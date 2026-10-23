@@ -5,6 +5,7 @@ import EmailActions from '../../components/EmailActions.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import { SITE } from '../../consts';
+import { SLC_PATH } from '../../data/local';
 import { QUOTE_NEXT } from '../../data/quote';
 import { mailtoHref, QUOTE_EMAIL } from '../../lib/email';
 import { breadcrumbSchema } from '../../lib/schema';
@@ -131,7 +132,14 @@ const sectionHeading =
               finished file is welcome. A logo and a rough idea are enough, and
               design help can build the file from that. Tell us the state or
               ZIP. We ship the finished job anywhere in the United States. In
-              Salt Lake City, we deliver.
+              the Salt Lake City area,{' '}
+              <a
+                href={SLC_PATH}
+                class="text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+              >
+                we deliver
+              </a>
+              .
             </p>
             <div class="mt-8 flex flex-col items-start gap-5">
               <div>
