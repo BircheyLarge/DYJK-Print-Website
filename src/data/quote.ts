@@ -13,6 +13,6 @@ export const QUOTE_NEXT = [
   },
   {
     title: 'Delivered or shipped.',
-    text: 'In Salt Lake City, we deliver it ourselves. Everywhere else, we ship it anywhere in the United States.',
+    text: 'In the Salt Lake area (Salt Lake, Davis and Utah counties), we deliver it ourselves. Everywhere else, we ship it anywhere in the United States.',
   },
 ] as const;

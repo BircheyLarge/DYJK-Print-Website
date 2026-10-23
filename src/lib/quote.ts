@@ -30,7 +30,7 @@ export const PRODUCT_CHOICES: readonly string[] = [
   SOMETHING_ELSE,
 ];
 
-/** Where the finished job goes: shipped, or delivered in Salt Lake City. */
+/** Where the finished job goes: shipped, or delivered in the Salt Lake area. */
 export const DELIVERY_SHIP = 'ship';
 export const DELIVERY_SLC = 'deliver-slc';
 
@@ -295,7 +295,7 @@ export function validateQuote(
       set('shipTo', 'Enter a state, like UT or Texas, or a 5-digit ZIP.');
     }
   } else if (values.delivery !== DELIVERY_SLC) {
-    set('delivery', 'Choose shipping or Salt Lake City delivery.');
+    set('delivery', 'Choose shipping or delivery in the Salt Lake area.');
   }
 
   if (values.artwork) {

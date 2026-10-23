@@ -71,7 +71,9 @@ test('the form has its fields, labels and spam checks', async ({ page }) => {
   ).toHaveText(['Choose one', ...PRODUCT_CHOICES]);
   await expect(page.getByRole('radio', { name: 'Ship it' })).toBeChecked();
   await expect(
-    page.getByRole('radio', { name: 'Salt Lake City, deliver it' }),
+    page.getByRole('radio', {
+      name: 'Salt Lake area (Salt Lake, Davis or Utah County): deliver it',
+    }),
   ).toBeVisible();
   await expect(field(page, 'State or ZIP')).toBeVisible();
   await expect(page.locator('#q-artwork-hint')).toContainText(
@@ -157,14 +159,18 @@ test('sends with fetch and lands on /quote-received/', async ({ page }) => {
   expect(sent!.body).toContain(TOKEN);
 });
 
-test('Salt Lake City delivery needs no state or ZIP', async ({ page }) => {
+test('Salt Lake area delivery needs no state or ZIP', async ({ page }) => {
   await page.route('**/api/quote', (route) =>
     route.fulfill({ json: { ok: true } }),
   );
   await page.goto('/request-a-quote/');
   await fillRequired(page);
   await field(page, 'State or ZIP').fill('');
-  await page.getByRole('radio', { name: 'Salt Lake City, deliver it' }).check();
+  await page
+    .getByRole('radio', {
+      name: 'Salt Lake area (Salt Lake, Davis or Utah County): deliver it',
+    })
+    .check();
   await page.getByRole('button', { name: 'Send my quote request' }).click();
   await expect(page).toHaveURL(/\/quote-received\/$/);
 });

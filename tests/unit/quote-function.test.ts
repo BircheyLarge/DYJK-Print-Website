@@ -126,7 +126,9 @@ describe('a good request', () => {
     expect(reply!.text).toContain('quote request for presentation folders');
     expect(reply!.text).toContain('The quote is free.');
     expect(reply!.text).toContain('approve a proof before anything prints');
-    expect(reply!.text).toContain('In Salt Lake City, we deliver it ourselves');
+    expect(reply!.text).toContain(
+      'In the Salt Lake area (Salt Lake, Davis and Utah counties), we deliver it ourselves',
+    );
   });
 
   it('a plain form POST gets a 303 to /quote-received/', async () => {
@@ -137,10 +139,10 @@ describe('a good request', () => {
     );
   });
 
-  it('notes Salt Lake City delivery in the lead', async () => {
+  it('notes Salt Lake area delivery in the lead', async () => {
     await post({ delivery: 'deliver-slc', shipTo: '' });
     expect((resendCalls()[0]!.body as { text: string }).text).toContain(
-      'Where it goes: Salt Lake City, deliver it',
+      'Where it goes: Salt Lake area (Salt Lake, Davis or Utah County): deliver it',
     );
   });
 
