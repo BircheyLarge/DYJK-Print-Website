@@ -2,11 +2,16 @@
  * JSON-LD structured-data builders. Pure functions returning plain objects so
  * they are unit-testable and can be serialized by the <JsonLd> component.
  *
- * Policy (updated 2026-10-12, Stanley): DYJK is a small Utah-based team
+ * Policy (updated 2026-10-23, Stanley): DYJK is a small Utah-based team
  * serving clients nationwide. We emit `Organization` (NOT `LocalBusiness`)
  * with `areaServed: United States` and a region-only address (state and
- * country): NO street address, city, map or hours. (Salt Lake City delivery
- * is said in page copy, not in the schema.)
+ * country): NO street address, city, map or hours.
+ *
+ * Local first: Salt Lake City appears in the homepage meta, /salt-lake-city/
+ * and five local product titles, always tied to delivery. No address,
+ * showroom, pick-up or other city names. Never claim the work is printed in
+ * Utah. In the schema, Salt Lake City is only the /salt-lake-city/ page's
+ * Service areaServed.
  */
 import { SITE } from '../consts';
 import { absoluteUrl, canonicalUrl } from './seo';
@@ -89,7 +94,15 @@ export interface ServiceInput {
   name: string;
   description: string;
   path: string;
+  /** Where the service is offered; the whole United States by default. */
+  areaServed?: Json | Json[];
 }
+
+/** The default service area: the whole country. */
+export const UNITED_STATES: Json = {
+  '@type': 'Country',
+  name: 'United States',
+};
 
 /** Service node, linked back to the Organization as provider. */
 export function serviceSchema(input: ServiceInput): Json {
@@ -101,10 +114,7 @@ export function serviceSchema(input: ServiceInput): Json {
     url: canonicalUrl(input.path),
     serviceType: input.name,
     provider: { '@id': ORG_ID },
-    areaServed: {
-      '@type': 'Country',
-      name: 'United States',
-    },
+    areaServed: input.areaServed ?? UNITED_STATES,
   };
 }
 
