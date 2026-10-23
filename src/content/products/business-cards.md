@@ -40,10 +40,9 @@ faqs:
     answer: >-
       Say so on the quote, with each state or ZIP and how you want the
       quantity split. We confirm those shipments before production.
-seoTitle: Business Card Printing, Shipped Nationwide | DYJK Print
+seoTitle: Business Card Printing in Salt Lake City | DYJK Print
 seoDescription: >-
-  Order custom business cards in your size, stock, and finish. DYJK Print
-  proofs the file, prints the run, and ships it anywhere in the US.
+  Custom business cards in your size, stock and finish. Free quote and a proof before print. Delivered in Salt Lake City, shipped anywhere in the US.
 draft: false
 ---
 
@@ -74,3 +73,7 @@ If the boxes need to split across offices, list each destination on the same req
 Type that sits on the trim will be cut off. A card is small, so the margin is unforgiving. Build the art to the finished size with bleed, keep names and phone numbers inside a safe margin, and send a PDF. A slide deck, a low-resolution export, or a logo floating on white is not press-ready.
 
 [Graphic design and prepress](/services/graphic-design/) can build the card or repair the file — bleeds, color, and type — so the proof you approve is the card that prints. Send the logo and the wording if you want that help, and keep the quote request in the same thread so the specs and the file stay together.
+
+## Salt Lake City delivery
+
+In the Salt Lake City area, we [deliver](/salt-lake-city/) your business cards ourselves. Everywhere else, we ship them anywhere in the United States.

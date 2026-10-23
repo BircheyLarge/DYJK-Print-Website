@@ -27,6 +27,7 @@ const STATIC_ROUTES = [
   '/about/',
   '/contact/',
   '/request-a-quote/',
+  '/salt-lake-city/',
 ];
 const pages = [
   ...STATIC_ROUTES,

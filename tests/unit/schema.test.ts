@@ -104,6 +104,21 @@ describe('serviceSchema', () => {
       name: 'United States',
     });
   });
+
+  it('takes a narrower area where one page needs it', () => {
+    const county = {
+      '@type': 'AdministrativeArea',
+      name: 'Salt Lake County',
+      containedInPlace: { '@type': 'State', name: 'Utah' },
+    };
+    const svc = serviceSchema({
+      name: 'Printing, delivered',
+      description: 'Delivered in person.',
+      path: '/salt-lake-city/',
+      areaServed: [county],
+    });
+    expect(svc.areaServed).toEqual([county]);
+  });
 });
 
 describe('faqSchema', () => {

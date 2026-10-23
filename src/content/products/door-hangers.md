@@ -39,10 +39,9 @@ faqs:
       slit, and any perforation. Type and the offer have to stay clear of
       those cuts. Graphic design and prepress can draw the die if you do not
       have one.
-seoTitle: Door Hanger Printing, Shipped Nationwide | DYJK Print
+seoTitle: Door Hanger Printing in Salt Lake City | DYJK Print
 seoDescription: >-
-  Custom door hangers in your size, with a doorknob die and optional coupon
-  panel. DYJK Print proofs the cuts, prints, and ships anywhere in the US.
+  Door hangers with a doorknob die and optional coupon. Free quote and a proof of the cuts. Delivered in Salt Lake City, shipped anywhere in the US.
 draft: false
 ---
 
@@ -73,3 +72,7 @@ Hanging them is not part of the order. We do not drop them at doors. The cartons
 Build each side to the finished size plus bleed, and put the hole, the slit, and any perforation on their own cut paths. The headline, the phone number, and the coupon copy have to sit clear of those cuts. A panel meant to tear off needs its own margin, so the edge left behind still looks finished. Send a PDF for every side you want printed.
 
 [Graphic design and prepress](/services/graphic-design/) can draw that die, place the coupon panel, and check that nothing important falls into the cut. Send the artwork and a note about how the hanger should hang. The proof should show the hole and the tear, not only the front.
+
+## Salt Lake City delivery
+
+In the Salt Lake City area, we [deliver](/salt-lake-city/) your door hangers ourselves. Everywhere else, we ship them anywhere in the United States.

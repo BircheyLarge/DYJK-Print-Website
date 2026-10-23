@@ -227,3 +227,22 @@ test('ships the site icons at their pixel sizes', () => {
     expect(`${width}x${height}`, icon.src).toBe(icon.sizes);
   }
 });
+
+// One genuine local page. A page per city, or per product per city, is a
+// doorway page, which Google penalizes.
+test('no route but /salt-lake-city/ names a place in its path', () => {
+  const places = /(utah|salt-lake|draper|sandy|provo|ogden|lehi|orem)/;
+  const doorways = builtPages()
+    .map(([file]) => `/${file.replace(/index\.html$/, '')}`)
+    .filter((path) => path !== '/salt-lake-city/' && places.test(path));
+  expect(doorways).toEqual([]);
+});
+
+test('no two pages share a title', () => {
+  const byTitle = new Map<string, string[]>();
+  for (const [file, html] of builtPages()) {
+    const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '';
+    byTitle.set(title, [...(byTitle.get(title) ?? []), file]);
+  }
+  expect([...byTitle].filter(([, files]) => files.length > 1)).toEqual([]);
+});

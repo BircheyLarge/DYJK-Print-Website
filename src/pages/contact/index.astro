@@ -4,6 +4,7 @@ import Checklist from '../../components/Checklist.astro';
 import ContactCta from '../../components/ContactCta.astro';
 import FaqList from '../../components/FaqList.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import { leadParts } from '../../data/home';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
 // Copy: Content Strategist's contact-copy.md, hook option 2. The hook sells
@@ -24,7 +25,7 @@ const STEPS = [
   },
   {
     title: 'Shipped to you',
-    text: 'In Salt Lake City, we deliver it ourselves. Everywhere else, name the state or ZIP and we ship it anywhere in the United States.',
+    text: 'In the Salt Lake City area, [we deliver it ourselves](/salt-lake-city/). Everywhere else, name the state or ZIP and we ship it anywhere in the United States.',
   },
 ];
 
@@ -51,7 +52,7 @@ const FAQS = [
   {
     question: 'Do you ship outside your area?',
     answer:
-      'Yes. We ship anywhere in the United States, and in Salt Lake City we deliver it ourselves. Put the state or ZIP on the quote, including a split across more than one destination if you need it.',
+      'Yes. We ship anywhere in the United States, and across the Salt Lake City area we deliver it ourselves. Put the state or ZIP on the quote, including a split across more than one destination if you need it.',
   },
 ];
 
@@ -101,7 +102,18 @@ const schema = [
                 {step.title}
               </h3>
               <p class="mt-2 text-sm leading-normal text-brand-slate md:text-ui">
-                {step.text}
+                {leadParts(step.text).map((part) =>
+                  part.href ? (
+                    <a
+                      href={part.href}
+                      class="text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+                    >
+                      {part.text}
+                    </a>
+                  ) : (
+                    part.text
+                  ),
+                )}
               </p>
             </li>
           ))

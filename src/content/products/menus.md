@@ -37,10 +37,9 @@ faqs:
       as a tent. Dish names have to sit clear of the trim and any fold.
       Graphic design and prepress can set the menu from your dish list if the
       file is not press-ready.
-seoTitle: Restaurant Menu Printing, Shipped Nationwide | DYJK Print
+seoTitle: Restaurant Menu Printing in Salt Lake City | DYJK Print
 seoDescription: >-
-  Menus for restaurants, cafes, bars, and food trucks: flat, folded, table
-  tent, or takeout. DYJK Print proofs, prints, and ships anywhere in the US.
+  Menus for restaurants, cafes, bars and food trucks. Free quote and a proof before print. Delivered in Salt Lake City, shipped anywhere in the US.
 draft: false
 ---
 
@@ -73,3 +72,7 @@ If more than one restaurant or truck needs its own cartons, put that split on th
 A flat menu needs a PDF at the trim size plus bleed, with type off the cut. A folded menu needs the flat size, the panels in order, and type kept out of the fold. A tent needs the art placed so it reads once the piece is standing. Dish names have to be readable at the table. A photo of a chalkboard is a reference, not a press file.
 
 [Graphic design and prepress](/services/graphic-design/) can set the menu from your dish list, place the fold or the tent, and check bleed and type. Send the copy in the order a guest should read it, and name the format. The proof should show that format, not only a flat rectangle.
+
+## Salt Lake City delivery
+
+In the Salt Lake City area, we [deliver](/salt-lake-city/) your menus ourselves. Everywhere else, we ship them anywhere in the United States.

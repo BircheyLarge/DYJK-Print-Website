@@ -8,6 +8,7 @@ import MatchedFrame from '../components/MatchedFrame.astro';
 import ProductTicker from '../components/ProductTicker.astro';
 import QuoteCta from '../components/QuoteCta.astro';
 import { SITE } from '../consts';
+import { SLC_PATH } from '../data/local';
 import {
   AUDIENCES,
   AUDIENCE_PIECES,
@@ -58,7 +59,7 @@ const schema = [organizationSchema(), websiteSchema()];
 ---
 
 <BaseLayout
-  title="Commercial Printing, Shipped Nationwide"
+  title="Commercial Printing in Utah, Shipped Nationwide"
   description={SITE.description}
   schema={schema}
   fonts={[500, 600, 700]}
@@ -118,6 +119,13 @@ const schema = [organizationSchema(), websiteSchema()];
           ))
         }
       </ol>
+      <p class="mt-6 max-w-3xl text-base leading-normal text-brand-slate">
+        In the Salt Lake City area, <a
+          href={SLC_PATH}
+          class="text-brand-blue underline underline-offset-2 hover:text-brand-blue-dark"
+          >we deliver it ourselves</a
+        >. Everywhere else, we ship anywhere in the US.
+      </p>
     </div>
   </section>
 

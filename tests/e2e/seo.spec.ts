@@ -6,7 +6,19 @@ import { expect, test } from '@playwright/test';
 
 test('titles carry the search terms', async ({ page }) => {
   const TITLES: Record<string, string> = {
-    '/': 'Commercial Printing, Shipped Nationwide | DYJK Print',
+    '/': 'Commercial Printing in Utah, Shipped Nationwide | DYJK Print',
+    '/about/': 'A Small Utah Printing Company | About DYJK Print',
+    '/salt-lake-city/':
+      'Printing in Salt Lake City, Delivered in Person | DYJK Print',
+    '/products/business-cards/':
+      'Business Card Printing in Salt Lake City | DYJK Print',
+    '/products/flyers/': 'Flyer Printing in Salt Lake City | DYJK Print',
+    '/products/door-hangers/':
+      'Door Hanger Printing in Salt Lake City | DYJK Print',
+    '/products/postcards-mailers/':
+      'Postcard & Mailer Printing in Salt Lake City | DYJK Print',
+    '/products/menus/':
+      'Restaurant Menu Printing in Salt Lake City | DYJK Print',
     '/services/': 'Printing Services: Offset, Digital & Design | DYJK Print',
     '/industries/':
       'Printing for Dental, Auto, Restaurants & Events | DYJK Print',

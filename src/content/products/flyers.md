@@ -36,10 +36,9 @@ faqs:
     answer: >-
       Yes. A shared design with a change per version is a different setup
       from one identical stack. List the versions when you request the quote.
-seoTitle: Flyer Printing, Shipped Nationwide | DYJK Print
+seoTitle: Flyer Printing in Salt Lake City | DYJK Print
 seoDescription: >-
-  Full-color flyers for promotions and events, in the size you choose. DYJK
-  Print proofs the file, prints the run, and ships anywhere in the US.
+  Full-color flyers for promotions and events. Free quote and a proof before print. Delivered in Salt Lake City, shipped anywhere in the US.
 draft: false
 ---
 
@@ -66,3 +65,7 @@ Send a [quote request](/request-a-quote/) with size, sides, stock, finish, quant
 Build the flyer to the trim size plus bleed. Photographs that should run off the edge have to extend past the cut, and headlines have to sit inside the margin or they will be trimmed. Send a PDF. A screenshot, a social graphic stretched to letter size, or a word-processor page with hairline type will not hold up on a stack of flyers.
 
 [Graphic design and prepress](/services/graphic-design/) can set the promotion up for press, check image resolution, and fix the bleed before you ever see a proof. Send the copy, the logo, and the photos you actually have rights to use. If a version changes only a date or a store name, send the master and the list so each proof is a real flyer, not a placeholder.
+
+## Salt Lake City delivery
+
+In the Salt Lake City area, we [deliver](/salt-lake-city/) your flyers ourselves. Everywhere else, we ship them anywhere in the United States.

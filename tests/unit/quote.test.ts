@@ -89,7 +89,7 @@ describe('validateQuote', () => {
     ).toBe(true);
   });
 
-  it('ships to a state or ZIP, or delivers in Salt Lake City', () => {
+  it('ships to a state or ZIP, or delivers in the Salt Lake area', () => {
     for (const shipTo of ['UT', 'Texas', '84101', 'Boise, ID', '10001-1234']) {
       expect(validateQuote(values({ shipTo }), TODAY).valid, shipTo).toBe(true);
     }
@@ -105,7 +105,7 @@ describe('validateQuote', () => {
     ).toBe(true);
     expect(
       validateQuote(values({ delivery: 'pick-up' }), TODAY).errors.delivery,
-    ).toBe('Choose shipping or Salt Lake City delivery.');
+    ).toBe('Choose shipping or delivery in the Salt Lake area.');
   });
 
   it('accepts a date from today on, and nothing else', () => {

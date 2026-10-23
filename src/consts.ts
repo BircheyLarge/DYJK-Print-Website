@@ -1,13 +1,15 @@
 /**
  * Site-wide constants. Single source of truth for brand, contact and SEO defaults.
  *
- * Contact policy (Stanley, updated 2026-10-12): DYJK is a small Utah-based team
- * serving clients nationwide. Everything is ordered online or by email and
- * shipped, except in Salt Lake City, where DYJK delivers; that's the one city
- * the copy names (Contact, Request a Quote, Quote Received, About and the
- * quote form's auto-reply). NO street address, map, hours, pick-up or
- * showroom. Utah never goes in titles or H1s; product pages target
- * nationwide queries.
+ * Contact policy (Stanley, updated 2026-10-23): DYJK is a small Utah-based team
+ * serving clients nationwide. Everything is ordered online or by email; DYJK
+ * delivers in person across the Salt Lake City area (Salt Lake, Davis and Utah
+ * counties) and ships everywhere else.
+ *
+ * Local first: Salt Lake City appears in the homepage meta, /salt-lake-city/
+ * and five local product titles, always tied to delivery. No address,
+ * showroom, pick-up or other city names. Never claim the work is printed in
+ * Utah.
  */
 
 /** A public phone number: E.164 for tel: links and schema, plus display text. */
@@ -23,8 +25,8 @@ export const SITE = {
   url: 'https://www.dyjkprint.com',
   /** Homepage meta description and the fallback; 155 chars max for snippets. */
   description:
-    'Nationwide commercial printing from DYJK Print: offset and digital printing, ' +
-    'graphic design and prepress, proofed and shipped anywhere in the US.',
+    'Utah commercial printing from DYJK Print: business cards, flyers, folders ' +
+    'and more. Free quotes, a proof before print, delivered in Salt Lake City.',
   /**
    * DYJK's business line. tel: links, the Call buttons, the footer, the
    * contact page and the schema telephone all read it; null hides them all.

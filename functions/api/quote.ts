@@ -238,7 +238,7 @@ export function leadEmail(values: QuoteValues, receivedAt: Date) {
     value ? `${label}: ${value}` : null;
   const where =
     values.delivery === DELIVERY_SLC
-      ? 'Salt Lake City, deliver it'
+      ? 'Salt Lake area (Salt Lake, Davis or Utah County): deliver it'
       : `Ship to ${values.shipTo}`;
   const text = [
     'New quote request from the website.',
